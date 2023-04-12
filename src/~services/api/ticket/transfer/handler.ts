@@ -1,4 +1,4 @@
-import { devInfo, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Field } from '~constants'
 import { NoValidTicketAvailableForTransferError } from '~errors'
@@ -10,6 +10,7 @@ import {
   emptyResponse,
   genericTryCatchErrorResponseHandler,
 } from '~utils/backend/response-handlers'
+import { devInfo } from '~utils/dev'
 import { getFormattedGuestName } from '~utils/get-formatted-guest-name'
 import { APITransferTicketHandlerParams } from './abstractions'
 

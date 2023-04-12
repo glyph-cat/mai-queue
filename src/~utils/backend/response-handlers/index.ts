@@ -1,6 +1,7 @@
-import { devError, devInfo, HttpStatus } from '@glyph-cat/swiss-army-knife'
+import { HttpStatus } from '@glyph-cat/swiss-army-knife'
 import { NextApiResponse } from 'next'
 import { CustomAPIError } from '~errors'
+import { devError, devInfo } from '~utils/dev'
 
 export function jsonResponse<D>(
   res: NextApiResponse,

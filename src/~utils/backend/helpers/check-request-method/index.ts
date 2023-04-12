@@ -1,6 +1,7 @@
-import { devInfo, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest } from 'next'
 import { InvalidRequestMethodError } from '~errors'
+import { devInfo } from '~utils/dev'
 
 /**
  * @returns `true` if the request method matches the allowed ones.

@@ -1,4 +1,4 @@
-import { devInfo, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Field } from '~constants'
 import { InvalidDeviceKeyError } from '~errors'
@@ -8,6 +8,7 @@ import {
   genericTryCatchErrorResponseHandler,
   simpleResponse,
 } from '~utils/backend/response-handlers'
+import { devInfo } from '~utils/dev'
 import {
   APIValidateDeviceKeyHandlerParams,
   APIValidateDeviceKeyHandlerReturnData,

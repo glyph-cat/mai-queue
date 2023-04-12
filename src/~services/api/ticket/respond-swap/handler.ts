@@ -1,4 +1,4 @@
-import { devInfo, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { DocumentSnapshot } from '@google-cloud/firestore'
 import { firestore } from 'firebase-admin'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -19,6 +19,7 @@ import {
   emptyResponse,
   genericTryCatchErrorResponseHandler,
 } from '~utils/backend/response-handlers'
+import { devInfo } from '~utils/dev'
 import { APIRespondSwapRequestHandlerParams } from './abstractions'
 
 export default async function APICancelSwapTicketHandler(

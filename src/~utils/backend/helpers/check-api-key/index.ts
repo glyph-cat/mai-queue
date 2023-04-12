@@ -1,7 +1,7 @@
-import { devInfo } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest } from 'next'
 import { ENV } from '~constants'
 import { InvalidAPIKeyError } from '~errors'
+import { devInfo } from '~utils/dev'
 
 /**
  * @returns `true` if API key is valid, otherwise `false`.

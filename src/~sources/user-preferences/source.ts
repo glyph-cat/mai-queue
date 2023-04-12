@@ -1,5 +1,5 @@
-import { devError } from '@glyph-cat/swiss-army-knife'
 import { RelinkSource } from 'react-relink'
+import { devError } from '~utils/dev'
 import { IUserPreferences } from './abstractions'
 
 const STORAGE_KEY = 'user-pref'

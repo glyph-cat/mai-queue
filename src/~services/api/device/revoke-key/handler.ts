@@ -1,4 +1,4 @@
-import { devInfo, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { DBCollection } from '~services/firebase-admin'
 import { performBasicChecks } from '~utils/backend/helpers'
@@ -7,6 +7,7 @@ import {
   emptyResponse,
   genericTryCatchErrorResponseHandler,
 } from '~utils/backend/response-handlers'
+import { devInfo } from '~utils/dev'
 
 export default async function APIRevokeDeviceKeyHandler(
   req: NextApiRequest,

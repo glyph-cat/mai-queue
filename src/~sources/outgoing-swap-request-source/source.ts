@@ -1,9 +1,9 @@
-import { devError } from '@glyph-cat/swiss-army-knife'
 import { doc, getDoc } from 'firebase/firestore'
 import { RelinkSource } from 'react-relink'
 import { SwapRequestStatus } from '~abstractions'
 import { Field } from '~constants'
 import { DBCollection } from '~services/firebase-client'
+import { devError } from '~utils/dev'
 import { IOutgoingSwapRequestSource } from './abstractions'
 
 const STORAGE_KEY = 'outgoing-swap-request'

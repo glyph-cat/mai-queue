@@ -1,5 +1,7 @@
-import { devInfo, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { firestore } from 'firebase-admin'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { CloseTicketReason } from '~abstractions'
 import { VoteType } from '~abstractions/vote'
 import { Field, MAX_ALLOWED_STALE_FLAG_COUNT } from '~constants'
 import {
@@ -17,9 +19,8 @@ import {
   emptyResponse,
   genericTryCatchErrorResponseHandler,
 } from '~utils/backend/response-handlers'
+import { devInfo } from '~utils/dev'
 import { APIReportStaleTicketHandlerParams } from './abstractions'
-import { firestore } from 'firebase-admin'
-import { CloseTicketReason } from '~abstractions'
 
 export default async function APIReportStaleTicketHandler(
   req: NextApiRequest,

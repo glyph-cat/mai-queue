@@ -1,4 +1,4 @@
-import { devInfo, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { DocumentSnapshot } from '@google-cloud/firestore'
 import { DateTime } from 'luxon'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -20,6 +20,7 @@ import {
   genericTryCatchErrorResponseHandler,
   simpleResponse,
 } from '~utils/backend/response-handlers'
+import { devInfo } from '~utils/dev'
 import {
   APIRequestSwapTicketHandlerParams,
   APIRequestSwapTicketHandlerReturnData,

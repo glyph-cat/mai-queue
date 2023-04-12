@@ -1,19 +1,14 @@
-import {
-  devError,
-  devInfo,
-  devWarn,
-  useLayoutEffect,
-  useRef,
-} from '@glyph-cat/swiss-army-knife'
+import { useLayoutEffect, useRef } from '@glyph-cat/swiss-army-knife'
 import {
   BrowserMultiFormatReader,
+  ChecksumException as ZXingChecksumException,
   FormatException as ZXingFormatException,
   NotFoundException as ZXingNotFoundException,
-  ChecksumException as ZXingChecksumException,
 } from '@zxing/library'
 import { MutableRefObject } from 'react'
 import { RelinkSource } from 'react-relink'
 import { IS_HUAWEI_DEVICE } from '~constants'
+import { devError, devInfo, devWarn } from '~utils/dev'
 import { hasUserMediaWithAlertIfUnavailable } from '~utils/user-media'
 
 export enum ScannerAccessStatus {

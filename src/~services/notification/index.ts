@@ -1,5 +1,6 @@
-import { devError, IS_CLIENT_ENV } from '@glyph-cat/swiss-army-knife'
+import { IS_CLIENT_ENV } from '@glyph-cat/swiss-army-knife'
 import { RelinkSource } from 'react-relink'
+import { devError } from '~utils/dev'
 
 export enum NotificationPermission {
   DEFAULT = 'default',

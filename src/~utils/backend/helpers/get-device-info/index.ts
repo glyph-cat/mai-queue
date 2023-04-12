@@ -1,10 +1,11 @@
-import { Nullable, devInfo, isString } from '@glyph-cat/swiss-army-knife'
+import { Nullable, isString } from '@glyph-cat/swiss-army-knife'
 import { Transaction } from '@google-cloud/firestore'
 import { DateTime } from 'luxon'
 import { NextApiRequest } from 'next'
 import { Field } from '~constants'
 import { InvalidDeviceKeyError } from '~errors'
 import { DBCollection } from '~services/firebase-admin'
+import { devInfo } from '~utils/dev'
 
 export function extractDeviceKeyFromHeader(
   reqOrDeviceKey: NextApiRequest | string

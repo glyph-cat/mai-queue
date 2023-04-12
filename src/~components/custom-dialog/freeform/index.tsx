@@ -1,6 +1,5 @@
 import {
   JSFunction,
-  devError,
   removeFromPortal,
   renderInPortal,
 } from '@glyph-cat/swiss-army-knife'
@@ -13,6 +12,7 @@ import {
   useContext,
 } from 'react'
 import { ANIMATED_BACKDROP_TRANSITION_DURATION } from '~constants'
+import { devError } from '~utils/dev'
 import { CUSTOM_DIALOG_CANCEL_VALUE, CustomDialogCancellableValue } from '../abstractions'
 import {
   BaseDialog,

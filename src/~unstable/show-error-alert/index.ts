@@ -1,6 +1,7 @@
-import { Nullable, devError, tryOnly } from '@glyph-cat/swiss-army-knife'
+import { Nullable, tryOnly } from '@glyph-cat/swiss-army-knife'
 import { AxiosError, CanceledError } from 'axios'
 import { CustomDialog } from '~components/custom-dialog'
+import { devError } from '~utils/dev'
 
 // TODO: [High priority] What error do we get when no internet? How do we know? and what do we show?
 // May be can do something in '~utils/network'

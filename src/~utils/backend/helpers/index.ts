@@ -1,5 +1,6 @@
-import { devInfo, IS_DEBUG_ENV, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod, IS_DEBUG_ENV } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest } from 'next'
+import { devInfo } from '~utils/dev'
 import { checkApiKey } from './check-api-key'
 import { checkRequestMethod } from './check-request-method'
 

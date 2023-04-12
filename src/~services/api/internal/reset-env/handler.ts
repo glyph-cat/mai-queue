@@ -1,4 +1,4 @@
-import { devInfo, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { ENV } from '~constants'
 import { InternalAPIError } from '~errors'
@@ -9,6 +9,7 @@ import {
   emptyResponse,
   genericTryCatchErrorResponseHandler,
 } from '~utils/backend/response-handlers'
+import { devInfo } from '~utils/dev'
 
 // TOFIX: Current method is probably not reliable
 // https://firebase.google.com/docs/firestore/manage-data/delete-data#collections

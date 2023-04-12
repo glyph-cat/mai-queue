@@ -1,8 +1,9 @@
-import { devInfo, HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import queryString, { StringifiableRecord } from 'query-string'
 import { ENV } from '~constants'
 import { ConfigSource } from '~sources/config'
+import { devInfo } from '~utils/dev'
 
 interface NetworkConfigTemplateOptions {
   config?: AxiosRequestConfig
