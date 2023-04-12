@@ -26,7 +26,6 @@ MATERIAL_ICON_DEFAULTS.variant = 'rounded'
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
 
-  return null
   const { palette } = useTheme()
   useThemeColor(palette.basicBg)
   useGlobalCSSVariableInjection(palette)
