@@ -1,7 +1,7 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document(): JSX.Element {
-  // return null
+  return null
   return (
     <Html lang='en'>
       <Head />
