@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	match /Tickets/{ticket} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /PREVIEW_Tickets/{ticket} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /INTERNAL_Tickets/{ticket} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /SwapRequests/{swapRequest} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /PREVIEW_SwapRequests/{swapRequest} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /INTERNAL_SwapRequests/{swapRequest} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

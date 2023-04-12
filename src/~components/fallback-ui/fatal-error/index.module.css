@@ -1,0 +1,38 @@
+.container {
+  min-height: 80vh;
+  place-items: center;
+}
+
+.subContainer {
+  gap: 20px;
+  place-items: center;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.message {
+  text-align: center;
+}
+
+.codeContainer {
+  padding: 5px;
+  width: 100vw;
+}
+
+.codeSection {
+  background-color: #ffcccc;
+  border-left: solid 5px #ff6666;
+  border-radius: 5px;
+  font-size: 9pt;
+  margin: 0;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 5px;
+  padding: 5px;
+  width: calc(100vw -10px);
+}

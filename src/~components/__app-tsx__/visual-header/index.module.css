@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap");
+
+.container {
+  align-items: center;
+  background-color: var(--basicBg);
+  display: grid;
+  gap: 10px;
+  margin-left: env(safe-area-inset-left);
+  margin-right: env(safe-area-inset-right);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.title,
+.title:hover,
+.title:active {
+  color: inherit;
+  font-size: 14pt;
+  font-family: "Comfortaa", cursive;
+  font-weight: bold;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.iconButton {
+  color: var(--fixedWhite);
+  cursor: pointer;
+  place-items: center;
+  position: relative;
+}
+
+.iconButton:active {
+  opacity: 0.5;
+}
+
+.emphasisRipple {
+  --size: 48px;
+  animation: ripple 4s infinite;
+  background-color: var(--fixedRed);
+  opacity: 0.5;
+  border-radius: var(--size);
+  height: var(--size);
+  position: absolute;
+  place-self: center;
+  width: var(--size);
+}
+
+@keyframes ripple {
+  0% {
+    opacity: 0.65;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+/* .notificationDot {
+  --size: 10px;
+  background-color: var(--fixedRed);
+  border-radius: var(--size);
+  height: var(--size);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: var(--size);
+} */

@@ -1,0 +1,263 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "INTERNAL_SwapRequests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "tt",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "ws",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "e",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "INTERNAL_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "tn",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "INTERNAL_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "x",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "c",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "INTERNAL_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "x",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "INTERNAL_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "y",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "x",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PREVIEW_SwapRequests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "tt",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "ws",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "e",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PREVIEW_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "tn",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PREVIEW_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "x",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "c",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PREVIEW_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "x",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PREVIEW_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "y",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "x",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PROD_SwapRequests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "tt",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "ws",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "e",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PROD_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "tn",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PROD_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "x",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "c",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PROD_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "x",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PROD_Tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "y",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "x",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

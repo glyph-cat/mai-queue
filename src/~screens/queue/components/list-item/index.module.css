@@ -1,0 +1,77 @@
+.virtualizedCell {
+  transition-duration: 0.5s;
+}
+
+.virtualizedCellAnimated {
+  animation: ticket-entrance 0.5s forwards;
+}
+
+@keyframes ticket-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.itemContainer {
+  --itemContainerGap: 10px;
+  --itemContainerMargin: 10px;
+  --ticketNumberContainerWidth: 72px;
+  background-color: var(--fixedWhite);
+  border-radius: 5px;
+  grid-auto-flow: column;
+  grid-template-columns: auto 1fr;
+  gap: var(--itemContainerGap);
+  margin: var(--itemContainerMargin);
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+.itemContainerSelf {
+  background-color: #ffee80;
+}
+
+.itemContainerClosed {
+  background-color: #c0ffc0;
+}
+
+.itemContainerOtherPlayer {
+  cursor: pointer;
+}
+
+.ticketNumberContainer {
+  --dotSpacing: 3px;
+  border-inline-end: dotted var(--dotSpacing) var(--basicBg);
+  font-size: 28px;
+  font-weight: bold;
+  grid-auto-flow: column;
+  margin: var(--dotSpacing) 0px;
+  place-items: center;
+  text-align: center;
+  width: var(--ticketNumberContainerWidth);
+}
+
+.ticketInfoContainer {
+  align-items: center;
+  align-self: center;
+}
+
+.ticketUpperContainer {
+  gap: 10px;
+  grid-template-columns: 1fr auto;
+}
+
+.ctime {
+  font-size: 10pt;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.staleFlagContainer {
+  margin-inline-end: 5px;
+  opacity: 0.5;
+}

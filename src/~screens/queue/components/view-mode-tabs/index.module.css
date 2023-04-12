@@ -1,0 +1,44 @@
+.container {
+  background-color: var(--basicBg);
+  height: 48px;
+  position: sticky;
+  z-index: 1;
+}
+
+.subContainer {
+  --buttonHeight: 36px;
+  background-color: #00000040;
+  border-radius: var(--buttonHeight);
+  grid-auto-flow: column;
+  grid-template-columns: 1fr 1fr;
+  height: var(--buttonHeight);
+  margin: 5px 10px;
+  padding: 0;
+}
+
+.button {
+  border-radius: var(--buttonHeight);
+  color: var(--fixedWhite);
+  cursor: pointer;
+  height: var(--buttonHeight);
+  padding: 10px 20px;
+  place-items: center;
+  text-align: center;
+}
+
+.buttonPressable {
+  cursor: pointer;
+}
+
+.buttonPressable:active {
+  transition: 0.1s;
+  opacity: 0.5;
+  transform: scale(0.9);
+}
+
+.buttonSelected {
+  background-color: var(--fixedWhite);
+  box-shadow: var(--dxShadow);
+  color: var(--fixedBlack);
+  font-weight: bold;
+}

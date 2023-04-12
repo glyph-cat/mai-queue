@@ -1,0 +1,156 @@
+.container {
+  --containerPadding: 10px;
+  --floatingButtonHeight: 72px;
+  --floatingButtonWidth: 200px;
+  --floatingButtonHeightCompact: 48px;
+  --floatingButtonWidthCompact: 70%;
+  /* --floatingSheetMinHeight: 100px; */
+  background-color: var(--fixedWhite);
+  box-shadow: var(--dxShadow);
+  border-radius: 20px;
+  bottom: calc(env(safe-area-inset-bottom) + 10px);
+  justify-self: center;
+  left: 50%;
+  max-height: calc(
+    80vh - env(safe-area-inset-top) - (3 * var(--containerPadding))
+  );
+  max-width: calc(
+    100vw - env(safe-area-inset-left) - env(safe-area-inset-right) -
+      (2 * var(--containerPadding))
+  );
+  overflow: hidden;
+  overflow-y: scroll;
+  position: fixed;
+  transform: translateX(-50%);
+  transition-property: background-color, height, width;
+  /* transition-duration: var(--animatedBackdropTransitionDuration); */
+  transition: background-color 0.1s, height 0.2s, width 0.3s;
+  z-index: 1;
+}
+
+.containerAsFloatingButton {
+  border-radius: var(--floatingButtonHeight);
+  height: var(--floatingButtonHeight);
+  place-items: center;
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+  width: var(--floatingButtonWidth);
+}
+
+.containerAsFloatingButton:active {
+  opacity: 0.5;
+}
+
+.containerAsFloatingSheet {
+  align-items: end;
+  border-radius: 20px;
+  gap: 10px;
+  grid-template-rows: auto 1fr;
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  width: 600px;
+}
+
+.buttonBase {
+  border-radius: var(--floatingButtonHeight);
+  cursor: pointer;
+  height: var(--floatingButtonHeight);
+  place-items: center;
+  text-align: center;
+  user-select: none;
+  width: var(--floatingButtonWidth);
+}
+
+.button {
+  background-color: var(--primaryOrange);
+  color: var(--fixedWhite);
+  font-size: 12pt;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.buttonBase:active {
+  opacity: 0.5;
+}
+
+.buttonCompact {
+  height: var(--floatingButtonHeightCompact);
+  width: var(--floatingButtonWidthCompact);
+  transition: none;
+}
+
+.sideArea {
+  align-items: end;
+  overflow: hidden;
+  width: 0;
+}
+
+.sideAreaVisible {
+  padding-bottom: 50px;
+  width: 36px;
+}
+
+.waitStatusArea {
+  height: var(--floatingButtonHeight);
+  place-items: center;
+}
+
+.waitStatusAreaContainer {
+  place-items: center;
+}
+
+.ticketNumber {
+  font-size: 20pt;
+  font-weight: bold;
+  text-align: center;
+  transition: var(--bottomSheetTransitionDuration);
+}
+
+.ticketNumberLarge {
+  font-size: 28pt;
+}
+
+.displayWaitStatus {
+  font-size: 10pt;
+  opacity: 0.65;
+  font-weight: bolder;
+  text-align: center;
+}
+
+/* #region GeneralConfigSection */
+
+/* #endregion GeneralConfigSection */
+
+/* #region SetFriendCodeSection */
+
+.friendCodeInput {
+  background-color: transparent;
+  border: solid 2px #808080;
+  border-radius: 10px;
+  font-size: 14pt;
+  min-height: 48px;
+  outline: none;
+  text-align: center;
+}
+
+/* #endregion SetFriendCodeSection */
+
+/* #region ShowQRSection */
+
+.showQRSectionContainer {
+  gap: 20px;
+  padding: 10px 0px;
+}
+
+.qrContainer {
+  background-color: #80808020;
+  place-items: center;
+  place-self: center;
+}
+/* #endregion ShowQRSection */
+
+/* #region ScanQRSection */
+.scanQRTitle {
+  font-size: 16pt;
+  font-weight: bold;
+  text-align: center;
+}
+/* #endregion ScanQRSection */

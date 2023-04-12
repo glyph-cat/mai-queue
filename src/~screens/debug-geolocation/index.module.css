@@ -1,0 +1,35 @@
+.container {
+  align-items: start;
+  min-height: 65vh;
+  padding: 10px;
+}
+
+.form {
+  align-items: center;
+  column-gap: 5px;
+  grid-template-columns: auto 1fr;
+  row-gap: 10px;
+}
+
+.form span {
+  font-size: 12pt;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.form input {
+  align-items: center;
+  border: solid 2px var(--fixedWhite);
+  padding: 0px 10px;
+  border-radius: 10px;
+  display: grid;
+  font-size: 14pt;
+  min-height: 64px;
+  outline: none;
+  width: 100%;
+}
+
+.form input:read-only {
+  background-color: #dddddd80;
+  color: #505050;
+}

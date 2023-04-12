@@ -1,0 +1,12 @@
+.innerContainer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  place-items: center;
+  gap: 20px;
+}
+
+.label {
+  font-size: 24pt;
+  font-weight: bold;
+  color: var(--fixedWhite);
+}

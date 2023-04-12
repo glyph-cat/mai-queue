@@ -1,0 +1,12 @@
+.simpleContainer {
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.complexContainer {
+  grid-template-columns: 1fr 4fr 1fr;
+}
+
+.complexButtonsArea {
+  gap: 10px;
+}

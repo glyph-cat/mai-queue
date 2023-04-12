@@ -1,0 +1,24 @@
+.stepButton {
+  --size: 32px;
+  border-radius: var(--size);
+  height: var(--size);
+  place-items: center;
+  user-select: none;
+  width: var(--size);
+}
+
+.stepButtonEnabled {
+  background-color: #3673dc30;
+  color: #3673dc;
+  cursor: pointer;
+}
+
+.stepButtonEnabled:active {
+  opacity: 0.5;
+}
+
+.stepButtonDisabled {
+  background-color: #80808020;
+  color: #80808080;
+  cursor: not-allowed;
+}

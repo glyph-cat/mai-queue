@@ -1,0 +1,26 @@
+.container {
+  align-items: center;
+  min-height: 80vh;
+}
+
+.subContainer {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: var(--dxShadow);
+  gap: 20px;
+  padding: 20px;
+  margin-left: calc(env(safe-area-inset-left) + 20px);
+  margin-right: calc(env(safe-area-inset-right) + 20px);
+}
+
+.title {
+  margin: 0;
+  text-align: center;
+}
+
+.ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}

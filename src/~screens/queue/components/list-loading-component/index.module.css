@@ -1,0 +1,17 @@
+.container {
+  place-items: center;
+  position: absolute;
+  top: 100px;
+  width: 100%;
+}
+
+.paddingContainer {
+  --size: 84px;
+  background-color: var(--fixedWhite);
+  border-radius: var(--size);
+  border: solid 1px #80808040;
+  box-shadow: var(--dxShadow);
+  height: var(--size);
+  place-items: center;
+  width: var(--size);
+}

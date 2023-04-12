@@ -1,0 +1,27 @@
+.baseContainer {
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 1;
+}
+
+.outermostContainer {
+  place-items: center;
+}
+
+.dimmedLayer {
+  background-color: #00000080;
+  backdrop-filter: blur(2px);
+  transition: opacity var(--animatedBackdropTransitionDuration);
+}
+
+.childContainer {
+  place-self: center;
+  z-index: 1;
+}
+
+.noScroll {
+  overflow: hidden;
+}

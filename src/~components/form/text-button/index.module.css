@@ -1,0 +1,25 @@
+.containerBase {
+  --size: 48px;
+  border-radius: var(--size);
+  font-size: 12pt;
+  font-weight: bold;
+  height: var(--size);
+  overflow: hidden;
+  place-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.containerEnabled {
+  cursor: pointer;
+}
+
+.containerEnabled:active {
+  opacity: 0.5;
+}
+
+.containerDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

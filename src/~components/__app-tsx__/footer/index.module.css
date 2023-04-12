@@ -1,0 +1,36 @@
+.container {
+  background-color: var(--footerBg);
+  bottom: 0;
+  place-items: center;
+  /* position: sticky; */
+  /* position: fixed; */
+  width: 100vw;
+}
+
+.subContainer {
+  color: var(--fixedWhite);
+  bottom: 0;
+  gap: 10px;
+  margin: 20px;
+  margin-bottom: calc(env(safe-area-inset-bottom) + 20px);
+  place-items: center;
+}
+
+.subContainer a {
+  color: #eeffdd;
+}
+
+.subContainer a:hover {
+  color: #ffffff;
+}
+
+.subContainer a:active {
+  opacity: 0.5;
+}
+
+.devVersionLabel {
+  background-color: #ffff00;
+  color: #ff0000;
+  font-weight: bold;
+  padding: 5px;
+}

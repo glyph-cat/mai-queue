@@ -1,0 +1,19 @@
+.containerBase {
+  background-color: var(--fixedWhite);
+  border-radius: 10px;
+  box-shadow: var(--dxShadow);
+  min-height: 150px;
+  opacity: 0;
+  padding: 20px;
+  transform: scale(0.85);
+  transition-property: opacity transform;
+  transition-duration: 0.2s;
+}
+
+.containerVisible {
+  opacity: 1;
+  transform: scale(1);
+  transition-duration: var(--animatedBackdropTransitionDuration);
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.375);
+  /* See: https://stackoverflow.com/a/29786350/5810737 */
+}

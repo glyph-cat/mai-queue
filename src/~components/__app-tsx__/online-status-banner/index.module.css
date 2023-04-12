@@ -1,0 +1,9 @@
+.container {
+  color: var(--safeGreen);
+  font-size: 12pt;
+  font-weight: bold;
+  overflow: hidden;
+  place-items: center;
+  text-align: center;
+  transition: height 0.3s, transform 0.3s;
+}

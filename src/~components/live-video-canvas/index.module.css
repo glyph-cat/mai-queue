@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+}
+
+.spinnerContainer {
+  place-items: center;
+  gap: 10px;
+  place-self: center;
+  position: absolute;
+}
+
+.video {
+  aspect-ratio: 1 / 1;
+  background-color: #808080;
+  max-height: 350px;
+  max-width: 350px;
+  min-height: 250px;
+  min-width: 250px;
+  overflow: hidden;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.loadingHint {
+  text-align: center;
+  font-size: 14pt;
+  color: #808080;
+  font-weight: bold;
+}

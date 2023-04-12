@@ -1,0 +1,40 @@
+.container {
+  background-color: #80808040;
+  border-radius: 10px;
+  gap: 20px;
+  padding: 20px;
+}
+
+.playerInfoDisplay {
+  background-color: var(--fixedWhite);
+  border-radius: 10px;
+}
+
+.swapInfoContainer {
+  place-items: center;
+}
+
+.swapInfoSubContainer {
+  grid-auto-flow: column;
+  gap: 10px;
+  grid-template-columns: 1fr auto 1fr;
+  place-items: center;
+}
+
+.number {
+  font-size: 32pt;
+  font-weight: bold;
+  text-align: center;
+}
+
+.numberLabel {
+  font-size: 12pt;
+  font-weight: bold;
+  opacity: 0.75;
+  text-align: center;
+}
+
+.arrowContainer {
+  opacity: 0.35;
+  place-items: center;
+}

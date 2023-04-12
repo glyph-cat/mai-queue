@@ -1,0 +1,97 @@
+{
+	// Place your iicpacg-web workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"Import scoped CSS": {
+		"scope": "javascript,javascriptreact,typescript,typescriptreact",
+		"prefix": "import styles",
+		"body": "import styles from './index.module.css'",
+	},
+	"Env Safe Area Inset Top": {
+		"scope": "css",
+		"prefix": "env(safe-area-inset-top)",
+		"body": "env(safe-area-inset-top)",
+	},
+	"Env Safe Area Inset Left": {
+		"scope": "css",
+		"prefix": "env(safe-area-inset-left)",
+		"body": "env(safe-area-inset-left)",
+	},
+	"Env Safe Area Inset Right": {
+		"scope": "css",
+		"prefix": "env(safe-area-inset-right)",
+		"body": "env(safe-area-inset-right)",
+	},
+	"Env Safe Area Inset Bottom": {
+		"scope": "css",
+		"prefix": "env(safe-area-inset-bottom)",
+		"body": "env(safe-area-inset-bottom)",
+	},
+	"Palette fixedBlack": {
+		"scope": "css",
+		"prefix": "var(--fixedBlack)",
+		"body": "var(--fixedBlack)",
+	},
+	"Palette fixedWhite": {
+		"scope": "css",
+		"prefix": "var(--fixedWhite)",
+		"body": "var(--fixedWhite)",
+	},
+	"Palette fixedRed": {
+		"scope": "css",
+		"prefix": "var(--fixedRed)",
+		"body": "var(--fixedRed)",
+	},
+	"Palette basicBg": {
+		"scope": "css",
+		"prefix": "var(--basicBg)",
+		"body": "var(--basicBg)",
+	},
+	"Palette footerBg": {
+		"scope": "css",
+		"prefix": "var(--footerBg)",
+		"body": "var(--footerBg)",
+	},
+	"Palette neutralFill": {
+		"scope": "css",
+		"prefix": "var(--neutralFill)",
+		"body": "var(--neutralFill)",
+	},
+	"Palette paleOrange": {
+		"scope": "css",
+		"prefix": "var(--paleOrange)",
+		"body": "var(--paleOrange)",
+	},
+	"Palette primaryOrange": {
+		"scope": "css",
+		"prefix": "var(--primaryOrange)",
+		"body": "var(--primaryOrange)",
+	},
+	"Palette dangerRed": {
+		"scope": "css",
+		"prefix": "var(--dangerRed)",
+		"body": "var(--dangerRed)",
+	},
+	"Firestore run transaction": {
+		"scope": "javascript,javascriptreact,typescript,typescriptreact",
+		"prefix": "await runTransaction(async (tx) => { })",
+		"body": [
+			"await runTransaction(async (tx) => {",
+			"  $0",
+			"})",
+		],
+	},
+}

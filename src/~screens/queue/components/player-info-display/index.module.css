@@ -1,0 +1,14 @@
+.container {
+  aspect-ratio: 213 / 67;
+  /* width: calc(
+    100% - (2 * var(--itemContainerMargin)) - var(--ticketNumberContainerWidth) -
+      var(--itemContainerGap)
+  ); */
+}
+
+.bannerImage {
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  width: 100%;
+}

@@ -1,0 +1,15 @@
+.container {
+  height: 50vh;
+  place-items: center;
+  top: 150px;
+}
+
+.text {
+  background-color: var(--fixedWhite);
+  border-radius: 10px;
+  font-size: 16pt;
+  font-weight: bold;
+  place-items: center;
+  padding: 30px 50px;
+  text-align: center;
+}

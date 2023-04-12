@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap");
+
+/* html {
+  color-scheme: dark;
+} */
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--basicBg);
+}
+
+a,
+.a {
+  color: #3775de;
+  cursor: pointer;
+  display: grid;
+  text-decoration: underline;
+}
+
+a:hover,
+.a:hover {
+  color: #4481e1;
+}
+
+a:active,
+.a:active {
+  color: #1e4c9c;
+  opacity: 0.5;
+}
+
+.code,
+code {
+  font-family: "Source Code Pro", Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+div {
+  display: grid;
+}
+
+.dxShadow {
+  box-shadow: var(--dxShadow);
+}
+
+.fadedBlink {
+  animation: faded-blink 1.5s infinite linear;
+}
+
+.centerAll {
+  place-items: center;
+}
+
+@keyframes faded-blink {
+  0% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.35;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
