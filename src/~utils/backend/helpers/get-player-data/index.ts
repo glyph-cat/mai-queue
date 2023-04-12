@@ -1,47 +1,47 @@
 import { IS_DEBUG_ENV, pickRandom } from '@glyph-cat/swiss-army-knife'
-// import chrome from 'chrome-aws-lambda'
+import chrome from 'chrome-aws-lambda'
 import { DateTime } from 'luxon'
-import puppeteer, { EventEmitter } from 'puppeteer'
+import puppeteer, { EventEmitter, PuppeteerLaunchOptions } from 'puppeteer'
 import queryString from 'query-string'
 import { DateTimeFormat, ENV, FIREBASE_STORAGE_BASE_URL, StorageBucketNames } from '~constants'
 import { InvalidFriendCodeError } from '~errors'
 import { STORAGE_BUCKET } from '~services/firebase-admin'
 import { sanitizePlayerName } from '~utils/sanitize-player-name'
 
-// /**
-//  * @see https://github.com/johnpolacek/nextjs-scraper-playground
-//  */
-// async function getOptions(): Promise<PuppeteerLaunchOptions> {
-//   let environmentBasedOptions: PuppeteerLaunchOptions
-//   if (ENV.VERCEL_ENV !== 'localhost') {
-//     // environmentBasedOptions = {
-//     //   args: chrome.args,
-//     //   executablePath: await chrome.executablePath,
-//     //   headless: chrome.headless,
-//     // }
-//   } else {
-//     // environmentBasedOptions = {
-//     //   executablePath: process.platform === 'win32'
-//     //     ? 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
-//     //     : process.platform === 'linux'
-//     //       ? '/usr/bin/google-chrome'
-//     //       : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-//     //   headless: true,
-//     // }
-//   }
-//   return {
-//     ...environmentBasedOptions,
-//     // headless: false,
-//     args: [
-//       '--no-sandbox',
-//       '--disable-setuid-sandbox',
-//     ],
-//     defaultViewport: {
-//       height: pickRandom([600, 900, 675, 720, 900]),
-//       width: pickRandom([800, 1000, 1200, 1280, 1600]),
-//     },
-//   }
-// }
+/**
+ * @see https://github.com/johnpolacek/nextjs-scraper-playground
+ */
+async function getOptions(): Promise<PuppeteerLaunchOptions> {
+  let environmentBasedOptions: PuppeteerLaunchOptions
+  if (ENV.VERCEL_ENV !== 'localhost') {
+    environmentBasedOptions = {
+      args: chrome.args,
+      executablePath: await chrome.executablePath,
+      headless: chrome.headless,
+    }
+  } else {
+    // environmentBasedOptions = {
+    //   executablePath: process.platform === 'win32'
+    //     ? 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+    //     : process.platform === 'linux'
+    //       ? '/usr/bin/google-chrome'
+    //       : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    //   headless: true,
+    // }
+  }
+  return {
+    ...environmentBasedOptions,
+    // headless: false,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+    ],
+    defaultViewport: {
+      height: pickRandom([600, 900, 675, 720, 900]),
+      width: pickRandom([800, 1000, 1200, 1280, 1600]),
+    },
+  }
+}
 
 export interface PlayerDataObject {
   bannerUrl: string
@@ -52,17 +52,8 @@ export async function getPlayerData(
   friendCode: string
 ): Promise<PlayerDataObject> {
 
-  // const options = await getOptions()
-  const browser = await puppeteer.launch({
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-    ],
-    defaultViewport: {
-      height: pickRandom([600, 900, 675, 720, 900]),
-      width: pickRandom([800, 1000, 1200, 1280, 1600]),
-    },
-  })
+  const options = await getOptions()
+  const browser = await puppeteer.launch(options)
   const page = await browser.newPage()
   let debugListener: EventEmitter
   if (IS_DEBUG_ENV) {
