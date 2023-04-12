@@ -1,7 +1,7 @@
 import { IS_DEBUG_ENV, pickRandom } from '@glyph-cat/swiss-army-knife'
 import chrome from 'chrome-aws-lambda'
 import { DateTime } from 'luxon'
-import puppeteer, { EventEmitter, PuppeteerLaunchOptions } from 'puppeteer'
+import puppeteer, { EventEmitter, PuppeteerLaunchOptions } from 'puppeteer-core'
 import queryString from 'query-string'
 import { DateTimeFormat, ENV, FIREBASE_STORAGE_BASE_URL, StorageBucketNames } from '~constants'
 import { InvalidFriendCodeError } from '~errors'
@@ -20,6 +20,9 @@ async function getOptions(): Promise<PuppeteerLaunchOptions> {
       headless: chrome.headless,
     }
   } else {
+    environmentBasedOptions = {
+      executablePath: `${process.cwd()}/binaries/Chromium.app/Contents/MacOS/Chromium`,
+    }
     // environmentBasedOptions = {
     //   executablePath: process.platform === 'win32'
     //     ? 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
@@ -31,7 +34,7 @@ async function getOptions(): Promise<PuppeteerLaunchOptions> {
   }
   return {
     ...environmentBasedOptions,
-    // headless: false,
+    headless: false,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
