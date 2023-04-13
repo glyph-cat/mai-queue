@@ -1,4 +1,5 @@
 import { IS_DEBUG_ENV, pickRandom } from '@glyph-cat/swiss-army-knife'
+import { execSync } from 'child_process'
 import { DateTime } from 'luxon'
 import { ConsoleMessage, chromium } from 'playwright'
 import queryString from 'query-string'
@@ -20,6 +21,10 @@ export interface PlayerDataObject {
 export async function getPlayerData(
   friendCode: string
 ): Promise<PlayerDataObject> {
+
+  if (ENV.VERCEL_ENV !== 'localhost') {
+    execSync('npx playwright install')
+  }
 
   const browser = await chromium.launch({
     headless: true,
