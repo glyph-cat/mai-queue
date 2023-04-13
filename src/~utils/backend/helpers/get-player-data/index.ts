@@ -23,7 +23,7 @@ export async function getPlayerData(
 ): Promise<PlayerDataObject> {
 
   if (ENV.VERCEL_ENV !== 'localhost') {
-    execSync('npx playwright install')
+    execSync('yarn playwright install')
   }
 
   const browser = await chromium.launch({
