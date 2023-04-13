@@ -1,12 +1,19 @@
 import { IS_DEBUG_ENV, pickRandom } from '@glyph-cat/swiss-army-knife'
 import chrome from 'chrome-aws-lambda'
 import { DateTime } from 'luxon'
-import puppeteer, { EventEmitter, PuppeteerLaunchOptions } from 'puppeteer-core'
+import puppeteer, {
+  BrowserConnectOptions,
+  BrowserLaunchArgumentOptions,
+  EventEmitter,
+  LaunchOptions,
+} from 'puppeteer'
 import queryString from 'query-string'
 import { DateTimeFormat, ENV, FIREBASE_STORAGE_BASE_URL, StorageBucketNames } from '~constants'
 import { InvalidFriendCodeError } from '~errors'
 import { STORAGE_BUCKET } from '~services/firebase-admin'
 import { sanitizePlayerName } from '~utils/sanitize-player-name'
+
+type PuppeteerLaunchOptions = LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions
 
 /**
  * @see https://github.com/johnpolacek/nextjs-scraper-playground
@@ -114,10 +121,10 @@ export async function getPlayerData(
     bannerElement.style.backgroundColor = 'transparent'
     bannerElement.style.boxShadow = 'none'
   }, bannerSelector)
-  const screenshot = await userBanner.screenshot({
+  const screenshot = (await userBanner.screenshot({
     encoding: 'binary',
     omitBackground: true,
-  })
+  })) as string | Buffer
   const screenshotName = `${friendCode}-${DateTime.now().toFormat(DateTimeFormat.SCREENSHOT_DATE_TIME)}.png`
   const file = STORAGE_BUCKET.file(`${StorageBucketNames.PlayerBannerScreenshots}/${screenshotName}`)
   await file.save(screenshot, {
@@ -140,6 +147,8 @@ export async function getPlayerData(
     return nameElement?.innerText || null
   }))
 
+  await page.close()
+  await browser.close()
   if (debugListener) { debugListener.removeAllListeners() }
 
   return {
