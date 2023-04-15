@@ -28,7 +28,7 @@ import { useResizeSensor } from '~hooks/resize-sensor'
 import { useCustomBrowserMultiFormatReader } from '~hooks/scanner'
 import { useSelfTicket } from '~hooks/self-ticket'
 import { APIRequestDeviceKey } from '~services/api/device/request-key'
-import { APISetFriendCode } from '~services/api/device/set-friend-code'
+import { APISetFriendCodeAlt } from '~services/api/device/set-friend-code-alt'
 import { APICloseTicket } from '~services/api/ticket/close'
 import { APIGetNewTicket } from '~services/api/ticket/get-new'
 import { APITransferTicket } from '~services/api/ticket/transfer'
@@ -164,7 +164,7 @@ export function BottomSheet({
     if (isRequestSuccessful && friendCode) {
       try {
         await UnstableSource.set((s) => ({ ...s, isRetrievingPlayerInfo: true }))
-        await APISetFriendCode({ f: friendCode })
+        await APISetFriendCodeAlt({ f: friendCode })
       } catch (e) {
         handleClientError(e)
       } finally {
@@ -436,7 +436,7 @@ function SetFriendCodeSection(): JSX.Element {
     try {
       setSavingFriendCodeStatus(true)
       if (selfTicket) {
-        await APISetFriendCode({ f: friendCode })
+        await APISetFriendCodeAlt({ f: friendCode })
         await StepWizard.hideBottomSheet()
       }
       await delay(Math.round(500 + Math.random() * 500))

@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions'
+import { Request, Response } from 'express'
 import { DateTime } from 'luxon'
 import puppeteer from 'puppeteer'
 import { stringifyUrl } from 'query-string'
@@ -15,7 +16,9 @@ const FIREBASE_STORAGE_BASE_URL = 'https://storage.googleapis.com'
 
 // TODO: Remove calls to `functions.logger.log`
 
-export const getPlayerData = functions.https.onRequest(async (req, res) => {
+// export const getPlayerData = functions.https.onRequest(async (req, res) => {})
+
+export async function getPlayerData(req: Request, res: Response): Promise<void> {
 
   functions.logger.log(req.headers?.api_key
     ? '•'.repeat(String(req.headers['api_key']).length)
@@ -128,7 +131,7 @@ export const getPlayerData = functions.https.onRequest(async (req, res) => {
   if (error) { throw error }
 
   res.status(200).json({
-    bannerUrl,
-    playerName,
+    b: bannerUrl,
+    n: playerName,
   })
-})
+}

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-deprecated */
 import { API_ROUTE } from '~services/navigation'
 import { networkGet } from '~utils/network'
 import {
@@ -6,6 +7,9 @@ import {
   APISetFriendCodeReturnData,
 } from './abstractions'
 
+/**
+ * @deprecated For the time being, use `APISetFriendCodeAlt`.
+ */
 export async function APISetFriendCode(
   params: APISetFriendCodeHandlerParams
 ): Promise<APISetFriendCodeReturnData> {

@@ -10,7 +10,13 @@ export class ClientCollectionWriteError extends ClientError {
 
 }
 
-export class InternalClientError extends Error { }
+export class InternalClientError extends Error {
+
+  constructor(errorCodeAndOrParams: string) {
+    super(errorCodeAndOrParams)
+  }
+
+}
 
 /**
  * @see https://stackoverflow.com/a/29244254/5810737
