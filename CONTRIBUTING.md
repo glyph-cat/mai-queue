@@ -39,6 +39,23 @@ FIREBASE_CLIENT_EMAIL=████████
 FIREBASE_PRIVATE_KEY='["-----BEGIN PRIVATE KEY-----\n████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████\n-----END PRIVATE KEY-----\n"]'
 ```
 
+4. Create a file based on the path `functions/src/bridge.secrets.ts` and populate with the data below
+
+```ts
+/**
+ * @see https://stackoverflow.com/a/60963496/5810737
+ */
+export const APP_API_KEY = String(process.env.FUNCTIONS_EMULATOR) === 'true'
+  ? '████████'
+  : '████████'
+
+export const SEGA_ID = '████████'
+
+export const SEGA_PW = '████████'
+
+export const FIREBASE_STORAGE_BUCKET = 'PROJECT_NAME.appspot.com'
+```
+
 <br/>
 
 # Running in localhost

@@ -2,7 +2,6 @@ import { concatClassNames } from '@glyph-cat/swiss-army-knife'
 import { useCallback } from 'react'
 import { QueueViewMode } from '~abstractions'
 import { VISUAL_HEADER_SIZE } from '~components/__app-tsx__/visual-header'
-import { useTheme } from '~services/theme'
 import styles from './index.module.css'
 
 export interface ViewModeTabsProps {

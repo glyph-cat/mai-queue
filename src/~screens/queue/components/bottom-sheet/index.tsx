@@ -416,6 +416,7 @@ function GeneralConfigSection(): JSX.Element {
 
 function SetFriendCodeSection(): JSX.Element {
   const selfTicket = useSelfTicket()
+  // TODO: [Mid priority] this should be based on current queue if player has ticket in the queue
   const firstFriendCodeSnapshot = useRef(() => ConfigSource.get().friendCode)
   const [friendCode, setFriendCode] = useState(firstFriendCodeSnapshot.current)
   const configState = useRelinkValue(ConfigSource)
@@ -511,7 +512,7 @@ function ShowQRSection({
           : <Spinner />
         }
       </div>
-      <span style={{ textAlign: 'center' }}>
+      <span style={{ opacity: qrValue ? 1 : 0, textAlign: 'center' }}>
         {'QR code will refresh in '}
         <br />
         {`${timeLeft} second${timeLeft === 1 ? '' : 's'}.`}

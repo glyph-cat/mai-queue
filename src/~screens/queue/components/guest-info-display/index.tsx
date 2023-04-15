@@ -1,6 +1,8 @@
 import { Spinner } from '~components/spinner'
 import styles from './index.module.css'
 
+// NOTE: No ellipsis is needed because maimai IGN are limited to 8 characters
+
 export interface GuestInfoDisplayProps {
   playerName: string
   isRetrievingPlayerInfo: boolean

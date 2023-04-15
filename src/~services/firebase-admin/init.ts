@@ -34,18 +34,10 @@ export function runTransaction<T>(
     | ReadOnlyTransactionOptions
 ): Promise<T> {
   const defaultOptions: ReadWriteTransactionOptions | ReadOnlyTransactionOptions = {
-    maxAttempts: 5,
+    maxAttempts: 3,
   }
   return DB.runTransaction(updateFunction, {
     ...transactionOptions,
     ...defaultOptions,
   })
 }
-
-
-// runTransaction<T>(
-//   updateFunction: (transaction: Transaction) => Promise<T>,
-//   transactionOptions ?:
-//     | ReadWriteTransactionOptions
-//     | ReadOnlyTransactionOptions
-// ): Promise<T>

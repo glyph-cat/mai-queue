@@ -28,7 +28,6 @@ export const OPEN_IN_NEW_TAB_PROPS = {
 export enum DateTimeFormat {
   USER_TIME_SHORT = 'hh:mm:ss a',
   LEGAL_DATE = 'd LLLL yyyy',
-  SCREENSHOT_DATE_TIME = 'yyyyLLdd_HHmmss',
 }
 
 export const PRIVACY_POLICY_AND_TNC_EFFECTIVE_DATE = DateTime.fromSQL('2023-03-01').toFormat(DateTimeFormat.LEGAL_DATE)

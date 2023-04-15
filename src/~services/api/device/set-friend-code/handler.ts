@@ -6,7 +6,7 @@ import { DBCollection } from '~services/firebase-admin'
 import { runTransaction } from '~services/firebase-admin/init'
 import { performBasicChecks } from '~utils/backend/helpers'
 import { getDeviceInfoInTransaction } from '~utils/backend/helpers/get-device-info'
-import { getPlayerData } from '~utils/backend/helpers/get-player-data'
+import { getPlayerDataAlt } from '~utils/backend/helpers/get-player-data'
 import {
   emptyResponse,
   genericTryCatchErrorResponseHandler,
@@ -43,7 +43,7 @@ export default async function APISetFriendCodeHandler(
       }
 
       if (friendCode) {
-        const { bannerUrl, playerName } = await getPlayerData(friendCode)
+        const { bannerUrl, playerName } = await getPlayerDataAlt(friendCode)
         tx.update(DBCollection.Tickets.doc(existingTicketQuery.docs[0].id), {
           [Field.friendCode]: friendCode,
           [Field.bannerUrl]: bannerUrl,

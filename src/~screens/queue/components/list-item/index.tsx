@@ -115,7 +115,7 @@ export const ListItem = memo(({ data, index, style }: ListItemProps): JSX.Elemen
         }
       }
     } while (!Object.is(response, CUSTOM_DIALOG_CANCEL_VALUE))
-  }, [alreadyFlaggedBySelfAsStale, bannerUrl, handleOnRequestSwapNumber, playerName, staleFlagCount, ticketId, ticketNumber])
+  }, [alreadyFlaggedBySelfAsStale, bannerUrl, estimatedWaitingTime, handleOnRequestSwapNumber, playerName, staleFlagCount, ticketId, ticketNumber])
 
   // Only show entrance animation if ticket was just added, but not everytime
   // the DOM element mounts after unmounting due to list virtualization.
