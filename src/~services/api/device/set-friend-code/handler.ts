@@ -34,7 +34,7 @@ export default async function APISetFriendCodeHandler(
       const {
         f: friendCode,
       } = req.query as unknown as APISetFriendCodeHandlerParams
-      devInfo(`friendCode: ${friendCode}`)
+      devInfo(`friendCode: '${friendCode}'`)
 
       const existingTicketQuery = await tx.get(DBCollection.Tickets
         .where(Field.deviceKey, '==', deviceInfo.deviceKey)
