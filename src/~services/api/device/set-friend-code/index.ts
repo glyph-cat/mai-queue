@@ -1,5 +1,5 @@
 /* eslint-disable import/no-deprecated */
-import { API_ROUTE } from '~services/navigation'
+// import { API_ROUTE } from '~services/navigation'
 import { networkGet } from '~utils/network'
 import {
   APISetFriendCodeHandlerParams,
@@ -14,7 +14,8 @@ export async function APISetFriendCode(
   params: APISetFriendCodeHandlerParams
 ): Promise<APISetFriendCodeReturnData> {
   await networkGet<APISetFriendCodeHandlerParams, APISetFriendCodeHandlerReturnData>(
-    API_ROUTE.DEVICE_SET_FRIEND_CODE,
+    // KIV: `API_ROUTE.DEVICE_SET_FRIEND_CODE` is removed for now
+    '/api/device/set-friend-code-alt',
     params,
   )
 }
