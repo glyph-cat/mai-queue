@@ -25,7 +25,7 @@ export async function getPlayerData(req: Request, res: Response): Promise<void> 
     : 'no api key'
   )
   req.headers?.api_key
-  if (req.headers['api_key'] !== ENV.APP_API_KEY) {
+  if (ENV.APP_API_KEYS.includes(req.headers['api_key'] as string)) {
     res.send('INVALID_API_KEY')
     return // Early exit
   }

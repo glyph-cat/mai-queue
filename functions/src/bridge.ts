@@ -1,6 +1,6 @@
 import admin from 'firebase-admin'
 import {
-  APP_API_KEY,
+  APP_API_KEYS,
   FIREBASE_STORAGE_BUCKET,
   SEGA_ID,
   SEGA_PW,
@@ -14,7 +14,7 @@ export const DB = admin.firestore()
 export const STORAGE_BUCKET = admin.storage().bucket()
 
 export const ENV = {
-  APP_API_KEY: APP_API_KEY,
+  APP_API_KEYS,
   SEGA_ID: SEGA_ID,
   SEGA_PW: SEGA_PW,
   FIREBASE_STORAGE_BUCKET: FIREBASE_STORAGE_BUCKET,

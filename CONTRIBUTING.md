@@ -43,11 +43,12 @@ FIREBASE_PRIVATE_KEY='["-----BEGIN PRIVATE KEY-----\n█████████
 
 ```ts
 /**
- * @see https://stackoverflow.com/a/60963496/5810737
+ * Different API keys are used for development and production
  */
-export const APP_API_KEY = String(process.env.FUNCTIONS_EMULATOR) === 'true'
-  ? '████████'
-  : '████████'
+export const APP_API_KEY: Array<string> = [
+  '████████',
+  '████████',
+]
 
 export const SEGA_ID = '████████'
 
