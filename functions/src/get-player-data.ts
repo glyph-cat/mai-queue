@@ -13,13 +13,21 @@ const SCREENSHOT_DATE_TIME_FORMAT = 'yyyyLLdd_HHmmss'
 
 const FIREBASE_STORAGE_BASE_URL = 'https://storage.googleapis.com'
 
+// TODO: Remove calls to `functions.logger.log`
+
 export const getPlayerData = functions.https.onRequest(async (req, res) => {
 
+  functions.logger.log(req.headers?.api_key
+    ? '•'.repeat(String(req.headers['api_key']).length)
+    : 'no api key'
+  )
+  req.headers?.api_key
   if (req.headers['api_key'] !== ENV.APP_API_KEY) {
     res.send('INVALID_API_KEY')
     return // Early exit
   }
 
+  functions.logger.log(`req.query?.f: ${req.query?.f}`)
   if (!req.query?.f) {
     res.send('INVALID_FRIEND_CODE')
     return // Early exit
@@ -54,7 +62,6 @@ export const getPlayerData = functions.https.onRequest(async (req, res) => {
       query: { friendCode },
     })
     await page.goto(friendSearchUrl, { waitUntil: 'networkidle0' })
-
     const bannerSelector = 'body > div.wrapper.main_wrapper.t_c > div.see_through_block.m_15.m_t_5.p_10.t_l.f_0.p_r > div.basic_block.p_10.f_0'
     try {
       await page.waitForSelector(bannerSelector, { timeout: 10000 })
@@ -68,7 +75,7 @@ export const getPlayerData = functions.https.onRequest(async (req, res) => {
         throw new Error('INVALID_FRIEND_CODE')
         // ^ Early exit; proceeds to `finally` block to cleanup Puppeteer.
       } else {
-        await page.screenshot({ path: 'scnshot_' + DateTime.now().toFormat(SCREENSHOT_DATE_TIME_FORMAT) + '.png' })
+        // await page.screenshot({ path: 'scnshot_' + DateTime.now().toFormat(SCREENSHOT_DATE_TIME_FORMAT) + '.png' })
         throw e
       }
     }

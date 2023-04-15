@@ -437,6 +437,7 @@ function SetFriendCodeSection(): JSX.Element {
       setSavingFriendCodeStatus(true)
       if (selfTicket) {
         await APISetFriendCode({ f: friendCode })
+        await StepWizard.hideBottomSheet()
       }
       await delay(Math.round(500 + Math.random() * 500))
       await ConfigSource.set((s) => ({ ...s, friendCode }))
