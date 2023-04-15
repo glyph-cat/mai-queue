@@ -11,7 +11,7 @@ import {
   emptyResponse,
   genericTryCatchErrorResponseHandler,
 } from '~utils/backend/response-handlers'
-import { devInfo } from '~utils/dev'
+import { devError, devInfo } from '~utils/dev'
 import { getFormattedGuestName } from '~utils/get-formatted-guest-name'
 import { APISetFriendCodeHandlerParams } from './abstractions'
 
@@ -27,22 +27,25 @@ export default async function APISetFriendCodeHandler(
 
       const deviceInfo = await getDeviceInfoInTransaction(tx, req)
       if (deviceInfo.friendCode) {
+        devError('Friend code already in use')
         throw new FriendCodeAlreadyInUseError()
       }
 
       const {
         f: friendCode,
       } = req.query as unknown as APISetFriendCodeHandlerParams
+      devInfo(`friendCode: ${friendCode}`)
 
       const existingTicketQuery = await tx.get(DBCollection.Tickets
         .where(Field.deviceKey, '==', deviceInfo.deviceKey)
         .where(Field.xTime, '==', null)
         .limit(1))
       if (existingTicketQuery.empty) {
-        return emptyResponse(res)
+        return emptyResponse(res) // Early exit
       }
 
       if (friendCode) {
+        devInfo('Getting player data')
         const { bannerUrl, playerName } = await getPlayerDataAlt(friendCode)
         tx.update(DBCollection.Tickets.doc(existingTicketQuery.docs[0].id), {
           [Field.friendCode]: friendCode,
