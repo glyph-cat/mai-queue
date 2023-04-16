@@ -13,8 +13,8 @@ export interface PlayerDataObject {
 // const url = 'https://us-central1-mai-queue.cloudfunctions.net/getPlayerData'
 
 const url = IS_DEBUG_ENV
-  ? 'http://127.0.0.1:5001/mai-queue/us-central1/api/getPlayerData'
-  : 'https://us-central1-mai-queue.cloudfunctions.net/api/getPlayerData'
+  ? 'http://127.0.0.1:5001/mai-queue/us-central1/getPlayerData'
+  : 'https://us-central1-mai-queue.cloudfunctions.net/getPlayerData'
 
 /**
  * Alternative method to get player data based on friend code by invoking

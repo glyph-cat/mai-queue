@@ -9,6 +9,7 @@ import {
   StorageBucketNames,
   sanitizePlayerName,
 } from './bridge'
+import { pickRandom } from './pick-random'
 
 const SCREENSHOT_DATE_TIME_FORMAT = 'yyyyLLdd_HHmmss'
 
@@ -37,7 +38,16 @@ export async function getPlayerData(req: Request, res: Response): Promise<void> 
   }
 
   const friendCode = String(req.query?.f)
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+    ],
+    defaultViewport: {
+      height: pickRandom([600, 900, 675, 720, 900]),
+      width: pickRandom([800, 1000, 1200, 1280, 1600]),
+    },
+  })
   const page = await browser.newPage()
 
   let bannerUrl: string
@@ -58,6 +68,7 @@ export async function getPlayerData(req: Request, res: Response): Promise<void> 
       // body > div.wrapper.main_wrapper.t_c > header > div > div:nth-child(2) > a:nth-child(3) > img
       page.waitForNavigation({ waitUntil: 'networkidle0' }),
     ])
+    functions.logger.log('login success')
 
     // Get player data
     const friendSearchUrl = stringifyUrl({
@@ -71,17 +82,17 @@ export async function getPlayerData(req: Request, res: Response): Promise<void> 
     } catch (e) {
       const errorBannerText = await page.evaluate(() => {
         const errorBannerElement: HTMLDivElement = document.querySelector('body > div.wrapper.main_wrapper.t_c > div.see_through_block.m_15.p_15.f_14.t_c')
-        return errorBannerElement.innerText
+        return errorBannerElement.textContent
       })
       if (/wrong code/i.test(errorBannerText)) {
         res.send('INVALID_FRIEND_CODE')
         throw new Error('INVALID_FRIEND_CODE')
         // ^ Early exit; proceeds to `finally` block to cleanup Puppeteer.
       } else {
-        // await page.screenshot({ path: 'scnshot_' + DateTime.now().toFormat(SCREENSHOT_DATE_TIME_FORMAT) + '.png' })
         throw e
       }
     }
+    functions.logger.log('navigated to friend code page')
 
     const userBanner = await page.$(bannerSelector)
     await page.evaluate(($bannerSelector) => {
@@ -115,11 +126,28 @@ export async function getPlayerData(req: Request, res: Response): Promise<void> 
       StorageBucketNames.PlayerBannerScreenshots,
       screenshotName,
     ].join('/')
+    functions.logger.log('taken snapshot for banner')
+
+    const debugScreenshot = await page.screenshot({
+      encoding: 'binary',
+      type: 'png',
+    })
+    const debugScreenshotName = `DEBUG-${DateTime.now().toFormat(SCREENSHOT_DATE_TIME_FORMAT)}.png`
+    const debugFile = STORAGE_BUCKET.file(`${StorageBucketNames.PlayerBannerScreenshots}/${debugScreenshotName}`)
+    await debugFile.save(debugScreenshot, {
+      public: false,
+      gzip: true,
+      metadata: {
+        contentType: 'image/png',
+        cacheControl: 'public, max-age=31536000',
+      },
+    })
 
     playerName = sanitizePlayerName(await page.evaluate(() => {
       const nameElement: HTMLDivElement = document.querySelector('.basic_block .name_block')
-      return nameElement?.innerText || null
+      return nameElement?.textContent || null
     }))
+    functions.logger.log('extracted player name')
 
   } catch (e) {
     error = e

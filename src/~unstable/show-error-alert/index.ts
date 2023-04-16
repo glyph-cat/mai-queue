@@ -19,7 +19,11 @@ export async function handleClientError(
       if (code > 0) {
         await CustomDialog.alert(message, `Error (code:${code})`)
       } else {
-        await CustomDialog.alert(error.message)
+        if (error.response?.status !== 500) {
+          await CustomDialog.alert(error.message)
+        } else {
+          await CustomDialog.alert('Internal error')
+        }
       }
     }
   } else if (error instanceof CustomAPIError) {
