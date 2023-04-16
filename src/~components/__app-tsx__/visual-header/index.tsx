@@ -15,7 +15,7 @@ export function VisualHeader(): JSX.Element {
   const notificationCount = 0
   const currentArcade = useArcadeInfo()
   const onRequestShowNotifications = useCallback(async () => {
-    await CustomDialog.alert(<>{'You are currently at '}<br />{formatArcadeName(currentArcade)}</>)
+    await CustomDialog.alert(<>{'You queue location is set to'}<br />{formatArcadeName(currentArcade)}</>)
   }, [currentArcade])
 
   const haveReportsToShow = notificationCount > 0

@@ -11,17 +11,28 @@ import {
 } from '@google-cloud/firestore'
 import { DB } from '~services/firebase-admin'
 
+/**
+ * Additional references:
+ * - https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
+ * - https://firebase.google.com/docs/firestore/solutions/delete-collections
+ */
 export class BatchOperator {
+
+  static CUSTOM_BATCH_LIMIT = 200
 
   private batchList: Array<WriteBatch> = []
   private currentBatch = DB.batch()
   private currentBatchCount = 0
 
+  private reloadBatch(): void {
+    this.batchList.push(this.currentBatch)
+    this.currentBatch = DB.batch()
+    this.currentBatchCount = 0
+  }
+
   private runCounterAndReloadBatchIfNecessary(): void {
-    if (this.currentBatchCount >= 500) {
-      this.batchList.push(this.currentBatch)
-      this.currentBatch = DB.batch()
-      this.currentBatchCount = 0
+    if (this.currentBatchCount >= BatchOperator.CUSTOM_BATCH_LIMIT) {
+      this.reloadBatch()
     }
     this.currentBatchCount++
   }
@@ -65,6 +76,7 @@ export class BatchOperator {
   }
 
   async commit(): Promise<void> {
+    if (this.currentBatchCount > 0) { this.reloadBatch() }
     const commitStack: Array<Promise<WriteResult[]>> = []
     for (const batch of this.batchList) {
       commitStack.push(batch.commit())

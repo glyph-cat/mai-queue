@@ -11,15 +11,11 @@ import {
 } from '~utils/backend/response-handlers'
 import { devInfo } from '~utils/dev'
 
-// TOFIX: Current method is probably not reliable
-// https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
-// https://firebase.google.com/docs/firestore/solutions/delete-collections
-
-export default async function APIResetEnvKeyHandler(
+export default async function APIResetEnvHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  devInfo(`Invoked ${APIResetEnvKeyHandler.name}`)
+  devInfo(`Invoked ${APIResetEnvHandler.name}`)
   try {
     performBasicChecks(req, [HttpMethod.DELETE])
     if (ENV.VERCEL_ENV === 'production') {

@@ -17,6 +17,7 @@ for (let i = 0; i < fileStack.length; i++) {
     const subFileStack = readdirSync(currentFullPath, 'utf-8')
     for (let j = 0; j < subFileStack.length; j++) {
       const currentDirectory = fileStack[i]
+      if (currentDirectory === 'cron') { continue }
       const currentApi = subFileStack[j]
       const API_NAME = kebabCaseToMacroCase(`${currentDirectory}_${currentApi}`)
       variableBodyStack.push(`  ${API_NAME}: \`\${CLIENT_ROUTE.api}/${currentDirectory}/${currentApi}\`,`)
