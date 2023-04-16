@@ -39,7 +39,7 @@ export function useCustomDialogFreeformContext<Response>(): ICustomDialogFreefor
 }
 
 export interface CustomDialogFreeformArgs<Props> {
-  title?: string,
+  title?: ReactNode,
   description?: ReactNode,
   component: FunctionComponent<Props> | ComponentClass<Props>
   props?: Props

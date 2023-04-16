@@ -1,7 +1,7 @@
 import { Nullable } from '@glyph-cat/swiss-army-knife'
+import { VoteCollection } from '~abstractions/vote'
 import { Field } from '~constants'
 import { IBaseModelObject, IBaseSnapshot } from '../core'
-import { VoteCollection } from '~abstractions/vote'
 
 export enum IncidentReportType {
   /**

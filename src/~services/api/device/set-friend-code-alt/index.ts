@@ -3,6 +3,7 @@ import axios from 'axios'
 import { stringifyUrl } from 'query-string'
 import { ENV, Field } from '~constants'
 import {
+  FriendCodeAlreadyInUseError,
   InternalClientError,
   InvalidAPIKeyError,
   InvalidFriendCodeError,
@@ -10,6 +11,7 @@ import {
 import { API_ROUTE } from '~services/navigation'
 import { devError, devInfo } from '~utils/dev'
 import { networkGet } from '~utils/network'
+import { APICheckFriendCode } from '../check-friend-code'
 import {
   APISetFriendCodeAltHandlerParams,
   APISetFriendCodeAltHandlerReturnData,
@@ -38,6 +40,12 @@ export async function APISetFriendCodeAlt(
     // work but it's too much work to port the variables over and breaks coherency
     // within this project at the same time. Not that the coherency is at 100%
     // now either since we need to resort to this approach... [:facepalm:]
+
+    const isFriendCodeTaken = await APICheckFriendCode({ [Field.friendCode]: friendCode })
+    if (isFriendCodeTaken) {
+      throw new FriendCodeAlreadyInUseError()
+    }
+
     const apiUrl = stringifyUrl({ url, query: { [Field.friendCode]: friendCode } })
     devInfo('Sending GET request...')
     const res = await axios.get(apiUrl, { headers: { api_key: ENV.APP_API_KEY } })

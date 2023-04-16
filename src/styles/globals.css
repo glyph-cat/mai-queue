@@ -20,7 +20,6 @@ a,
 .a {
   color: #3775de;
   cursor: pointer;
-  display: grid;
   text-decoration: underline;
 }
 

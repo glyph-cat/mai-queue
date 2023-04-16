@@ -3,11 +3,12 @@ import { HttpStatus, isNumber, isString } from '@glyph-cat/swiss-army-knife'
 import { ARCADE_LIST } from '~services/arcade-info'
 import { CustomAPIError } from './classes'
 import { SwapRequestStatus } from '~abstractions'
+import { formatArcadeName } from '~utils/format-arcade-name'
 
 function getStillInQueueErrorMessage(arcadeId: string): string {
   if (isString(arcadeId)) {
     const arcade = ARCADE_LIST[Number(arcadeId)]
-    return `You already have a ticket in ${arcade.name}, ${arcade.place}`
+    return `You already have a ticket in ${formatArcadeName(arcade)}`
   } else {
     return 'You already have a ticket'
   }

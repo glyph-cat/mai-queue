@@ -1,2 +1,7 @@
 .container {
 }
+
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+}

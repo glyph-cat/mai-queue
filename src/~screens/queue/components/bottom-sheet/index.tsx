@@ -1,6 +1,7 @@
 import {
   concatClassNames,
   delay,
+  getRandomNumber,
   isNumber,
   useLayoutEffect,
   useRef,
@@ -51,6 +52,8 @@ import {
   StepWizard,
   StepWizardSource,
 } from './source'
+import Link from 'next/link'
+import { CLIENT_ROUTE } from '~services/navigation'
 
 // TODO: [High priority] Reflect to show status cannot take number if not near arcade, how to visually convey this?
 
@@ -439,7 +442,7 @@ function SetFriendCodeSection(): JSX.Element {
         await APISetFriendCodeAlt({ f: friendCode })
         await StepWizard.hideBottomSheet()
       }
-      await delay(Math.round(500 + Math.random() * 500))
+      await delay(getRandomNumber(500, 1000))
       await ConfigSource.set((s) => ({ ...s, friendCode }))
     } catch (e) {
       handleClientError(e)
@@ -450,9 +453,10 @@ function SetFriendCodeSection(): JSX.Element {
 
   return (
     <>
-      <span style={{ textAlign: 'center' }}>
-        Enter friend code to show your profile.<br />This helps the crowd to recognize you and prevent impostors from cutting into the queue. You can find your friend code at <a href='https://maimaidx-eng.com/maimai-mobile/friend/userFriendCode' {...OPEN_IN_NEW_TAB_PROPS}>maimaidx</a>.
-      </span>
+      <div className={GlobalStyles.centerAll} style={{ gap: 10, marginBottom: 10 }}>
+        <span>Enter friend code to show your profile on your ticket.</span>
+        <Link href={CLIENT_ROUTE.help_friendCode} {...OPEN_IN_NEW_TAB_PROPS}>How to find my friend code?</Link>
+      </div>
       <input
         className={styles.friendCodeInput}
         value={friendCode}

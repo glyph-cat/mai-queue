@@ -1,20 +1,24 @@
 import { MaterialIcon, MaterialIconProps } from '@glyph-cat/swiss-army-knife'
 import Link from 'next/link'
 import { useCallback } from 'react'
+import { CustomDialog } from '~components/custom-dialog'
 import { PROJECT_NAME } from '~constants'
+import { useArcadeInfo } from '~services/arcade-info'
 import { CLIENT_ROUTE } from '~services/navigation'
 import { useTheme } from '~services/theme'
+import { formatArcadeName } from '~utils/format-arcade-name'
 import styles from './index.module.css'
 
 export const VISUAL_HEADER_SIZE = 48 // px
 
 export function VisualHeader(): JSX.Element {
-  const notificationCount = 10
-  const onRequestShowNotifications = useCallback(() => {
-    // ...
-  }, [])
+  const notificationCount = 0
+  const currentArcade = useArcadeInfo()
+  const onRequestShowNotifications = useCallback(async () => {
+    await CustomDialog.alert(<>{'You are currently at '}<br />{formatArcadeName(currentArcade)}</>)
+  }, [currentArcade])
 
-  const showEmphasis = notificationCount > 0
+  const haveReportsToShow = notificationCount > 0
   // TODO: [Low priority] `&& unread notifications`
 
   return (
@@ -31,14 +35,12 @@ export function VisualHeader(): JSX.Element {
           {`~ ${PROJECT_NAME} ~`}
         </Link>
       </div>
-      {false && ( // Temporarily hidden
-        <IconButton
-          // @ts-ignore - TOFIX: [Mid priority] In '@glyph-cat/swiss-army-knife'
-          icon='crisis_alert'
-          onPress={onRequestShowNotifications}
-          emphasis={showEmphasis}
-        />
-      )}
+      <IconButton
+        // @ts-ignore - TOFIX: [Mid priority] In '@glyph-cat/swiss-army-knife'
+        icon={haveReportsToShow ? 'crisis_alert' : 'info'}
+        onPress={onRequestShowNotifications}
+        emphasis={haveReportsToShow}
+      />
     </nav>
   )
 }
@@ -61,7 +63,7 @@ function IconButton({
       role='button'
       onClick={onPress}
     >
-      <div className={styles.emphasisRipple} />
+      {emphasis && <div className={styles.emphasisRipple} />}
       <MaterialIcon
         name={icon}
         {...(emphasis ? { color: palette.dangerRed } : {})}

@@ -60,8 +60,9 @@ export const FIREBASE_STORAGE_BUCKET = 'PROJECT_NAME.appspot.com'
 <br/>
 
 # Running in localhost
-1. Run `yarn start`.
-2. Visit [`http://localhost:3000`](http://localhost:3000).
+1. Run `yarn start` to start the UI.
+2. Run `yarn fn` to start Firebase functions emulator.
+3. Visit [`http://localhost:3000`](http://localhost:3000).
 
 # Enabling HTTPS
 The Notification Web API according to [MDN](https://developer.mozilla.org/en-US/docs/Web/API/notification):
@@ -77,5 +78,10 @@ ngrok config add-authtoken ████████████████
 ```
 4. Run `yarn ngrok` in the project directory.
 5. A HTTP and HTTPS tunnel link will be shown to you, open the HTTPS link in a browser.
+
+<br/>
+
+# Creating Pull Requests
+After creating a fork of the repo, please switch to and make changes on the `prerelease` branch. Then when creating pull requests, it should be a request to merge from the forked `prerelease` branch to the original `prerelease` branch.
 
 <br/>

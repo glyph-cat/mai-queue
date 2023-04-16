@@ -21,8 +21,9 @@
   line-height: 1.5em;
 }
 
-.contentContainer ul li {
+.contentContainer li {
   font-size: 14pt;
+  margin-bottom: 0.5em;
 }
 
 @media only screen and (max-width: 800px) {
@@ -33,7 +34,7 @@
     margin: 0px;
     padding: 10px 20px;
   }
-  .contentContainer ul li {
+  .contentContainer li {
     font-size: 12pt;
   }
 }

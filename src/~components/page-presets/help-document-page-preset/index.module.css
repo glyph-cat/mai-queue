@@ -1,0 +1,9 @@
+.helpButtonContainer {
+  align-items: center;
+  grid-template-columns: auto 1fr;
+}
+
+.label {
+  font-size: 14pt;
+  text-decoration: underline;
+}

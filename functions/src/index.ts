@@ -12,7 +12,9 @@ function withCors(handler) {
   return app
 }
 
-export const getPlayerData = functions.https.onRequest(withCors(getPlayerData_fn))
+export const getPlayerData = functions
+  .runWith({ memory: '512MB' })
+  .https.onRequest(withCors(getPlayerData_fn))
 
 export const hello = functions.https.onRequest(withCors((req, res) => {
   res.status(200).send('Hello')

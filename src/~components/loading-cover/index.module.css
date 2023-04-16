@@ -1,5 +1,4 @@
 .innerContainer {
-  display: grid;
   grid-template-columns: auto 1fr;
   place-items: center;
   gap: 20px;

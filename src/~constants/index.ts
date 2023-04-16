@@ -30,7 +30,10 @@ export enum DateTimeFormat {
   LEGAL_DATE = 'd LLLL yyyy',
 }
 
-export const PRIVACY_POLICY_AND_TNC_EFFECTIVE_DATE = DateTime.fromSQL('2023-03-01').toFormat(DateTimeFormat.LEGAL_DATE)
+export const PRIVACY_POLICY_AND_TNC_EFFECTIVE_DATE = DateTime.fromSQL('2023-04-16').toFormat(DateTimeFormat.LEGAL_DATE)
+
+export const CONTACT_EMAIL = 'role_chortle.0d@icloud.com'
+export const MAILTO_CONTACT_EMAIL = `mailto:${CONTACT_EMAIL}`
 
 export * from './device-recognition'
 export * from './env'

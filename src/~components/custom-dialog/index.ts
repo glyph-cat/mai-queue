@@ -16,7 +16,7 @@ export namespace CustomDialog {
   }
 
   export async function alert(
-    title: string,
+    title: ReactNode,
     description?: ReactNode,
     options: AlertOptions = {}
   ): Promise<void> {
@@ -79,7 +79,7 @@ export namespace CustomDialog {
   }
 
   export async function choice<Response>(
-    title: string,
+    title: ReactNode,
     description: Nullable<ReactNode>,
     options: ChoiceOptions<Response>
   ): Promise<CustomDialogCancellableValue<Response>> {

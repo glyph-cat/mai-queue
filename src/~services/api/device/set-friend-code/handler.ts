@@ -2,7 +2,6 @@
 import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Field } from '~constants'
-import { FriendCodeAlreadyInUseError } from '~errors'
 import { DBCollection } from '~services/firebase-admin'
 import { runTransaction } from '~services/firebase-admin/init'
 import { performBasicChecks } from '~utils/backend/helpers'
@@ -12,7 +11,7 @@ import {
   emptyResponse,
   genericTryCatchErrorResponseHandler,
 } from '~utils/backend/response-handlers'
-import { devError, devInfo } from '~utils/dev'
+import { devInfo } from '~utils/dev'
 import { getFormattedGuestName } from '~utils/get-formatted-guest-name'
 import { APISetFriendCodeHandlerParams } from './abstractions'
 
@@ -27,10 +26,11 @@ export default async function APISetFriendCodeHandler(
     await runTransaction(async (tx) => {
 
       const deviceInfo = await getDeviceInfoInTransaction(tx, req)
-      if (deviceInfo.friendCode) {
-        devError('Friend code already in use')
-        throw new FriendCodeAlreadyInUseError()
-      }
+      // if (deviceInfo.friendCode) {
+      //   devError('Friend code already in use')
+      //   throw new FriendCodeAlreadyInUseError()
+      //   // KIV: Wtf is this...
+      // }
 
       const {
         [Field.friendCode]: friendCode,
