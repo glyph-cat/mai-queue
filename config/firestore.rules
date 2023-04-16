@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-  	match /Tickets/{ticket} {
+  	match /PROD_Tickets/{ticket} {
       allow read: if true;
       allow write: if false;
     }
@@ -13,7 +13,7 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
-    match /SwapRequests/{swapRequest} {
+    match /PROD_SwapRequests/{swapRequest} {
       allow read: if true;
       allow write: if false;
     }
