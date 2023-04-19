@@ -6,9 +6,9 @@ import { APIRevokeDeviceKey } from '~services/api/device/revoke-key'
 import { APICloseTicket } from '~services/api/ticket/close'
 import { NotificationSource } from '~services/notification'
 import { ConfigSource } from '~sources/config'
-import { IncomingSwapRequestSource } from '~sources/incoming-swap-request-source'
 import { OutgoingSwapRequestSource } from '~sources/outgoing-swap-request-source/source'
-import { handleClientError } from '~unstable/show-error-alert'
+import { UserPreferencesSource } from '~sources/user-preferences'
+import { devError } from '~utils/dev'
 
 export interface ClearCacheOptions {
   noReload?: boolean
@@ -27,14 +27,14 @@ export async function clearCache({
         [Field.xReason]: CloseTicketReason.WITHDRAW,
       })
     } catch (e) {
-      await handleClientError(e)
+      devError(e)
     }
   }
   await APIRevokeDeviceKey()
   await Promise.all([
     ConfigSource.reset(),
-    IncomingSwapRequestSource.reset(),
     OutgoingSwapRequestSource.reset(),
+    UserPreferencesSource.reset(),
     NotificationSource.reset(),
   ])
   sessionStorage.clear()

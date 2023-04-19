@@ -5,8 +5,8 @@ A fan-made online queuing system for the maimai arcade rhythm game.
 <br/>
 
 Project Links:
-* **Production**: `https://mai-queue.vercel.app`
-* **Preview**: `https://mai-queue-git-prerelease-glyph-cat.vercel.app`
+* **Production**: https://mai-queue.vercel.app
+* **Preview**: https://mai-queue-git-prerelease-glyph-cat.vercel.app
 
 <br/><hr/><br/>
 

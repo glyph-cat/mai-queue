@@ -13,7 +13,7 @@ import { CloseTicketReason } from '~abstractions'
 import { AnimatedBackdrop } from '~components/animated-backdrop'
 import { CustomDialog } from '~components/custom-dialog'
 import { ChoiceItem } from '~components/custom-dialog/choice'
-import { LinkButton, TextButton } from '~components/form'
+import { LinkButton, TextButton, ToggleSwitch, ToggleSwitchWithLabel } from '~components/form'
 import { LiveVideoCanvas } from '~components/live-video-canvas'
 import { LoadingCover } from '~components/loading-cover'
 import { Spinner } from '~components/spinner'
@@ -54,6 +54,7 @@ import {
 } from './source'
 import Link from 'next/link'
 import { CLIENT_ROUTE } from '~services/navigation'
+import { UserPreferencesSource } from '~sources/user-preferences'
 
 // TODO: [High priority] Reflect to show status cannot take number if not near arcade, how to visually convey this?
 
@@ -158,7 +159,6 @@ export function BottomSheet({
           friendCode: ConfigSource.default.friendCode,
         }))
       } else {
-        // TODO: [Mid priority] If player have ticket in another arcade, assuming that is forgot to close, error is thrown, but we need to be able to pass parameters to inform the user to cancel it, may be in the GUI, we can offer to cancel the ticket for the player, so that he/she does't need to change `arcadeId`.
         handleClientError(e)
       }
     } finally {
@@ -167,6 +167,7 @@ export function BottomSheet({
     if (isRequestSuccessful && friendCode) {
       try {
         await UnstableSource.set((s) => ({ ...s, isRetrievingPlayerInfo: true }))
+        await delay(getRandomNumber(5000, 10000)) // See footnote [A]
         await APISetFriendCodeAlt({ f: friendCode })
       } catch (e) {
         handleClientError(e)
@@ -392,6 +393,15 @@ function GeneralConfigSection(): JSX.Element {
   const selfTicket = useSelfTicket()
   const selfTicketId = selfTicket?.id
   const selfTicketNumber = selfTicket?.ticketNumber
+
+  const allowNotifications = useRelinkValue(UserPreferencesSource, (s) => s.allowNotifications)
+  const onChangeAllowNotifications = useCallback(async (newAllowNotificationsState: boolean) => {
+    await UserPreferencesSource.set((s) => ({
+      ...s,
+      allowNotifications: newAllowNotificationsState,
+    }))
+  }, [])
+
   const onRequestClearCache = useCallback(async () => {
     const shouldProceed = await CustomDialog.confirm(
       'Confirm clear cache?',
@@ -403,9 +413,19 @@ function GeneralConfigSection(): JSX.Element {
     if (!shouldProceed) { return }
     await clearCache({ ticketId: selfTicketId })
   }, [palette.dangerRed, selfTicketId, selfTicketNumber])
+
   return (
     <div style={{ padding: 10, justifyItems: 'center' }}>
-      <div style={{ gap: 10, minWidth: 200, width: '65%' }}>
+      <div style={{ gap: 20, minWidth: 200, width: '65%' }}>
+        <span className={styles.stepTitle}>Settings</span>
+        <div className={styles.notificationsField}>
+          <ToggleSwitchWithLabel
+            label={'Allow notifications?'}
+            value={allowNotifications}
+            onChange={onChangeAllowNotifications}
+          />
+        </div>
+        <div style={{ backgroundColor: '#80808040', height: 1 }} />
         <TextButton
           label={'Clear cache'}
           onPress={onRequestClearCache}
@@ -439,6 +459,7 @@ function SetFriendCodeSection(): JSX.Element {
     try {
       setSavingFriendCodeStatus(true)
       if (selfTicket) {
+        await delay(getRandomNumber(3000, 7000)) // See footnote [A]
         await APISetFriendCodeAlt({ f: friendCode })
         await StepWizard.hideBottomSheet()
       }
@@ -630,3 +651,8 @@ function ScanQRSection(): JSX.Element {
     </div>
   )
 }
+
+// Footnotes
+// [A] Random delays are added to reduce chances of race conditions, for fearing
+//     that if the same account is logged in twice, one of them will expire.
+

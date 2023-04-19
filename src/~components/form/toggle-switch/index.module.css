@@ -1,0 +1,44 @@
+.container {
+  --containerSize: 36px;
+  align-items: center;
+  background-color: #80808080;
+  border-radius: var(--containerSize);
+  cursor: pointer;
+  height: var(--containerSize);
+  width: calc(var(--containerSize) * 2);
+}
+
+.containerOn {
+  background-color: var(--primaryOrange);
+}
+
+.orb {
+  --orbPadding: 5px;
+  --orbSize: calc(var(--containerSize) - var(--orbPadding) * 2);
+  background-color: var(--fixedWhite);
+  border-radius: var(--orbSize);
+  margin-inline-start: var(--orbPadding);
+  height: var(--orbSize);
+  width: var(--orbSize);
+  transition: transform 0.2s, margin 0.2s;
+}
+
+.container:active .orb {
+  opacity: 0.5;
+  transform: scale(0.85);
+}
+
+.orbOn {
+  margin-inline-start: calc(var(--containerSize) + var(--orbPadding));
+}
+
+.withLabelContainer {
+  align-items: center;
+  gap: 10px;
+  grid-template-columns: 1fr auto;
+}
+
+.label {
+  font-size: 14pt;
+  user-select: none;
+}

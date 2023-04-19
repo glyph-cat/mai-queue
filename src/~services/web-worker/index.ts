@@ -5,12 +5,15 @@ import { useEstimatedWaitingTime } from '~hooks/estimated-waiting-time'
 import { useSelfTicket } from '~hooks/self-ticket'
 import { useArcadeInfo } from '~services/arcade-info'
 import { CLIENT_ROUTE } from '~services/navigation'
-import { checkNotificationPermission } from '~services/notification'
+import { NotificationSource, checkNotificationPermission } from '~services/notification'
 import { UserPreferencesSource } from '~sources/user-preferences'
 import {
   CustomWebWorkerBaseEventType,
   CustomWebWorkerNotificationEventData,
 } from './abstractions'
+
+const NEXT_TURN_THRESHOLD_MINUTES = 5
+const NEXT_TURN_THRESHOLD_SECONDS = NEXT_TURN_THRESHOLD_MINUTES * 1000
 
 export function useWebWorker(): void {
   const workerRef = useRef<Worker>()
@@ -20,11 +23,15 @@ export function useWebWorker(): void {
     return () => { workerRef.current?.terminate() }
   }, [])
 
+  const notificationState = useRelinkValue(NotificationSource)
+
   const selfTicket = useSelfTicket()
+  const selfTicketId = selfTicket?.id
+  const selfTicketCTime = selfTicket?.cTime
   const currentArcade = useArcadeInfo()
   const allowNotifications = useRelinkValue(UserPreferencesSource, (s) => s.allowNotifications)
 
-  const shouldCreateNotifications = useCallback(() => {
+  const shouldCreateNotification = useCallback(() => {
     if (allowNotifications) {
       if (!document.hasFocus() && document.visibilityState === 'hidden') {
         if (currentArcade) {
@@ -37,40 +44,43 @@ export function useWebWorker(): void {
   const createNotification = useCallback(async (
     messageData: CustomWebWorkerNotificationEventData
   ) => {
+    const { key, ...remainingMessageData } = messageData
     await checkNotificationPermission()
-    workerRef.current.postMessage(JSON.stringify(messageData))
+    workerRef.current.postMessage(JSON.stringify(remainingMessageData))
+    await NotificationSource.set((s) => ({ ...s, cache: { ...s.cache, [key]: true } }))
   }, [])
 
   const estimatedWaitingTime = useEstimatedWaitingTime(selfTicket?.positionInQueue)
   useEffect(() => {
-    if (!shouldCreateNotifications()) { return } // Early exit
-    // Show notification when there's 5 minutes left
-    if (isNumber(estimatedWaitingTime) && estimatedWaitingTime <= 5) {
-      // TODO: [Low priority] Only show notification once (no repeat if already shown notification after refresh page)
-      // TODO: [Low priority] Refactor
-      // if (localStorage.getItem(String(selfTicket.originalTicketNumber))) {
-      //   return
-      // }
-      // localStorage.setItem(String(selfTicket.originalTicketNumber), 'true')
+    if (!shouldCreateNotification()) { return } // Early exi
+    if (isNumber(estimatedWaitingTime) && estimatedWaitingTime <= NEXT_TURN_THRESHOLD_MINUTES) {
+      // No need to show notification if ticket was just created
+      if (selfTicketCTime.diffNow().negate().as('seconds') <= NEXT_TURN_THRESHOLD_SECONDS) {
+        return // Early exit
+      }
+      // Only show notification once (no repeat if already shown notification after refresh page)
+      const notificationKey = `NEXT_${selfTicketId}`
+      if (notificationState.cache[notificationKey]) { return }
       createNotification({
+        key: notificationKey,
         type: CustomWebWorkerBaseEventType.NOTIFICATION,
-        title: 'It\'s your turn next',
+        title: 'It\'s almost your turn next',
         message: `Estimated time: ${estimatedWaitingTime}minute(s)`,
         url: CLIENT_ROUTE.root,
       })
     }
-  }, [createNotification, shouldCreateNotifications, estimatedWaitingTime])
+  }, [createNotification, shouldCreateNotification, estimatedWaitingTime, notificationState.cache, selfTicketId, selfTicketCTime])
 
-  useEffect(() => {
-    if (!shouldCreateNotifications()) { return } // Early exit
-    // TODO: [Low priority] Show notification for swap requests
-    const TEMP_playerName = '<player>' // TODO: [Low priority]
-    createNotification({
-      type: CustomWebWorkerBaseEventType.NOTIFICATION,
-      title: `Swap request from ${TEMP_playerName}`,
-      message: '', // TODO: [Low priority]
-      url: CLIENT_ROUTE.root,
-    })
-  }, [createNotification, shouldCreateNotifications])
+  // useEffect(() => {
+  //   if (!shouldCreateNotification()) { return } // Early exit
+  //   // TODO: [Low priority] Show notification for swap requests
+  //   const TEMP_playerName = '<player>' // TODO: [Low priority]
+  //   createNotification({
+  //     type: CustomWebWorkerBaseEventType.NOTIFICATION,
+  //     title: `Swap request from ${TEMP_playerName}`,
+  //     message: '', // TODO: [Low priority]
+  //     url: CLIENT_ROUTE.root,
+  //   })
+  // }, [createNotification, shouldCreateNotification])
 
 }

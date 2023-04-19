@@ -115,6 +115,12 @@
   text-align: center;
 }
 
+.stepTitle {
+  font-size: 16pt;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
 /* #region GeneralConfigSection */
 
 /* #endregion GeneralConfigSection */

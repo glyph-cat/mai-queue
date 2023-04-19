@@ -7,6 +7,7 @@ export interface CustomWebWorkerBaseEventData {
 }
 
 export interface CustomWebWorkerNotificationEventData extends CustomWebWorkerBaseEventData {
+  key: string
   type: CustomWebWorkerBaseEventType.NOTIFICATION
   title: string
   message: string

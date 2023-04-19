@@ -9,7 +9,11 @@ export enum NotificationPermission {
 }
 
 export interface INotificationSource {
+  /**
+   * Whether or not system permission is granted.
+   */
   permission: NotificationPermission
+  cache: Record<string, true>
 }
 
 const STORAGE_KEY = 'notification'
@@ -17,7 +21,7 @@ export const NotificationSource = new RelinkSource<INotificationSource>({
   key: STORAGE_KEY,
   default: {
     permission: NotificationPermission.DEFAULT,
-    // TODO: [Low priority] Create a cache
+    cache: {},
   },
   lifecycle: typeof window === 'undefined' ? {} : {
     init({ commit, commitNoop, defaultState }) {

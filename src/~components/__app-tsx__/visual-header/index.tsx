@@ -35,12 +35,14 @@ export function VisualHeader(): JSX.Element {
           {`~ ${PROJECT_NAME} ~`}
         </Link>
       </div>
-      <IconButton
-        // @ts-ignore - TOFIX: [Mid priority] In '@glyph-cat/swiss-army-knife'
-        icon={haveReportsToShow ? 'crisis_alert' : 'info'}
-        onPress={onRequestShowNotifications}
-        emphasis={haveReportsToShow}
-      />
+      {currentArcade && (
+        <IconButton
+          // @ts-ignore - TOFIX: [Mid priority] In '@glyph-cat/swiss-army-knife'
+          icon={haveReportsToShow ? 'crisis_alert' : 'info'}
+          onPress={onRequestShowNotifications}
+          emphasis={haveReportsToShow}
+        />
+      )}
     </nav>
   )
 }
