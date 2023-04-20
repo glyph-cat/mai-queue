@@ -1,6 +1,6 @@
-import type { ArcadeInfo } from './abstractions'
+import type { IArcadeInfo } from './abstractions'
 
-export const ARCADE_LIST: Array<Omit<ArcadeInfo, 'id'>> = [
+export const ARCADE_LIST: Array<Omit<IArcadeInfo, 'id'>> = [
   undefined, // Skipped because 0-index is dangerous in data validation
   {
     name: 'FunScape',

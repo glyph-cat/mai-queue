@@ -36,7 +36,15 @@
 }
 
 .itemContainerClosed {
-  background-color: #c0ffc0;
+  background-color: #a0ffd0;
+}
+
+.itemContainerWithdraw {
+  background-color: #eedddd;
+}
+
+.itemContainerStale {
+  background-color: #dee6a7;
 }
 
 .itemContainerOtherPlayer {

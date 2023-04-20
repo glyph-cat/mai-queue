@@ -16,10 +16,13 @@ export function Footer(): JSX.Element {
           marginBottom: `calc(env(safe-area-inset-bottom) + ${route === CLIENT_ROUTE.root ? 100 : 10}px)`,
         }}
       >
-        <Link href={CLIENT_ROUTE.root}>Home</Link>
+        <div style={{ gridAutoFlow: 'column', gap: 10 }}>
+          <Link href={CLIENT_ROUTE.root}>Home</Link>
+          <Link href={CLIENT_ROUTE.credits}>Credits</Link>
+          <Link href={CLIENT_ROUTE.help}>Help</Link>
+        </div>
         <Link href={CLIENT_ROUTE.privacyPolicy}>Privacy policy</Link>
         <Link href={CLIENT_ROUTE.termsConditions}>Terms & Conditions</Link>
-        <Link href={CLIENT_ROUTE.help}>Help</Link>
         <Link href={ENV.GIT_REPO_HOMEPAGE} {...OPEN_IN_NEW_TAB_PROPS}>View on GitHub</Link>
         <span className={isNotProductionEnv ? styles.devVersionLabel : null}>
           {ENV.APP_VERSION ? `v${ENV.APP_VERSION}` : 'Version unknown'}

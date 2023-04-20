@@ -1,4 +1,6 @@
-export type APIRequestDeviceKeyHandlerParams = Record<string, never>
+import { EmptyRecord } from '~abstractions'
+
+export type APIRequestDeviceKeyHandlerParams = EmptyRecord
 
 export type APIRequestDeviceKeyHandlerReturnData = string // Device key
 

@@ -1,6 +1,7 @@
 import { HttpStatus } from '@glyph-cat/swiss-army-knife'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import QS from 'query-string'
+import { EmptyRecord } from '~abstractions'
 import { Field } from '~constants'
 import { CLIENT_ROUTE } from '~services/navigation'
 
@@ -8,7 +9,7 @@ export { default } from '~screens/main'
 
 export function getServerSideProps(
   context: GetServerSidePropsContext
-): GetServerSidePropsResult<Record<string, never>> {
+): GetServerSidePropsResult<EmptyRecord> {
   let { [Field.arcadeId]: arcadeId } = context.query || {}
   arcadeId = String(arcadeId)
 

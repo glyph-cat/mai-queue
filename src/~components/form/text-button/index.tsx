@@ -3,6 +3,7 @@ import { Property } from 'csstype'
 import { Spinner } from '~components/spinner'
 import { useTheme } from '~services/theme'
 import styles from './index.module.css'
+import { CSSProperties } from 'react'
 
 export interface TextButtonProps {
   label: string
@@ -11,6 +12,7 @@ export interface TextButtonProps {
   type?: 'primary' | 'neutral' | 'destructive' | 'safe'
   disabled?: boolean
   loading?: boolean
+  style?: CSSProperties
 }
 
 export function TextButton({
@@ -20,6 +22,7 @@ export function TextButton({
   type,
   disabled,
   loading,
+  style,
 }: TextButtonProps): JSX.Element {
   const { palette } = useTheme()
   const shouldBlockButton = disabled || loading
@@ -46,7 +49,7 @@ export function TextButton({
         styles.containerL
       )}
       onClick={shouldBlockButton ? undefined : onPress}
-      style={{ backgroundColor: bgColor, color: fgColor }}
+      style={{ backgroundColor: bgColor, color: fgColor, ...style }}
       tabIndex={0}
       role='button'
     >

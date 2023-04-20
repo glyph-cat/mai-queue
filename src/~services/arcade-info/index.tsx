@@ -2,9 +2,9 @@ import { isString } from '@glyph-cat/swiss-army-knife'
 import { useRouter } from 'next/router'
 import { createContext, ReactNode, useContext, useMemo } from 'react'
 import { ARCADE_LIST } from './list'
-import { ArcadeInfo } from './abstractions'
+import { IArcadeInfo } from './abstractions'
 
-const ArcadeInfoContext = createContext<ArcadeInfo>(null)
+const ArcadeInfoContext = createContext<IArcadeInfo>(null)
 
 const STORAGE_KEY = 'arcade-id'
 
@@ -47,7 +47,7 @@ export function ArcadeInfoProvider({
   )
 }
 
-export function useArcadeInfo(): ArcadeInfo {
+export function useArcadeInfo(): IArcadeInfo {
   return useContext(ArcadeInfoContext)
 }
 

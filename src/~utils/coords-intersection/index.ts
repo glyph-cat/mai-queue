@@ -1,8 +1,8 @@
-import { Coord } from '~abstractions'
+import { ICoordinate } from '~abstractions'
 
 export function checkIfCoordIsWithinRadius(
-  evaluationCoord: Coord,
-  targetCoord: Coord,
+  evaluationCoord: ICoordinate,
+  targetCoord: ICoordinate,
   radius: number
 ): boolean {
   // TODO: [High priority] Take altitude into consideration, but when it is available
@@ -13,7 +13,7 @@ export function checkIfCoordIsWithinRadius(
 /**
  * Reference: https://www.movable-type.co.uk/scripts/latlong.html
  */
-function getLatLonDistance(coord1: Coord, coord2: Coord): number {
+function getLatLonDistance(coord1: ICoordinate, coord2: ICoordinate): number {
 
   const { latitude: lat1, longitude: lon1, altitude: alt1 } = coord1
   const { latitude: lat2, longitude: lon2, altitude: alt2 } = coord2
@@ -35,7 +35,7 @@ function getLatLonDistance(coord1: Coord, coord2: Coord): number {
 /**
  * @see https://dirask.com/posts/JavaScript-calculate-distance-between-two-points-in-3D-space-xpz9aD
  */
-function UNSTABLE_getDistance(coord1: Coord, coord2: Coord): number {
+function UNSTABLE_getDistance(coord1: ICoordinate, coord2: ICoordinate): number {
   const dLat = coord2.latitude - coord1.latitude
   const dLon = coord2.longitude - coord1.longitude
   const dAlt = coord2.altitude - coord1.altitude

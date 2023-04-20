@@ -11,6 +11,8 @@ export const MAX_ALLOWED_SWAP_REQUEST_RETRY_COUNT = 3
 
 export const MAX_ALLOWED_STALE_FLAG_COUNT = 5
 
+export const INCIDENT_REPORT_COMMENT_MAX_CHARACTERS = 200
+
 /**
  * Each cabinet has 2 sides, this is a fact.
  *

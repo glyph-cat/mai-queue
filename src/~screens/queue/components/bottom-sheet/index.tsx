@@ -270,7 +270,10 @@ export function BottomSheet({
           </div>
 
           {/* Step wizard area */}
-          <div style={shouldShowBottomSheet ? { gap: 10 } : {}}>
+          <div style={shouldShowBottomSheet ? {
+            gap: 10,
+            // backgroundColor: 'yellowgreen',
+          } : {}}>
 
             {step === StepIndex.CONFIG && <GeneralConfigSection />}
 
@@ -415,12 +418,12 @@ function GeneralConfigSection(): JSX.Element {
   }, [palette.dangerRed, selfTicketId, selfTicketNumber])
 
   return (
-    <div style={{ padding: 10, justifyItems: 'center' }}>
-      <div style={{ gap: 20, minWidth: 200, width: '65%' }}>
+    <div style={{}}>
+      <div style={{ gap: 20 }}>
         <span className={styles.stepTitle}>Settings</span>
         <div className={styles.notificationsField}>
           <ToggleSwitchWithLabel
-            label={'Allow notifications?'}
+            label={'Notifications'}
             value={allowNotifications}
             onChange={onChangeAllowNotifications}
           />
@@ -430,6 +433,7 @@ function GeneralConfigSection(): JSX.Element {
           label={'Clear cache'}
           onPress={onRequestClearCache}
           color={palette.dangerRed}
+          style={{ minWidth: 200, justifySelf: 'center' }}
         />
       </div>
     </div>
@@ -475,7 +479,9 @@ function SetFriendCodeSection(): JSX.Element {
   return (
     <>
       <div className={GlobalStyles.centerAll} style={{ gap: 10, marginBottom: 10 }}>
-        <span>Enter friend code to show your profile on your ticket.</span>
+        <span style={{ textAlign: 'center' }}>
+          {'Enter friend code to show your profile on your ticket.'}
+        </span>
         <Link href={CLIENT_ROUTE.help_friendCode} {...OPEN_IN_NEW_TAB_PROPS}>How to find my friend code?</Link>
       </div>
       <input

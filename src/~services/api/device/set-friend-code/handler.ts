@@ -15,6 +15,9 @@ import { devInfo } from '~utils/dev'
 import { getFormattedGuestName } from '~utils/get-formatted-guest-name'
 import { APISetFriendCodeHandlerParams } from './abstractions'
 
+/**
+ * @deprecated
+ */
 export default async function APISetFriendCodeHandler(
   req: NextApiRequest,
   res: NextApiResponse

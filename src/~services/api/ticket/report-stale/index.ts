@@ -1,3 +1,4 @@
+import { EmptyRecord } from '~abstractions'
 import { API_ROUTE } from '~services/navigation'
 import { networkPost } from '~utils/network'
 import {
@@ -9,7 +10,7 @@ import {
 export async function APIReportStaleTicket(
   params: APIReportStaleTicketHandlerParams
 ): Promise<APIReportStaleTicketReturnData> {
-  const res = await networkPost<Record<string, never>, APIReportStaleTicketHandlerParams, APIReportStaleTicketHandlerReturnData>(
+  const res = await networkPost<EmptyRecord, APIReportStaleTicketHandlerParams, APIReportStaleTicketHandlerReturnData>(
     API_ROUTE.TICKET_REPORT_STALE,
     {},
     params,

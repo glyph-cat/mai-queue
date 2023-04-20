@@ -14,7 +14,7 @@ export async function APISetFriendCode(
   params: APISetFriendCodeHandlerParams
 ): Promise<APISetFriendCodeReturnData> {
   await networkGet<APISetFriendCodeHandlerParams, APISetFriendCodeHandlerReturnData>(
-    // KIV: `API_ROUTE.DEVICE_SET_FRIEND_CODE` is removed for now
+    // NOTE: `API_ROUTE.DEVICE_SET_FRIEND_CODE` is removed for now
     '/api/device/set-friend-code-alt',
     params,
   )

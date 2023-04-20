@@ -1,9 +1,10 @@
 import { GetServerSidePropsResult } from 'next'
+import { EmptyRecord } from '~abstractions'
 import { ENV } from '~constants'
 
 export { default } from '~screens/debug-geolocation'
 
-export function getServerSideProps(): GetServerSidePropsResult<Record<string, never>> {
+export function getServerSideProps(): GetServerSidePropsResult<EmptyRecord> {
   if (ENV.VERCEL_ENV === 'production') {
     return {
       notFound: true,

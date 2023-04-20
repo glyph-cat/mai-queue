@@ -1,11 +1,13 @@
 .container {
-  --containerSize: 36px;
+  --containerSize: 32px;
+  --transitionDuration: 0.2s;
   align-items: center;
   background-color: #80808080;
   border-radius: var(--containerSize);
   cursor: pointer;
   height: var(--containerSize);
   width: calc(var(--containerSize) * 2);
+  transition: background-color var(--transitionDuration);
 }
 
 .containerOn {
@@ -20,7 +22,8 @@
   margin-inline-start: var(--orbPadding);
   height: var(--orbSize);
   width: var(--orbSize);
-  transition: transform 0.2s, margin 0.2s;
+  transition: transform var(--transitionDuration),
+    margin var(--transitionDuration);
 }
 
 .container:active .orb {

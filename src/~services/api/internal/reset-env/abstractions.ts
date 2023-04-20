@@ -1,4 +1,6 @@
-export type APIResetEnvHandlerParams = Record<string, never>
+import { EmptyRecord } from '~abstractions'
+
+export type APIResetEnvHandlerParams = EmptyRecord
 
 export type APIResetEnvHandlerReturnData = void
 

@@ -1,10 +1,10 @@
-import { Coord } from '~abstractions'
+import { ICoordinate } from '~abstractions'
 
-export interface ArcadeInfo {
+export interface IArcadeInfo {
   id: string
   name: string
   place: string
-  coordinates: Coord
+  coordinates: ICoordinate
   cabinetCount: number
   isLegacyVersion: boolean
 }

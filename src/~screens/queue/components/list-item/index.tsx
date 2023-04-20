@@ -14,6 +14,7 @@ import {
 } from '~components/custom-dialog/abstractions'
 import { LoadingCover } from '~components/loading-cover'
 import { DateTimeFormat, Field, GlobalStyles } from '~constants'
+import { useEstimatedWaitingTime } from '~hooks/estimated-waiting-time'
 import { useSelfTicket } from '~hooks/self-ticket'
 import { APIReportStaleTicket } from '~services/api/ticket/report-stale'
 import { onConfirmRequestSwapNumber } from '~sources/outgoing-swap-request-source'
@@ -23,7 +24,6 @@ import { handleClientError } from '~unstable/show-error-alert'
 import { ListItemMenu, ListItemMenuProps, ListItemMenuResponse } from '../list-item-menu'
 import { PlayerInfoDisplay } from '../player-info-display'
 import styles from './index.module.css'
-import { useEstimatedWaitingTime } from '~hooks/estimated-waiting-time'
 
 
 export interface ListItemPropData {
@@ -142,7 +142,13 @@ export const ListItem = memo(({ data, index, style }: ListItemProps): JSX.Elemen
             styles.itemContainer,
             GlobalStyles.dxShadow,
             currentTicketBelongsToSelf ? styles.itemContainerSelf : null,
-            xTime ? styles.itemContainerClosed : null,
+            xReason === CloseTicketReason.CLOSE
+              ? styles.itemContainerClosed
+              : xReason === CloseTicketReason.WITHDRAW
+                ? styles.itemContainerWithdraw
+                : xReason === CloseTicketReason.STALE
+                  ? styles.itemContainerStale
+                  : null,
             canShowPopupMenu ? styles.itemContainerOtherPlayer : null,
           )}
           onClick={canShowPopupMenu ? showPopupMenu : null}
@@ -154,7 +160,7 @@ export const ListItem = memo(({ data, index, style }: ListItemProps): JSX.Elemen
             <div className={styles.ticketUpperContainer}>
               <span className={styles.ctime}>
                 {cTime.toFormat(DateTimeFormat.USER_TIME_SHORT)}
-                {xReason && <>{` (${xReason === CloseTicketReason.CLOSE
+                {xTime && xReason && <>{` (${xReason === CloseTicketReason.CLOSE
                   ? 'Closed'
                   : xReason === CloseTicketReason.WITHDRAW
                     ? 'Withdrawn'

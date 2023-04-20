@@ -9,7 +9,7 @@ import {
 } from '~abstractions'
 import { Field } from '~constants'
 import { useArcadeInfo } from '~services/arcade-info'
-import { ArcadeInfo } from '~services/arcade-info/abstractions'
+import { IArcadeInfo } from '~services/arcade-info/abstractions'
 import { DataSubscriptionHookCoordinator } from '~unstable/hook-coordinator'
 
 export class QueueListener {
@@ -20,7 +20,7 @@ export class QueueListener {
 
   constructor(
     key: string,
-    private queryBuilder: (arcadeInfo: ArcadeInfo) => Query<ITicketsModelObject>,
+    private queryBuilder: (arcadeInfo: IArcadeInfo) => Query<ITicketsModelObject>,
     private sortFn: (a: IQueueTicket, b: IQueueTicket) => number
   ) {
     this.source = new RelinkSource<IQueueFetchingBaseSource>({

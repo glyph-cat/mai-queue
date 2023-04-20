@@ -15,16 +15,10 @@ const SCREENSHOT_DATE_TIME_FORMAT = 'yyyyLLdd_HHmmss'
 
 const FIREBASE_STORAGE_BASE_URL = 'https://storage.googleapis.com'
 
-// TODO: Remove calls to `functions.logger.log`
-
-// export const getPlayerData = functions.https.onRequest(async (req, res) => {})
 
 export async function getPlayerData(req: Request, res: Response): Promise<void> {
 
-  functions.logger.log(req.headers?.api_key
-    ? '•'.repeat(String(req.headers['api_key']).length)
-    : 'no api key'
-  )
+  functions.logger.log(`${req.headers?.api_key ? 'Received' : 'No'} api_key`)
 
   if (!ENV.APP_API_KEYS.includes(req.headers['api_key'] as string)) {
     res.send('INVALID_API_KEY')
@@ -128,20 +122,20 @@ export async function getPlayerData(req: Request, res: Response): Promise<void> 
     ].join('/')
     functions.logger.log('taken snapshot for banner')
 
-    const debugScreenshot = await page.screenshot({
-      encoding: 'binary',
-      type: 'png',
-    })
-    const debugScreenshotName = `DEBUG-${DateTime.now().toFormat(SCREENSHOT_DATE_TIME_FORMAT)}.png`
-    const debugFile = STORAGE_BUCKET.file(`${StorageBucketNames.PlayerBannerScreenshots}/${debugScreenshotName}`)
-    await debugFile.save(debugScreenshot, {
-      public: false,
-      gzip: true,
-      metadata: {
-        contentType: 'image/png',
-        cacheControl: 'public, max-age=31536000',
-      },
-    })
+    // const debugScreenshot = await page.screenshot({
+    //   encoding: 'binary',
+    //   type: 'png',
+    // })
+    // const debugScreenshotName = `DEBUG-${DateTime.now().toFormat(SCREENSHOT_DATE_TIME_FORMAT)}.png`
+    // const debugFile = STORAGE_BUCKET.file(`${StorageBucketNames.PlayerBannerScreenshots}/${debugScreenshotName}`)
+    // await debugFile.save(debugScreenshot, {
+    //   public: false,
+    //   gzip: true,
+    //   metadata: {
+    //     contentType: 'image/png',
+    //     cacheControl: 'public, max-age=31536000',
+    //   },
+    // })
 
     playerName = sanitizePlayerName(await page.evaluate(() => {
       const nameElement: HTMLDivElement = document.querySelector('.basic_block .name_block')

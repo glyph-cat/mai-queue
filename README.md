@@ -42,8 +42,8 @@ Project Links:
 
 ### ✅ Clear Cache
 * In case of any anomaly, a player can choose to clear the cache on the device.
-* If the player has an active ticket, it will be closed.
-* The device key will be reset and the page will be refreshed.
+* If the player has an active ticket, the system will attempt to close it.
+* The device key will be revoked and the page will be refreshed.
 * If the active ticket cannot be closed due to said anomaly, the player will no longer have access to the ticket either.
 
 ### 🚧 Automatically Delete Old Data
