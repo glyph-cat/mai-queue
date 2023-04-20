@@ -1,4 +1,5 @@
 import {
+  MaterialIcon,
   concatClassNames,
   delay,
   getRandomNumber,
@@ -40,6 +41,7 @@ import { CLIENT_ROUTE } from '~services/navigation'
 import { useCurrentQueueConsumer } from '~services/queue-watcher/current'
 import { useTheme } from '~services/theme'
 import { ConfigSource } from '~sources/config'
+import { DebugConfigSource } from '~sources/debug'
 import { UnstableSource } from '~sources/unstable'
 import { UserPreferencesSource } from '~sources/user-preferences'
 import { clearCache } from '~unstable/clear-cache'
@@ -56,7 +58,7 @@ import {
   StepWizardSource,
 } from './source'
 
-// TODO: [High priority] Reflect to show status cannot take number if not near arcade, how to visually convey this?
+const LABEL_YOU_MUST_BE_AT_ARCADE = 'You must be at the arcade to take a number.'
 
 export interface BottomSheetProps {
   onScrollToTicketInList(ticketId: string): void
@@ -78,16 +80,24 @@ export function BottomSheet({
   // #endregion UI
 
   // #region Hooks & derivative data
+  const { disableGeoChecking } = useRelinkValue(DebugConfigSource)
   const currentQueueLastFetchedTime = useCurrentQueueConsumer((s) => s.lastFetched)
   const isFetchingQueue = Object.is(currentQueueLastFetchedTime, null)
   const { deviceKey, friendCode } = useRelinkValue(ConfigSource)
   const currentArcade = useArcadeInfo()
   const geolocationPosition = useGeolocationPosition()
-  const coordIsWithinRadius = checkIfCoordIsWithinRadius(
-    geolocationPosition.coords,
-    currentArcade.coordinates,
-    300
-  )
+  const coordIsWithinRadius: boolean = (() => {
+    if (ENV.VERCEL_ENV !== 'production' && disableGeoChecking) {
+      return true
+    } else {
+      return checkIfCoordIsWithinRadius(
+        geolocationPosition.coords,
+        currentArcade.coordinates,
+        300
+      )
+    }
+  })()
+
   // #endregion Hooks & derivative data
 
   // #region Ticket status
@@ -118,11 +128,9 @@ export function BottomSheet({
   // TODO: [High priority] Mimic TextButton to show loading state when taking ticket
   const [isRequestingForNumber, setNumberRequestState] = useState(false)
   const onRequestNewTicket = useCallback(async () => {
-    if (ENV.VERCEL_ENV === 'production') {
-      if (!coordIsWithinRadius) {
-        await CustomDialog.alert('You must be at the arcade to take a number')
-        return // Early exit
-      }
+    if (!coordIsWithinRadius) {
+      await CustomDialog.alert(LABEL_YOU_MUST_BE_AT_ARCADE)
+      return // Early exit
     }
     let isRequestSuccessful = false
     try {
@@ -240,7 +248,9 @@ export function BottomSheet({
         style={{
           height: childContainerSize.height,
           ...(selfTicket || shouldShowBottomSheet ? {} : {
-            backgroundColor: palette.primaryOrange,
+            backgroundColor: coordIsWithinRadius
+              ? palette.primaryOrange
+              : palette.neutralGray,
           })
         }}
         onClick={shouldShowBottomSheet ? null : StepWizard.showBottomSheet}
@@ -270,10 +280,7 @@ export function BottomSheet({
           </div>
 
           {/* Step wizard area */}
-          <div style={shouldShowBottomSheet ? {
-            gap: 10,
-            // backgroundColor: 'yellowgreen',
-          } : {}}>
+          <div style={shouldShowBottomSheet ? { gap: 10 } : {}}>
 
             {step === StepIndex.CONFIG && <GeneralConfigSection />}
 
@@ -312,16 +319,39 @@ export function BottomSheet({
                           bgColor={`${palette.fixedWhite}60`}
                         />
                       </div>
-                      : <div
-                        className={concatClassNames(
-                          styles.buttonBase,
-                          styles.button,
-                          shouldShowBottomSheet && styles.buttonCompact,
+                      : <>
+                        {shouldShowBottomSheet && !coordIsWithinRadius && (
+                          <span style={{
+                            color: palette.fixedRed,
+                            marginBottom: 10,
+                            textAlign: 'center',
+                          }}>{LABEL_YOU_MUST_BE_AT_ARCADE}</span>
                         )}
-                        onClick={shouldShowBottomSheet ? onRequestNewTicket : null}
-                      >
-                        {'Take number'}
-                      </div>
+                        <div
+                          className={concatClassNames(
+                            styles.buttonBase,
+                            styles.button,
+                            shouldShowBottomSheet && styles.buttonCompact,
+                            coordIsWithinRadius ? null : styles.buttonNotInRadius,
+                          )}
+                          onClick={shouldShowBottomSheet ? onRequestNewTicket : null}
+                        >
+                          {!coordIsWithinRadius && (
+                            <MaterialIcon
+                              name='do_not_disturb'
+                              htmlProps={{
+                                style: {
+                                  position: 'absolute',
+                                  placeSelf: 'center',
+                                },
+                              }}
+                              color={palette.fixedWhite}
+                              size={shouldShowBottomSheet ? 36 : 48}
+                            />
+                          )}
+                          {'Take number'}
+                        </div>
+                      </>
                   }
                   {shouldShowBottomSheet && selfTicket && (
                     <div
@@ -354,6 +384,7 @@ export function BottomSheet({
                         } : {
                           label: 'Show QR',
                           onPress: StepWizard.showQR,
+                          disabled: !coordIsWithinRadius,
                         })}
                       />
                     </div>
@@ -391,19 +422,25 @@ export function BottomSheet({
   )
 }
 
+async function onChangeDisableGeoChecking(newValue: boolean) {
+  await DebugConfigSource.set((s) => ({ ...s, disableGeoChecking: newValue }))
+}
+
+async function onChangeAllowNotifications(newAllowNotificationsState: boolean) {
+  await UserPreferencesSource.set((s) => ({
+    ...s,
+    allowNotifications: newAllowNotificationsState,
+  }))
+}
+
 function GeneralConfigSection(): JSX.Element {
   const { palette } = useTheme()
   const selfTicket = useSelfTicket()
   const selfTicketId = selfTicket?.id
   const selfTicketNumber = selfTicket?.ticketNumber
 
+  const disableGeoChecking = useRelinkValue(DebugConfigSource, (s) => s.disableGeoChecking)
   const allowNotifications = useRelinkValue(UserPreferencesSource, (s) => s.allowNotifications)
-  const onChangeAllowNotifications = useCallback(async (newAllowNotificationsState: boolean) => {
-    await UserPreferencesSource.set((s) => ({
-      ...s,
-      allowNotifications: newAllowNotificationsState,
-    }))
-  }, [])
 
   const onRequestClearCache = useCallback(async () => {
     const shouldProceed = await CustomDialog.confirm(
@@ -418,28 +455,35 @@ function GeneralConfigSection(): JSX.Element {
   }, [palette.dangerRed, selfTicketId, selfTicketNumber])
 
   return (
-    <div style={{}}>
-      <div style={{ gap: 20 }}>
-        <span className={styles.stepTitle}>Settings</span>
-        <div className={styles.notificationsField}>
-          <ToggleSwitchWithLabel
-            label={'Notifications'}
-            value={allowNotifications}
-            onChange={onChangeAllowNotifications}
-          />
-        </div>
-        <div style={{ backgroundColor: '#80808040', height: 1 }} />
-        <TextButton
-          label={'Clear cache'}
-          onPress={onRequestClearCache}
-          color={palette.dangerRed}
-          style={{ minWidth: 200, justifySelf: 'center' }}
+    <div style={{ gap: 20 }}>
+      <span className={styles.stepTitle}>Settings</span>
+      <div className={styles.notificationsField}>
+        {ENV.VERCEL_ENV !== 'production' && (
+          <>
+            <ToggleSwitchWithLabel
+              label={'Bypass geo checking'}
+              value={disableGeoChecking}
+              onChange={onChangeDisableGeoChecking}
+            />
+            <div style={{ height: 10 }} />
+          </>
+        )}
+        <ToggleSwitchWithLabel
+          label={'Notifications'}
+          value={allowNotifications}
+          onChange={onChangeAllowNotifications}
         />
       </div>
+      <div style={{ backgroundColor: `${palette.neutralGray}40`, height: 1 }} />
+      <TextButton
+        label={'Clear cache'}
+        onPress={onRequestClearCache}
+        color={palette.dangerRed}
+        style={{ minWidth: 200, justifySelf: 'center' }}
+      />
     </div>
   )
 }
-
 
 function SetFriendCodeSection(): JSX.Element {
   const selfTicket = useSelfTicket()

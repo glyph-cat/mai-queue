@@ -1,4 +1,3 @@
-import { concatClassNames } from '@glyph-cat/swiss-army-knife'
 import { GlobalStyles } from '~constants'
 import styles from './index.module.css'
 
@@ -15,10 +14,7 @@ export function LinkButton({
 }: LinkButtonProps): JSX.Element {
   return (
     <span
-      className={concatClassNames(
-        GlobalStyles.anchor,
-        disabled ? styles.disabled : null,
-      )}
+      className={disabled ? styles.disabled : GlobalStyles.anchor}
       onClick={disabled ? undefined : onPress}
     >
       {label}

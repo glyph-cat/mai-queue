@@ -5,6 +5,7 @@ export interface ConsumableThemeData {
     fixedRed: string
     basicBg: string
     footerBg: string
+    neutralGray: string
     neutralFill: string
     paleOrange: string
     primaryOrange: string
@@ -20,6 +21,7 @@ const palette: ConsumableThemeData['palette'] = {
   fixedRed: '#ff0000',
   basicBg: '#51bcf3',
   footerBg: '#55ab47',
+  neutralGray: '#808080',
   neutralFill: '#8b9fad',
   paleOrange: '#ffa040',
   primaryOrange: '#ed702d',

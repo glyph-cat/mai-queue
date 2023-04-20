@@ -11,7 +11,7 @@
 
 .video {
   aspect-ratio: 1 / 1;
-  background-color: #808080;
+  background-color: var(--neutralGray);
   max-height: 350px;
   max-width: 350px;
   min-height: 250px;
@@ -24,6 +24,6 @@
 .loadingHint {
   text-align: center;
   font-size: 14pt;
-  color: #808080;
+  color: var(--neutralGray);
   font-weight: bold;
 }

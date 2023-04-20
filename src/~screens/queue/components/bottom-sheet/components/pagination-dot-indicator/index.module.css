@@ -9,14 +9,14 @@
 }
 
 .iconContainer {
-  color: #808080;
+  color: var(--neutralGray);
   opacity: 0.35;
   place-items: center;
 }
 
 .dot {
   --size: 8px;
-  background-color: #808080;
+  background-color: var(--neutralGray);
   border-radius: var(--size);
   height: var(--size);
   opacity: 0.35;

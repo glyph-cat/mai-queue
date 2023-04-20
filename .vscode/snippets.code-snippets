@@ -65,6 +65,11 @@
 		"prefix": "var(--footerBg)",
 		"body": "var(--footerBg)",
 	},
+	"Palette neutralGray": {
+		"scope": "css",
+		"prefix": "var(--neutralGray)",
+		"body": "var(--neutralGray)",
+	},
 	"Palette neutralFill": {
 		"scope": "css",
 		"prefix": "var(--neutralFill)",
@@ -84,6 +89,16 @@
 		"scope": "css",
 		"prefix": "var(--dangerRed)",
 		"body": "var(--dangerRed)",
+	},
+	"Palette safeGreen": {
+		"scope": "css",
+		"prefix": "var(--safeGreen)",
+		"body": "var(--safeGreen)",
+	},
+	"Palette acidColor": {
+		"scope": "css",
+		"prefix": "var(--acidColor)",
+		"body": "var(--acidColor)",
 	},
 	"Firestore run transaction": {
 		"scope": "javascript,javascriptreact,typescript,typescriptreact",

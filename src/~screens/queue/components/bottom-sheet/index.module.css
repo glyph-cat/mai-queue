@@ -54,6 +54,7 @@
   cursor: pointer;
   height: var(--floatingButtonHeight);
   place-items: center;
+  position: relative;
   text-align: center;
   user-select: none;
   width: var(--floatingButtonWidth);
@@ -75,6 +76,11 @@
   height: var(--floatingButtonHeightCompact);
   width: var(--floatingButtonWidthCompact);
   transition: none;
+}
+
+.buttonNotInRadius {
+  background-color: var(--neutralGray);
+  color: #4a4a4a;
 }
 
 .sideArea {
