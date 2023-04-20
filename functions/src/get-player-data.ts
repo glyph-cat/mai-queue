@@ -15,7 +15,6 @@ const SCREENSHOT_DATE_TIME_FORMAT = 'yyyyLLdd_HHmmss'
 
 const FIREBASE_STORAGE_BASE_URL = 'https://storage.googleapis.com'
 
-
 export async function getPlayerData(req: Request, res: Response): Promise<void> {
 
   functions.logger.log(`${req.headers?.api_key ? 'Received' : 'No'} api_key`)

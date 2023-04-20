@@ -1,8 +1,7 @@
 import { Nullable } from '@glyph-cat/swiss-army-knife'
 import { ReactNode } from 'react'
 import { CUSTOM_DIALOG_CANCEL_VALUE, CustomDialogCancellableValue } from './abstractions'
-import { CustomDialogChoiceComponent, ChoiceItem } from './choice'
-import { BaseDialogSize } from './components'
+import { ChoiceItem, CustomDialogChoiceComponent } from './choice'
 import { CustomDialogFreeform, CustomDialogFreeformArgs } from './freeform'
 import { getCancelText, getOkText } from './text'
 
@@ -11,7 +10,6 @@ export namespace CustomDialog {
 
   export interface AlertOptions {
     okText?: string
-    dialogSize?: BaseDialogSize
     highPriority?: boolean
   }
 
@@ -22,7 +20,6 @@ export namespace CustomDialog {
   ): Promise<void> {
     const {
       okText,
-      dialogSize = BaseDialogSize.default,
       highPriority,
     } = options
     await choice(title, description, {
@@ -30,7 +27,6 @@ export namespace CustomDialog {
         label: getOkText(okText),
         type: 'primary',
       }],
-      dialogSize,
       highPriority,
     })
   }
@@ -39,7 +35,6 @@ export namespace CustomDialog {
     okText?: string
     cancelText?: string
     destructive?: boolean
-    dialogSize?: BaseDialogSize
     highPriority?: boolean
   }
 
@@ -52,7 +47,6 @@ export namespace CustomDialog {
       cancelText,
       destructive,
       okText,
-      dialogSize = BaseDialogSize.default,
       highPriority,
     } = options
     const response = await choice(title, description, {
@@ -66,7 +60,6 @@ export namespace CustomDialog {
           label: getCancelText(cancelText),
         },
       ],
-      dialogSize,
       highPriority,
     })
     return !Object.is(response, CUSTOM_DIALOG_CANCEL_VALUE)
@@ -74,7 +67,6 @@ export namespace CustomDialog {
 
   export interface ChoiceOptions<Response> {
     data: Array<ChoiceItem<Response>>
-    dialogSize?: BaseDialogSize
     highPriority?: boolean
   }
 
@@ -85,7 +77,6 @@ export namespace CustomDialog {
   ): Promise<CustomDialogCancellableValue<Response>> {
     const {
       data,
-      dialogSize = BaseDialogSize.default,
       highPriority,
     } = options
     const response = await CustomDialogFreeform({
@@ -95,7 +86,6 @@ export namespace CustomDialog {
       props: {
         data,
       },
-      dialogSize,
       highPriority,
     })
     return response

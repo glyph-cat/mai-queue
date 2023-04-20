@@ -9,7 +9,6 @@ export interface BaseDialogProps {
   title: ReactNode
   description: ReactNode
   children: ReactNode
-  dialogSize: BaseDialogSize
   onDismiss(): void
   easyDismiss?: boolean
 }
@@ -30,8 +29,7 @@ export class BaseDialog extends ReactComponent<BaseDialogProps, BaseDialogState>
   }
 
   render(): ReactNode {
-    const { title, description, children, dialogSize, onDismiss, easyDismiss } = this.props
-    const baseDialogSizeStyles = sizingStyles[dialogSize] || sizingStyles[BaseDialogSize.default]
+    const { title, description, children, onDismiss, easyDismiss } = this.props
     return (
       <AnimatedBackdrop
         visible={this.state.isVisible}
@@ -40,7 +38,7 @@ export class BaseDialog extends ReactComponent<BaseDialogProps, BaseDialogState>
       >
         <AnimatedSheet
           visible={this.state.isVisible}
-          className={concatClassNames(baseDialogSizeStyles, styles.contentContainer)}
+          className={concatClassNames(styles.sizingDefault, styles.contentContainer)}
         >
           {title && (<span className={styles.title}>{title}</span>)}
           {description && (
@@ -56,16 +54,3 @@ export class BaseDialog extends ReactComponent<BaseDialogProps, BaseDialogState>
   }
 
 }
-
-export enum BaseDialogSize {
-  free = 1,
-  default,
-  large,
-  extraLarge,
-}
-
-const sizingStyles = {
-  [BaseDialogSize.default]: styles.sizingDefault,
-  [BaseDialogSize.large]: styles.sizingLarge,
-  [BaseDialogSize.extraLarge]: styles.sizingExtraLarge,
-} as const

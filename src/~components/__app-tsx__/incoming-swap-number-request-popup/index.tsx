@@ -2,11 +2,7 @@ import { EMPTY_FUNCTION, useRef } from '@glyph-cat/swiss-army-knife'
 import { useCallback, useState } from 'react'
 import { useRelinkValue } from 'react-relink'
 import { SwapRequestStatus } from '~abstractions'
-import {
-  BaseDialog,
-  BaseDialogSize,
-  CustomDialogButtonContainer,
-} from '~components/custom-dialog/components'
+import { BaseDialog, CustomDialogButtonContainer } from '~components/custom-dialog/components'
 import { TextButton } from '~components/form'
 import { TicketSwapVisualizer } from '~components/ticket-swap-visualizer'
 import { Field } from '~constants'
@@ -14,8 +10,8 @@ import { useSelfTicket } from '~hooks/self-ticket'
 import { APIRespondSwapTicket } from '~services/api/ticket/respond-swap'
 import { useTheme } from '~services/theme'
 import {
-  IncomingSwapRequestSource,
   IIncomingSwapRequestSource,
+  IncomingSwapRequestSource,
 } from '~sources/incoming-swap-request-source'
 import { handleClientError } from '~unstable/show-error-alert'
 import { useIncomingSwapRequestWatcher } from './hooks/use-incoming-swap-request-watcher'
@@ -88,7 +84,6 @@ function IncomingSwapNumberRequestPopupBase({
       ref={baseDialogRef}
       title={'Incoming swap request'}
       description={null}
-      dialogSize={BaseDialogSize.free}
       onDismiss={EMPTY_FUNCTION}
     >
       <TicketSwapVisualizer

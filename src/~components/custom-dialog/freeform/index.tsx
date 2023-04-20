@@ -14,10 +14,7 @@ import {
 import { ANIMATED_BACKDROP_TRANSITION_DURATION } from '~constants'
 import { devError } from '~utils/dev'
 import { CUSTOM_DIALOG_CANCEL_VALUE, CustomDialogCancellableValue } from '../abstractions'
-import {
-  BaseDialog,
-  BaseDialogSize,
-} from '../components'
+import { BaseDialog } from '../components'
 import { flow } from '../flow-control'
 
 export interface ICustomDialogFreeformContext<Response> {
@@ -43,7 +40,6 @@ export interface CustomDialogFreeformArgs<Props> {
   description?: ReactNode,
   component: FunctionComponent<Props> | ComponentClass<Props>
   props?: Props
-  dialogSize?: BaseDialogSize
   /**
    * @defaultValue `false`
    */

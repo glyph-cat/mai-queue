@@ -2,11 +2,7 @@ import { EMPTY_FUNCTION, useRef } from '@glyph-cat/swiss-army-knife'
 import { useCallback, useState } from 'react'
 import { useRelinkValue } from 'react-relink'
 import { CustomDialog } from '~components/custom-dialog'
-import {
-  BaseDialog,
-  BaseDialogSize,
-  CustomDialogButtonContainer,
-} from '~components/custom-dialog/components'
+import { BaseDialog, CustomDialogButtonContainer } from '~components/custom-dialog/components'
 import { TextButton } from '~components/form'
 import { TicketSwapVisualizer } from '~components/ticket-swap-visualizer'
 import { Field, GlobalStyles } from '~constants'
@@ -117,7 +113,6 @@ function OutgoingSwapNumberRequestPopupBase({
         : 'Send swap request' + (requestId ? '' : '?')
       }
       description={null}
-      dialogSize={BaseDialogSize.free}
       onDismiss={EMPTY_FUNCTION}
     >
       <div className={styles.container}>
