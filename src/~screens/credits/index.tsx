@@ -1,7 +1,7 @@
 import { PlainDocumentPagePreset } from '~components/page-presets/plain-document'
 import { OPEN_IN_NEW_TAB_PROPS } from '~constants'
 
-function ThankYouScreen(): JSX.Element {
+function CreditsScreen(): JSX.Element {
   return (
     <PlainDocumentPagePreset title='Credits'>
       <ul>
@@ -16,4 +16,4 @@ function ThankYouScreen(): JSX.Element {
   )
 }
 
-export default ThankYouScreen
+export default CreditsScreen

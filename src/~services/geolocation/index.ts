@@ -1,19 +1,13 @@
 import { useEffect } from 'react'
 import { RelinkSource, useRelinkValue } from 'react-relink'
-
-let __hookCounter__ = 0
-
-const GeolocationPositionHooksSource = new RelinkSource<Record<string, true>>({
-  key: 'geolocation-position/hooks',
-  default: {},
-})
+import { DataSubscriptionHookCoordinator } from '~unstable/hook-coordinator'
 
 export interface ExtendedGeolocationPosition extends GeolocationPosition {
   isUserEnabled: boolean
   error: GeolocationPositionError
 }
 
-// TODO: [High priority] Use hook coordinator instead
+const { useAsConsumer, useAsProvider } = new DataSubscriptionHookCoordinator()
 
 const GeolocationPositionSource = new RelinkSource<ExtendedGeolocationPosition>({
   key: 'geolocation-position',
@@ -34,15 +28,12 @@ const GeolocationPositionSource = new RelinkSource<ExtendedGeolocationPosition>(
 })
 
 export function useGeolocationPositionRoot(): void {
-  const geolocationPositionHooksCount = useRelinkValue(
-    GeolocationPositionHooksSource,
-    (s) => Object.keys(s).length
-  )
+  const shouldBeActive = useAsProvider()
   useEffect(() => {
-    if (geolocationPositionHooksCount <= 0) { return }
+    if (!shouldBeActive) { return }
     if (!navigator.geolocation) { return }
-    const watchId = navigator.geolocation.watchPosition((position: GeolocationPosition) => {
-      GeolocationPositionSource.set({
+    const watchId = navigator.geolocation.watchPosition(async (position: GeolocationPosition) => {
+      await GeolocationPositionSource.set({
         timestamp: position.timestamp,
         coords: position.coords,
         error: null,
@@ -54,19 +45,10 @@ export function useGeolocationPositionRoot(): void {
       enableHighAccuracy: true,
     })
     return () => { navigator.geolocation.clearWatch(watchId) }
-  }, [geolocationPositionHooksCount])
+  }, [shouldBeActive])
 }
 
 export function useGeolocationPosition(): ExtendedGeolocationPosition {
-  useEffect(() => {
-    const hookId = ++__hookCounter__
-    GeolocationPositionHooksSource.set((s) => ({ ...s, [hookId]: true }))
-    return () => {
-      GeolocationPositionHooksSource.set((existingHooks) => {
-        const { [hookId]: _toIgnore, ...nextHooks } = existingHooks
-        return nextHooks
-      })
-    }
-  }, [])
+  useAsConsumer(true)
   return useRelinkValue(GeolocationPositionSource)
 }

@@ -1,1 +1,1 @@
-export { default } from '~screens/thank-you'
+export { default } from '~screens/credits'

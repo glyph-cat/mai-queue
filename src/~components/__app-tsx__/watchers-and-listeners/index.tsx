@@ -1,4 +1,5 @@
 import { useVersioningMetadata } from '~hooks/versioning'
+import { useGeolocationPositionRoot } from '~services/geolocation'
 import { useCurrentQueueProvider } from '~services/queue-watcher/current'
 import { useLastPlayedQueueProvider } from '~services/queue-watcher/last-played'
 import { usePastQueueProvider } from '~services/queue-watcher/past'
@@ -14,6 +15,7 @@ export function WatchersAndListeners(): JSX.Element {
   useCurrentQueueProvider()
   usePastQueueProvider()
   useLastPlayedQueueProvider()
+  useGeolocationPositionRoot()
   useWebWorker()
 
   // Miscellaneous

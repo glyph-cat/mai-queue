@@ -5,8 +5,6 @@ export function checkIfCoordIsWithinRadius(
   targetCoord: ICoordinate,
   radius: number
 ): boolean {
-  // TODO: [High priority] Take altitude into consideration, but when it is available
-  // if (evaluationCoord.altitude ... ) { }
   return getLatLonDistance(evaluationCoord, targetCoord) <= radius
 }
 
@@ -15,8 +13,8 @@ export function checkIfCoordIsWithinRadius(
  */
 function getLatLonDistance(coord1: ICoordinate, coord2: ICoordinate): number {
 
-  const { latitude: lat1, longitude: lon1, altitude: alt1 } = coord1
-  const { latitude: lat2, longitude: lon2, altitude: alt2 } = coord2
+  const { latitude: lat1, longitude: lon1 } = coord1
+  const { latitude: lat2, longitude: lon2 } = coord2
 
   const R = 6371e3 // metres
   const φ1 = lat1 * Math.PI / 180 // φ, λ in radians
@@ -30,14 +28,4 @@ function getLatLonDistance(coord1: ICoordinate, coord2: ICoordinate): number {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
   return R * c // in metres
-}
-
-/**
- * @see https://dirask.com/posts/JavaScript-calculate-distance-between-two-points-in-3D-space-xpz9aD
- */
-function UNSTABLE_getDistance(coord1: ICoordinate, coord2: ICoordinate): number {
-  const dLat = coord2.latitude - coord1.latitude
-  const dLon = coord2.longitude - coord1.longitude
-  const dAlt = coord2.altitude - coord1.altitude
-  return Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLon, 2) + Math.pow(dAlt, 2))
 }

@@ -5,6 +5,7 @@ export const CLIENT_ROUTE = {
 
   api: '/api',
 
+  about: '/about',
   credits: '/credits',
   privacyPolicy: '/privacy',
   termsConditions: '/tnc',

@@ -6,6 +6,7 @@ import {
   useLayoutEffect,
   useRef,
 } from '@glyph-cat/swiss-army-knife'
+import Link from 'next/link'
 import { QRCodeSVG } from 'qrcode.react'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useRelinkValue } from 'react-relink'
@@ -13,7 +14,7 @@ import { CloseTicketReason } from '~abstractions'
 import { AnimatedBackdrop } from '~components/animated-backdrop'
 import { CustomDialog } from '~components/custom-dialog'
 import { ChoiceItem } from '~components/custom-dialog/choice'
-import { LinkButton, TextButton, ToggleSwitch, ToggleSwitchWithLabel } from '~components/form'
+import { LinkButton, TextButton, ToggleSwitchWithLabel } from '~components/form'
 import { LiveVideoCanvas } from '~components/live-video-canvas'
 import { LoadingCover } from '~components/loading-cover'
 import { Spinner } from '~components/spinner'
@@ -35,10 +36,12 @@ import { APIGetNewTicket } from '~services/api/ticket/get-new'
 import { APITransferTicket } from '~services/api/ticket/transfer'
 import { useArcadeInfo } from '~services/arcade-info'
 import { useGeolocationPosition } from '~services/geolocation'
+import { CLIENT_ROUTE } from '~services/navigation'
 import { useCurrentQueueConsumer } from '~services/queue-watcher/current'
 import { useTheme } from '~services/theme'
 import { ConfigSource } from '~sources/config'
 import { UnstableSource } from '~sources/unstable'
+import { UserPreferencesSource } from '~sources/user-preferences'
 import { clearCache } from '~unstable/clear-cache'
 import { handleClientError } from '~unstable/show-error-alert'
 import { checkIfCoordIsWithinRadius } from '~utils/coords-intersection'
@@ -52,9 +55,6 @@ import {
   StepWizard,
   StepWizardSource,
 } from './source'
-import Link from 'next/link'
-import { CLIENT_ROUTE } from '~services/navigation'
-import { UserPreferencesSource } from '~sources/user-preferences'
 
 // TODO: [High priority] Reflect to show status cannot take number if not near arcade, how to visually convey this?
 
@@ -589,7 +589,10 @@ function ScanQRSection(): JSX.Element {
         [Field.cTime]: cTime,
         [Field.deviceKey]: deviceKey,
       } = decryptedData
-      const diff = cTime.diffNow().negate().as('milliseconds')
+      // This allows narrowing down the time frame. Even if someone manages to
+      // produce a QR with a long cTime ahead, it would be just a litle bit
+      // harder to coordinate the exploit.
+      const diff = Math.abs(cTime.diffNow().as('milliseconds'))
       if (diff > (QR_EXPIRY_DURATION * 1000)) {
         CustomDialog.alert('QR has expired')
         return // Early exit
@@ -661,4 +664,3 @@ function ScanQRSection(): JSX.Element {
 // Footnotes
 // [A] Random delays are added to reduce chances of race conditions, for fearing
 //     that if the same account is logged in twice, one of them will expire.
-

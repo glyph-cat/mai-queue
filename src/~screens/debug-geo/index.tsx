@@ -11,7 +11,7 @@ const defaultLatitude = 5.43951
 const defaultLongitude = 100.3819734
 const defaultRadius = 500
 
-function DebugGeolocationScreen(): JSX.Element {
+function DebugGeoScreen(): JSX.Element {
 
   const { palette } = useTheme()
 
@@ -98,6 +98,11 @@ function DebugGeolocationScreen(): JSX.Element {
           value={geolocationPosition?.coords?.longitude || 'UNKNOWN'}
           readOnly
         />
+        <span>{'Current alt:'}</span>
+        <input
+          value={geolocationPosition?.coords?.altitude || 'UNKNOWN'}
+          readOnly
+        />
         <span>{'In radius:'}</span>
         <input
           value={isWithinRadius ? 'YES' : 'NO'}
@@ -132,4 +137,4 @@ function DebugGeolocationScreen(): JSX.Element {
   )
 }
 
-export default DebugGeolocationScreen
+export default DebugGeoScreen
