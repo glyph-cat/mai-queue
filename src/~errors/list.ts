@@ -4,6 +4,7 @@ import { ARCADE_LIST } from '~services/arcade-info'
 import { CustomAPIError } from './classes'
 import { SwapRequestStatus } from '~abstractions'
 import { formatArcadeName } from '~utils/format-arcade-name'
+import { Field } from '~constants'
 
 function getStillInQueueErrorMessage(arcadeId: string): string {
   if (isString(arcadeId)) {
@@ -40,12 +41,33 @@ export class InvalidRequestMethodError extends CustomAPIError {
   readonly message = 'Invalid request method'
 }
 
+export class InvalidParameterError extends CustomAPIError {
+  static readonly http = HttpStatus.UNPROCESSIBLE_ENTITY
+  static readonly code = 4
+  constructor(name: Field, value?: unknown) {
+    if (value) {
+      super(`Invalid parameter "${Field[name]}" <${String(value)}> of type ${typeof value}`)
+    } else {
+      super(`Invalid parameter "${Field[name]}"`)
+    }
+  }
+}
+
+export class MissingParameterError extends CustomAPIError {
+  static readonly http = HttpStatus.UNPROCESSIBLE_ENTITY
+  static readonly code = 5
+  constructor(name: Field) {
+    super(`Missing parameter "${Field[name]}"`)
+  }
+}
+
+
 /**
  * When an invalid device key is provided.
  */
 export class InvalidDeviceKeyError extends CustomAPIError {
   static readonly http = HttpStatus.UNAUTHORIZED
-  static readonly code = 4
+  static readonly code = 6
   readonly message = 'Invalid device key'
 }
 
@@ -55,7 +77,7 @@ export class InvalidDeviceKeyError extends CustomAPIError {
  */
 export class DeviceKeyMismatchError extends CustomAPIError {
   static readonly http = HttpStatus.UNAUTHORIZED
-  static readonly code = 5
+  static readonly code = 7
   readonly message = 'Invalid device key'
 }
 
@@ -65,7 +87,7 @@ export class DeviceKeyMismatchError extends CustomAPIError {
  */
 export class FriendCodeAlreadyInUseError extends CustomAPIError {
   static readonly http = HttpStatus.UNPROCESSIBLE_ENTITY
-  static readonly code = 6
+  static readonly code = 8
   readonly message = 'Friend code already in use'
 }
 
@@ -74,7 +96,7 @@ export class FriendCodeAlreadyInUseError extends CustomAPIError {
  */
 export class InvalidFriendCodeError extends CustomAPIError {
   static readonly http = HttpStatus.UNPROCESSIBLE_ENTITY
-  static readonly code = 7
+  static readonly code = 9
   readonly message = 'Invalid friend code'
 }
 
@@ -84,7 +106,7 @@ export class InvalidFriendCodeError extends CustomAPIError {
  */
 export class StillInQueueByDeviceKeyError extends CustomAPIError {
   static readonly http = HttpStatus.TOO_MANY_REQUESTS
-  static readonly code = 8
+  static readonly code = 10
   constructor(arcadeId: string) { super(getStillInQueueErrorMessage(arcadeId)) }
 }
 
@@ -94,7 +116,7 @@ export class StillInQueueByDeviceKeyError extends CustomAPIError {
  */
 export class StillInQueueByFriendCodeError extends CustomAPIError {
   static readonly http = HttpStatus.TOO_MANY_REQUESTS
-  static readonly code = 9
+  static readonly code = 11
   constructor(arcadeId: string) { super(getStillInQueueErrorMessage(arcadeId)) }
 }
 
@@ -103,14 +125,15 @@ export class StillInQueueByFriendCodeError extends CustomAPIError {
  */
 export class TicketNotFoundError extends CustomAPIError {
   static readonly http = HttpStatus.NOT_FOUND
-  static readonly code = 10
-  constructor(ticketIdOrNumber: unknown) {
+  static readonly code = 12
+  constructor(ticketIdOrNumber: unknown, descriptor?: string) {
+    const TICKET = descriptor ? `${descriptor} t` : 'T' + 'icket'
     if (isNumber(ticketIdOrNumber)) {
-      super(`Ticket #${ticketIdOrNumber} not found`)
+      super(`${TICKET} #${ticketIdOrNumber} not found`)
     } else if (isString(ticketIdOrNumber)) {
-      super(`Ticket (id: ${ticketIdOrNumber}) not found`)
+      super(`${TICKET} (id: ${ticketIdOrNumber}) not found`)
     } else {
-      super('Ticket not found')
+      super(`${TICKET} not found`)
     }
   }
 }
@@ -120,14 +143,15 @@ export class TicketNotFoundError extends CustomAPIError {
  */
 export class TicketAlreadyClosedError extends CustomAPIError {
   static readonly http = HttpStatus.UNPROCESSIBLE_ENTITY
-  static readonly code = 11
-  constructor(ticketIdOrNumber: unknown) {
+  static readonly code = 13
+  constructor(ticketIdOrNumber: unknown, descriptor?: string) {
+    const TICKET = descriptor ? `${descriptor} t` : 'T' + 'icket'
     if (isNumber(ticketIdOrNumber)) {
-      super(`Ticket #${ticketIdOrNumber} is already closed`)
+      super(`${TICKET} #${ticketIdOrNumber} is already closed`)
     } else if (isString(ticketIdOrNumber)) {
-      super(`Ticket (id: ${ticketIdOrNumber}) is already closed`)
+      super(`${TICKET} (id: ${ticketIdOrNumber}) is already closed`)
     } else {
-      super('Ticket is already closed')
+      super(`${TICKET} is already closed`)
     }
   }
 }
@@ -137,9 +161,9 @@ export class TicketAlreadyClosedError extends CustomAPIError {
  */
 export class InvalidTicketIdError extends CustomAPIError {
   static readonly http = HttpStatus.NOT_FOUND
-  static readonly code = 12
-  constructor(ticketId: unknown) {
-    super(`Invalid ticket id: ${String(ticketId)}`)
+  static readonly code = 14
+  constructor(ticketId: unknown, descriptor?: string) {
+    super(`Invalid ${descriptor ? `${descriptor} ` : ''} ticket id: ${String(ticketId)}`)
   }
 }
 
@@ -148,7 +172,7 @@ export class InvalidTicketIdError extends CustomAPIError {
  */
 export class NoValidTicketAvailableForTransferError extends CustomAPIError {
   static readonly http = HttpStatus.NOT_FOUND
-  static readonly code = 13
+  static readonly code = 15
   readonly message: string = 'You do not have a valid ticket to transfer'
 }
 
@@ -158,7 +182,7 @@ export class NoValidTicketAvailableForTransferError extends CustomAPIError {
  */
 export class UnresolvedSwapRequestError extends CustomAPIError {
   static readonly http = HttpStatus.UNPROCESSIBLE_ENTITY
-  static readonly code = 14
+  static readonly code = 16
   constructor(
     direction: 'in' | 'out',
     playerName?: string,
@@ -184,7 +208,7 @@ export class UnresolvedSwapRequestError extends CustomAPIError {
  */
 export class SwapRequestDeclineLimitError extends CustomAPIError {
   static readonly http = HttpStatus.TOO_MANY_REQUESTS
-  static readonly code = 15
+  static readonly code = 17
   constructor(ticketNumber: number) {
     super(`You have sent too many swap requests to ticket #${ticketNumber}`)
   }
@@ -195,7 +219,7 @@ export class SwapRequestDeclineLimitError extends CustomAPIError {
  */
 export class SwapRequestNotFoundError extends CustomAPIError {
   static readonly http = HttpStatus.NOT_FOUND
-  static readonly code = 16
+  static readonly code = 18
   readonly message = 'Swap request not found'
 }
 
@@ -205,20 +229,9 @@ export class SwapRequestNotFoundError extends CustomAPIError {
  */
 export class SwapRequestAlreadyClosedError extends CustomAPIError {
   static readonly http = HttpStatus.NOT_FOUND
-  static readonly code = 17
+  static readonly code = 19
   constructor(swapRequestStatus: SwapRequestStatus) {
     super(`Swap request has been closed (Reason=${swapRequestStatus}`)
-  }
-}
-
-/**
- * When attempting to append data to vote collection types with invalid value.
- */
-export class InvalidVoteTypeError extends CustomAPIError {
-  static readonly http = HttpStatus.UNPROCESSIBLE_ENTITY
-  static readonly code = 18
-  constructor(voteType: unknown) {
-    super(`Invalid vote type <${String(voteType)}>`)
   }
 }
 
@@ -227,6 +240,6 @@ export class InvalidVoteTypeError extends CustomAPIError {
  */
 export class ExceededMaximumStaleFlagsError extends CustomAPIError {
   static readonly http = HttpStatus.TOO_MANY_REQUESTS
-  static readonly code = 19
+  static readonly code = 21
   readonly message = 'This ticket has received the maximum amount of stale flags'
 }

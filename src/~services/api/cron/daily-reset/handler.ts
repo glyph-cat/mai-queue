@@ -12,6 +12,7 @@ export default async function APIDailyResetHandler(
   const batch = new BatchOperator()
   await batch.deleteCollection(DBCollection.Tickets)
   await batch.deleteCollection(DBCollection.SwapRequests)
+  await batch.deleteCollection(DBCollection.IncidentReports)
   await batch.commit()
   // Player banners on Cloud Storage are handled separately
   // https://cloud.google.com/storage/docs/managing-lifecycles#console

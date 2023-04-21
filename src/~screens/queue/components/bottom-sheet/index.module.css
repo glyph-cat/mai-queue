@@ -95,11 +95,11 @@
 }
 
 .waitStatusArea {
-  height: var(--floatingButtonHeight);
   place-items: center;
 }
 
 .waitStatusAreaContainer {
+  margin-bottom: 5px;
   place-items: center;
 }
 

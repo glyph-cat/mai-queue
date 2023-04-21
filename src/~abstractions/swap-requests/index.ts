@@ -1,5 +1,5 @@
 import { Field } from '~constants'
-import { IBaseModelObject, IBaseSnapshot } from '../core'
+import { IBaseModelObject, IBaseSnapshot } from '../base'
 
 export enum SwapRequestStatus {
   CANCELLED,

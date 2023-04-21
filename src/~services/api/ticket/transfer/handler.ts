@@ -1,7 +1,12 @@
 import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Field } from '~constants'
-import { NoValidTicketAvailableForTransferError } from '~errors'
+import {
+  InvalidParameterError,
+  MissingParameterError,
+  NoValidTicketAvailableForTransferError,
+} from '~errors'
+import { ARCADE_LIST } from '~services/arcade-info'
 import { DBCollection } from '~services/firebase-admin'
 import { runTransaction } from '~services/firebase-admin/init'
 import { performBasicChecks } from '~utils/backend/helpers'
@@ -22,14 +27,21 @@ export default async function APITransferTicketHandler(
   try {
     performBasicChecks(req, [HttpMethod.GET])
 
+    // NOTE: arcadeId is included as a safeguard.
+    const {
+      [Field.arcadeId]: arcadeId,
+      [Field.deviceKey]: deviceKey = null,
+    } = req.query as unknown as APITransferTicketHandlerParams
+
+    if (!ARCADE_LIST[arcadeId]) {
+      throw new InvalidParameterError(Field.arcadeId, arcadeId)
+    }
+
+    if (!deviceKey) {
+      throw new MissingParameterError(Field.deviceKey)
+    }
+
     await runTransaction(async (tx) => {
-
-      const {
-        [Field.arcadeId]: arcadeId,
-        [Field.deviceKey]: deviceKey = null,
-      } = req.query as unknown as APITransferTicketHandlerParams
-
-      // NOTE: arcadeId is included as a safeguard.
 
       const deviceInfo = await getDeviceInfoInTransaction(tx, req)
 

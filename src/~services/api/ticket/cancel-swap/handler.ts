@@ -4,6 +4,7 @@ import { SwapRequestStatus } from '~abstractions'
 import { Field } from '~constants'
 import {
   DeviceKeyMismatchError,
+  MissingParameterError,
   SwapRequestAlreadyClosedError,
   SwapRequestNotFoundError,
   TicketNotFoundError,
@@ -27,11 +28,16 @@ export default async function APICancelSwapTicketHandler(
   try {
     performBasicChecks(req, [HttpMethod.DELETE])
 
+    const {
+      [Field.swapRequestId]: swapRequestId,
+    } = req.query as unknown as APICancelSwapRequestHandlerParams
+
+    if (!swapRequestId) {
+      throw new MissingParameterError(Field.swapRequestId)
+    }
+
     await runTransaction(async (tx) => {
       const deviceInfo = await getDeviceInfoInTransaction(tx, req)
-      const {
-        [Field.swapRequestId]: swapRequestId,
-      } = req.query as unknown as APICancelSwapRequestHandlerParams
 
       const swapRequestQuery = await tx.get(DBCollection.SwapRequests.doc(swapRequestId))
       if (!swapRequestQuery.exists) {

@@ -6,6 +6,8 @@ import { ITicketsModelObject, SwapRequestStatus } from '~abstractions'
 import { Field, MAX_ALLOWED_SWAP_REQUEST_RETRY_COUNT } from '~constants'
 import {
   DeviceKeyMismatchError,
+  InvalidTicketIdError,
+  MissingParameterError,
   SwapRequestDeclineLimitError,
   TicketAlreadyClosedError,
   TicketNotFoundError,
@@ -33,15 +35,21 @@ export default async function APIRequestSwapTicketHandler(
   devInfo(`Invoked ${APIRequestSwapTicketHandler.name}`)
   try {
     performBasicChecks(req, [HttpMethod.GET])
+    const {
+      [Field.targetTicketId]: targetTicketId,
+      [Field.sourceTicketId]: sourceTicketId,
+    } = req.query as unknown as APIRequestSwapTicketHandlerParams
+
+    if (!targetTicketId) {
+      throw new MissingParameterError(Field.targetTicketId)
+    }
+    if (!sourceTicketId) {
+      throw new MissingParameterError(Field.sourceTicketId)
+    }
 
     const swapRequestId = await runTransaction(async (tx) => {
 
       const deviceInfo = await getDeviceInfoInTransaction(tx, req)
-
-      const {
-        [Field.targetTicketId]: targetTicketId,
-        [Field.sourceTicketId]: sourceTicketId,
-      } = req.query as unknown as APIRequestSwapTicketHandlerParams
 
       const ticketsQuery: Array<DocumentSnapshot<ITicketsModelObject>> = await tx.getAll(
         DBCollection.Tickets.doc(sourceTicketId),
@@ -50,22 +58,22 @@ export default async function APIRequestSwapTicketHandler(
       const sourceTicketQuery = ticketsQuery.find((value) => value.id === sourceTicketId)
       const targetTicketQuery = ticketsQuery.find((value) => value.id === targetTicketId)
       if (!sourceTicketQuery.exists) {
-        throw new TicketNotFoundError(sourceTicketId)
+        throw new TicketNotFoundError(sourceTicketId, 'Source')
       }
       const sourceTicketData = sourceTicketQuery.data()
       if (sourceTicketData[Field.deviceKey] !== deviceInfo.deviceKey) {
         throw new DeviceKeyMismatchError()
       } else {
         if (sourceTicketData[Field.xTime]) {
-          throw new TicketAlreadyClosedError(sourceTicketData[Field.ticketNumber])
+          throw new TicketAlreadyClosedError(sourceTicketData[Field.ticketNumber], 'Source')
         }
       }
       if (!targetTicketQuery.exists) {
-        throw new TicketNotFoundError(targetTicketId)
+        throw new TicketNotFoundError(targetTicketId, 'Target')
       } else {
         const targetTicketData = targetTicketQuery.data()
         if (targetTicketData[Field.xTime]) {
-          throw new TicketAlreadyClosedError(targetTicketData[Field.ticketNumber])
+          throw new TicketAlreadyClosedError(targetTicketData[Field.ticketNumber], 'Target')
         }
       }
 

@@ -26,14 +26,13 @@ export interface FetchedDeviceInfo {
 }
 
 /**
- * Legacy API. Prefer {@link getDeviceInfoInTransaction} where possible.
- * @returns The device's info if valid, otherwise throws a `CustomAPIError`.
+ * @returns The device's info if valid, otherwise throws an {@link InvalidDeviceKeyError}.
  */
 export async function getDeviceInfo(
   reqOrDeviceKey: NextApiRequest | string
 ): Promise<FetchedDeviceInfo> {
-  const deviceKey = extractDeviceKeyFromHeader(reqOrDeviceKey)
   devInfo(`Running: ${getDeviceInfo.name}`)
+  const deviceKey = extractDeviceKeyFromHeader(reqOrDeviceKey)
   const querySnapshot = await DBCollection.Devices.doc(deviceKey).get()
   if (querySnapshot.exists) {
     const snapshotData = querySnapshot.data()
@@ -48,14 +47,14 @@ export async function getDeviceInfo(
 }
 
 /**
- * @returns The device's info if valid, otherwise throws a `CustomAPIError`.
+ * @returns The device's info if valid, otherwise throws an {@link InvalidDeviceKeyError}.
  */
 export async function getDeviceInfoInTransaction(
   tx: Transaction,
   reqOrDeviceKey: NextApiRequest | string
 ): Promise<FetchedDeviceInfo> {
-  const deviceKey = extractDeviceKeyFromHeader(reqOrDeviceKey)
   devInfo(`Running: ${getDeviceInfoInTransaction.name}`)
+  const deviceKey = extractDeviceKeyFromHeader(reqOrDeviceKey)
   const querySnapshot = await tx.get(DBCollection.Devices.doc(deviceKey))
   if (querySnapshot.exists) {
     const snapshotData = querySnapshot.data()

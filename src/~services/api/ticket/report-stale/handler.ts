@@ -6,8 +6,8 @@ import { VoteType } from '~abstractions/vote'
 import { Field, MAX_ALLOWED_STALE_FLAG_COUNT } from '~constants'
 import {
   ExceededMaximumStaleFlagsError,
+  InvalidParameterError,
   InvalidTicketIdError,
-  InvalidVoteTypeError,
   TicketAlreadyClosedError,
   TicketNotFoundError,
 } from '~errors'
@@ -74,7 +74,7 @@ export default async function APIReportStaleTicketHandler(
         } = staleFlags
         tx.update(ticketDocRef, { [Field.staleFlags]: remainingStaleFlags })
       } else {
-        throw new InvalidVoteTypeError(voteType)
+        throw new InvalidParameterError(Field.voteType, voteType)
       }
 
     })

@@ -305,6 +305,11 @@ export function BottomSheet({
                         )}>
                           {displayWaitStatus}
                         </span>
+                        {shouldShowBottomSheet && isProbablyMyTurnNext && (
+                          <i style={{ fontSize: '10pt' }}>
+                            {'Remember to close your ticket before you start playing'}
+                          </i>
+                        )}
                       </div>
                     </div>
                     : isFetchingQueue

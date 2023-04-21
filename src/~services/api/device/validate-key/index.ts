@@ -6,6 +6,9 @@ import {
   APIValidateDeviceKeyReturnData,
 } from './abstractions'
 
+/**
+ * @returns `true` if the device key is valid.
+ */
 export async function APIValidateDeviceKey(
   data: APIValidateDeviceKeyHandlerParams
 ): Promise<APIValidateDeviceKeyReturnData> {

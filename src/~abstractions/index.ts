@@ -1,4 +1,4 @@
-export * from './core'
+export * from './base'
 export * from './device'
 export * from './geolocation'
 export * from './incident-reports'

@@ -6,6 +6,7 @@ import { APIRevokeDeviceKey } from '~services/api/device/revoke-key'
 import { APICloseTicket } from '~services/api/ticket/close'
 import { NotificationSource } from '~services/notification'
 import { ConfigSource } from '~sources/config'
+import { DebugConfigSource } from '~sources/debug'
 import { OutgoingSwapRequestSource } from '~sources/outgoing-swap-request-source/source'
 import { UserPreferencesSource } from '~sources/user-preferences'
 import { devError } from '~utils/dev'
@@ -33,6 +34,7 @@ export async function clearCache({
   await APIRevokeDeviceKey()
   await Promise.all([
     ConfigSource.reset(),
+    DebugConfigSource.reset(),
     OutgoingSwapRequestSource.reset(),
     UserPreferencesSource.reset(),
     NotificationSource.reset(),

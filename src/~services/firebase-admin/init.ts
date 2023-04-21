@@ -1,10 +1,11 @@
-import admin from 'firebase-admin'
-import { ENV } from '~constants'
 import {
-  ReadWriteTransactionOptions,
   ReadOnlyTransactionOptions,
+  ReadWriteTransactionOptions,
   Transaction,
 } from '@google-cloud/firestore'
+import admin from 'firebase-admin'
+import { ENV } from '~constants'
+import { CustomAPIError } from '~errors'
 
 let isFirebaseAppInitialized = false
 if (!isFirebaseAppInitialized) {
@@ -27,17 +28,25 @@ if (!isFirebaseAppInitialized) {
 
 export const DB = admin.firestore()
 export const STORAGE_BUCKET = admin.storage().bucket()
-export function runTransaction<T>(
+export async function runTransaction<T>(
   updateFunction: (transaction: Transaction) => Promise<T>,
   transactionOptions?:
     | ReadWriteTransactionOptions
     | ReadOnlyTransactionOptions
 ): Promise<T> {
-  const defaultOptions: ReadWriteTransactionOptions | ReadOnlyTransactionOptions = {
-    maxAttempts: 3,
+  const txResponse = await DB.runTransaction(async (transaction: Transaction): Promise<T> => {
+    try {
+      await updateFunction(transaction)
+    } catch (e) {
+      return Promise.resolve(e)
+      // Abort transaction if it's an error other than due to too much contention.
+      // Reference on data contention: https://firebase.google.com/docs/firestore/transaction-data-contention
+      // Reference on how to abort: https://stackoverflow.com/a/51986647/5810737
+      // Update: Seems like rejecting the promise doesn't work... [:facepalm:]
+    }
+  }, transactionOptions)
+  if (txResponse instanceof CustomAPIError) {
+    throw txResponse
   }
-  return DB.runTransaction(updateFunction, {
-    ...transactionOptions,
-    ...defaultOptions,
-  })
+  return txResponse
 }

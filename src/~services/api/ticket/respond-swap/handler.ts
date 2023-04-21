@@ -6,7 +6,8 @@ import { ITicketsModelObject, SwapRequestStatus } from '~abstractions'
 import { Field } from '~constants'
 import {
   DeviceKeyMismatchError,
-  InternalAPIError,
+  InvalidParameterError,
+  MissingParameterError,
   SwapRequestAlreadyClosedError,
   SwapRequestNotFoundError,
   TicketNotFoundError,
@@ -30,14 +31,21 @@ export default async function APICancelSwapTicketHandler(
   try {
     performBasicChecks(req, [HttpMethod.GET])
 
+    const {
+      [Field.swapRequestId]: swapRequestId,
+      [Field.swapRequestStatus]: rawResponseStatus,
+    } = req.query as unknown as APIRespondSwapRequestHandlerParams
+
+    if (!swapRequestId) {
+      throw new MissingParameterError(Field.swapRequestId)
+    }
+    if (!rawResponseStatus) {
+      throw new MissingParameterError(Field.swapRequestStatus)
+    }
+
     await runTransaction(async (tx) => {
 
       const deviceInfo = await getDeviceInfoInTransaction(tx, req)
-
-      const {
-        [Field.swapRequestId]: swapRequestId,
-        [Field.swapRequestStatus]: rawResponseStatus,
-      } = req.query as unknown as APIRespondSwapRequestHandlerParams
 
       const swapRequestQuery = await tx.get(DBCollection.SwapRequests.doc(swapRequestId))
       if (!swapRequestQuery.exists) {
@@ -88,7 +96,7 @@ export default async function APICancelSwapTicketHandler(
           [Field.declineCount]: firestore.FieldValue.increment(1),
         })
       } else {
-        throw new InternalAPIError(`Invalid swap response: <${typeof responseStatus}>${responseStatus}`)
+        throw new InvalidParameterError(Field.swapRequestStatus, responseStatus)
       }
     })
 

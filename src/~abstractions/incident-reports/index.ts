@@ -1,7 +1,7 @@
 import { Nullable } from '@glyph-cat/swiss-army-knife'
 import { VoteCollection } from '~abstractions/vote'
 import { Field } from '~constants'
-import { IBaseModelObject, IBaseSnapshot } from '../core'
+import { IBaseModelObject, IBaseSnapshot } from '../base'
 
 export enum IncidentReportType {
   /**
@@ -25,8 +25,6 @@ export enum IncidentReportType {
    */
   FLOOD,
 }
-
-// TODO: [High priority] Should reports also be removed daily by the cron job?
 
 export interface IIncidentReportsModelObject extends IBaseModelObject {
   [Field.arcadeId]: string

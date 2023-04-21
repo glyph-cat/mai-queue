@@ -14,6 +14,9 @@ import {
   APIValidateDeviceKeyHandlerReturnData,
 } from './abstractions'
 
+/**
+ * @returns `true` if the device key is valid.
+ */
 export default async function APIValidateDeviceKeyHandler(
   req: NextApiRequest,
   res: NextApiResponse

@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   // https://nextjs.org/docs/messages/next-image-unconfigured-host
   // images: {
   //   remotePatterns: [

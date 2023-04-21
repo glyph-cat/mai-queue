@@ -17,11 +17,15 @@ export function useDeviceKeyValidation(deviceKey: string): boolean {
       isInitialDeviceKeyValidationPerformed.current = true
       if (deviceKey) {
         try {
-          await APIValidateDeviceKey({ [Field.deviceKey]: deviceKey })
+          const isValid = await APIValidateDeviceKey({ [Field.deviceKey]: deviceKey })
+          if (!isValid) {
+            throw new InvalidDeviceKeyError()
+          }
           setDeviceKeyValidationStatus(true)
         } catch (e) {
-          if (e.response?.data?.code === InvalidDeviceKeyError.code) {
-            await CustomDialog.alert('Device key expired')
+          if (e instanceof InvalidDeviceKeyError || e.response?.data?.code === InvalidDeviceKeyError.code) {
+            // Cannot just reset silently in case there is an open ticket
+            await CustomDialog.alert('Device key has probably expired')
             await ConfigSource.set((s) => ({ ...s, deviceKey: null }))
           } else {
             await handleClientError(e, 'Unable to validate device key, please refresh the page')

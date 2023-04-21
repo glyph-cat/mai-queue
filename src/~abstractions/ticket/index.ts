@@ -3,7 +3,7 @@ import { Timestamp } from '@google-cloud/firestore'
 import { DateTime } from 'luxon'
 import { VoteCollection } from '~abstractions/vote'
 import { Field } from '~constants'
-import { IBaseModelObject, IBaseSnapshot } from '../core'
+import { IBaseModelObject, IBaseSnapshot } from '../base'
 
 export enum CloseTicketReason {
   CLOSE = 1,

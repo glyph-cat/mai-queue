@@ -2,7 +2,12 @@ import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { DateTime } from 'luxon'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Field } from '~constants'
-import { StillInQueueByDeviceKeyError, StillInQueueByFriendCodeError } from '~errors'
+import {
+  InvalidParameterError,
+  StillInQueueByDeviceKeyError,
+  StillInQueueByFriendCodeError,
+} from '~errors'
+import { ARCADE_LIST } from '~services/arcade-info'
 import { DBCollection } from '~services/firebase-admin'
 import { runTransaction } from '~services/firebase-admin/init'
 import { performBasicChecks } from '~utils/backend/helpers'
@@ -27,13 +32,17 @@ export default async function APIGetNewTicketHandler(
   try {
     performBasicChecks(req, [HttpMethod.GET])
 
-    const newTicketId = await runTransaction(async (tx) => {
+    const {
+      [Field.arcadeId]: arcadeId,
+      [Field.friendCode]: friendCode = null,
+      [Field.deviceKey]: deviceKey = null,
+    } = req.query as unknown as APIGetNewTicketHandlerParams
 
-      const {
-        [Field.arcadeId]: arcadeId,
-        [Field.friendCode]: friendCode = null,
-        [Field.deviceKey]: deviceKey = null,
-      } = req.query as unknown as APIGetNewTicketHandlerParams
+    if (!ARCADE_LIST[arcadeId]) {
+      throw new InvalidParameterError(Field.arcadeId, arcadeId)
+    }
+
+    const newTicketId = await runTransaction(async (tx) => {
 
       const deviceInfo = await getDeviceInfoInTransaction(tx, deviceKey ? deviceKey : req)
 
