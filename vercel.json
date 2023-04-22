@@ -1,8 +1,0 @@
-{
-  "crons": [
-    {
-      "path": "/api/cron/daily-reset?api_key=<API_KEY>",
-      "schedule": "0 0 * * *"
-    }
-  ]
-}
