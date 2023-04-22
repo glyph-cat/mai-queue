@@ -7,7 +7,7 @@ export enum Field {
   declineCount = 'e', // for swap requests
   friendCode = 'f',
   staleFlags = 'g', // for tickets
-  id = 'id',
+  incidentReportId = 'id',
   incidentReportType = 'it',
   incidentReportComment = 'ic',
   playerName = 'n',

@@ -1,5 +1,7 @@
+import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { DBCollection } from '~services/firebase-admin'
+import { performBasicChecks } from '~utils/backend/helpers'
 import { BatchOperator } from '~utils/backend/helpers/batch-operator'
 import { emptyResponse } from '~utils/backend/response-handlers'
 import { devInfo } from '~utils/dev'
@@ -9,6 +11,7 @@ export default async function APIDailyResetHandler(
   res: NextApiResponse
 ): Promise<void> {
   devInfo(`Invoked ${APIDailyResetHandler.name}`)
+  performBasicChecks(req, [HttpMethod.GET])
   const batch = new BatchOperator()
   await batch.deleteCollection(DBCollection.Tickets)
   await batch.deleteCollection(DBCollection.SwapRequests)

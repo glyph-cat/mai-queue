@@ -88,6 +88,7 @@ export const DBCollection = {
     toFirestore(modelObject: IIncidentReportsModelObject): IIncidentReportsSnapshot {
       return {
         [Field.cTime]: safelyConvertToFirestoreTimestamp(modelObject[Field.cTime]),
+        [Field.deviceKey]: String(modelObject[Field.deviceKey]),
         [Field.incidentReportType]: Number(modelObject[Field.incidentReportType]),
         [Field.arcadeId]: String(modelObject[Field.arcadeId]),
         [Field.incidentReportComment]: String(modelObject[Field.incidentReportComment]),

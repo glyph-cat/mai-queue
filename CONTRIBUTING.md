@@ -57,6 +57,28 @@ export const SEGA_PW = '████████'
 export const FIREBASE_STORAGE_BUCKET = 'PROJECT_NAME.appspot.com'
 ```
 
+5. Create `vercel.json` in the root of the project directory:
+
+```json
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily-reset?api_key=<API_KEY>",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
+```
+
+...and replace `<API_KEY>` with the same API key from above. Note that this should be the production API key.
+
+<br/>
+
+Quote:
+> There is currently no built-in way to secure cron jobs...
+
+Source: https://vercel.com/docs/cron-jobs#how-to-secure-cron-jobs
+
 <br/>
 
 # Running in localhost

@@ -1,10 +1,7 @@
 import { Field } from '~constants'
 
 export interface APIRemoveIncidentReportHandlerParams {
-  /**
-   * Incident report ID.
-   */
-  [Field.id]: string
+  [Field.incidentReportId]: string
 }
 
 export type APIRemoveIncidentReportHandlerReturnData = void

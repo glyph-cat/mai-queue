@@ -6,7 +6,10 @@ import { Field } from '~constants'
 import { InvalidParameterError } from '~errors'
 import { ARCADE_LIST } from '~services/arcade-info'
 import { DBCollection } from '~services/firebase-admin'
+import { runTransaction } from '~services/firebase-admin/init'
 import { performBasicChecks } from '~utils/backend/helpers'
+import { createDocInTransaction } from '~utils/backend/helpers/create-doc-in-transaction'
+import { getDeviceInfoInTransaction } from '~utils/backend/helpers/get-device-info'
 import {
   emptyResponse,
   genericTryCatchErrorResponseHandler,
@@ -36,15 +39,25 @@ export default async function APISubmitIncidentReportHandler(
       throw new InvalidParameterError(Field.incidentReportType, incidentReportType)
     }
 
-    // TODO: [Mid-priority] May be add a cooldown time as safeguard to prevent spam?
+    await runTransaction(async (tx) => {
 
-    await DBCollection.IncidentReports.add({
-      [Field.cTime]: DateTime.now(),
-      [Field.incidentReportType]: incidentReportType,
-      [Field.arcadeId]: arcadeId,
-      [Field.incidentReportComment]: incidentReportComment,
-      [Field.votes]: {},
+      const deviceInfo = await getDeviceInfoInTransaction(tx, req)
+
+      // TODO: [Mid-priority] May be add a cooldown time based on deviceKey as safeguard to prevent spam?
+      // This would still require making API calls, which would not save a lot of cost.
+      // This still needs more consideration and planning.
+
+      await createDocInTransaction(tx, DBCollection.IncidentReports, {
+        [Field.cTime]: DateTime.now(),
+        [Field.deviceKey]: deviceInfo.deviceKey,
+        [Field.incidentReportType]: incidentReportType,
+        [Field.arcadeId]: arcadeId,
+        [Field.incidentReportComment]: incidentReportComment,
+        [Field.votes]: {},
+      })
+
     })
+
     return emptyResponse(res)
   } catch (e) {
     return genericTryCatchErrorResponseHandler(res, e)

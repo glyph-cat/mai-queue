@@ -28,6 +28,8 @@ export default async function APISetFriendCodeAltHandler(
 
     await runTransaction(async (tx) => {
 
+      // No validation is performed because either one of these fields can be undefined/null
+
       const {
         [Field.friendCode]: friendCode,
         [Field.playerName]: playerName,

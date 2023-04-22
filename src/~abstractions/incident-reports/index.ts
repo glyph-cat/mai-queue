@@ -28,6 +28,7 @@ export enum IncidentReportType {
 
 export interface IIncidentReportsModelObject extends IBaseModelObject {
   [Field.arcadeId]: string
+  [Field.deviceKey]: string
   [Field.incidentReportType]: IncidentReportType
   [Field.incidentReportComment]: Nullable<string>
   [Field.votes]: VoteCollection
@@ -35,6 +36,7 @@ export interface IIncidentReportsModelObject extends IBaseModelObject {
 
 export interface IIncidentReportsSnapshot extends IBaseSnapshot {
   [Field.arcadeId]: IIncidentReportsModelObject[Field.arcadeId]
+  [Field.deviceKey]: IIncidentReportsModelObject[Field.deviceKey]
   [Field.incidentReportType]: IIncidentReportsModelObject[Field.incidentReportType]
   [Field.incidentReportComment]: IIncidentReportsModelObject[Field.incidentReportComment]
   [Field.votes]: IIncidentReportsModelObject[Field.votes]

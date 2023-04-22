@@ -243,3 +243,14 @@ export class ExceededMaximumStaleFlagsError extends CustomAPIError {
   static readonly code = 21
   readonly message = 'This ticket has received the maximum amount of stale flags'
 }
+
+export class IncidentReportNotFoundError extends CustomAPIError {
+  static readonly http = HttpStatus.NOT_FOUND
+  static readonly code = 22
+  constructor(incidentReportId?: string) {
+    super(incidentReportId
+      ? `Incident report (id: ${incidentReportId}) not found`
+      : 'Incident report not found'
+    )
+  }
+}

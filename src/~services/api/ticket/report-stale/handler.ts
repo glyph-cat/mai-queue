@@ -1,4 +1,4 @@
-import { HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpMethod, isUndefined } from '@glyph-cat/swiss-army-knife'
 import { firestore } from 'firebase-admin'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { CloseTicketReason } from '~abstractions'
@@ -30,18 +30,22 @@ export default async function APIReportStaleTicketHandler(
   try {
     performBasicChecks(req, [HttpMethod.POST])
 
+    const {
+      [Field.ticketId]: targetTicketId,
+      [Field.voteType]: voteType,
+    } = req.body as unknown as APIReportStaleTicketHandlerParams
+
+    if (!targetTicketId) {
+      throw new InvalidTicketIdError(targetTicketId)
+    }
+
+    if (isUndefined(VoteType[voteType])) {
+      throw new InvalidParameterError(Field.voteType, voteType)
+    }
+
     await runTransaction(async (tx) => {
 
       const deviceInfo = await getDeviceInfoInTransaction(tx, req)
-
-      const {
-        [Field.ticketId]: targetTicketId,
-        [Field.voteType]: voteType,
-      } = req.body as unknown as APIReportStaleTicketHandlerParams
-
-      if (!targetTicketId) {
-        throw new InvalidTicketIdError(targetTicketId)
-      }
 
       const ticketDocRef = DBCollection.Tickets.doc(targetTicketId)
       const ticketQuery = await tx.get(ticketDocRef)

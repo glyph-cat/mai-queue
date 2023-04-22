@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app'
 import { collection, getFirestore, QueryDocumentSnapshot } from 'firebase/firestore'
 import {
+  IIncidentReportsModelObject,
+  IIncidentReportsSnapshot,
   ISwapRequestsModelObject,
   ISwapRequestsSnapshot,
   ITicketsModelObject,
@@ -57,11 +59,12 @@ export const DBCollection = {
     toFirestore() {
       throw new ClientCollectionWriteError(Collection.IncidentReports)
     },
-    fromFirestore(snapshot: QueryDocumentSnapshot<ISwapRequestsSnapshot>): ISwapRequestsModelObject {
+    fromFirestore(snapshot: QueryDocumentSnapshot<IIncidentReportsSnapshot>): IIncidentReportsModelObject {
       const snapshotData = snapshot.data()
       return {
         ...snapshotData,
         [Field.cTime]: safelyConvertToLuxonDatetime(snapshotData[Field.cTime]),
+        [Field.deviceKey]: null,
       }
     }
   })
