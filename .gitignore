@@ -32,6 +32,8 @@ ui-debug.log
 
 # vercel
 .vercel
+vercel.json
+# because: https://vercel.com/docs/cron-jobs#how-to-secure-cron-jobs (facepalm)
 
 # typescript
 *.tsbuildinfo

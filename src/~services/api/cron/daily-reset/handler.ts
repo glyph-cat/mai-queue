@@ -1,17 +1,21 @@
-import { HttpMethod } from '@glyph-cat/swiss-army-knife'
+import { HttpStatus } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { ENV } from '~constants'
 import { DBCollection } from '~services/firebase-admin'
-import { performBasicChecks } from '~utils/backend/helpers'
 import { BatchOperator } from '~utils/backend/helpers/batch-operator'
 import { emptyResponse } from '~utils/backend/response-handlers'
-import { devInfo } from '~utils/dev'
+import { devError, devInfo } from '~utils/dev'
 
 export default async function APIDailyResetHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
   devInfo(`Invoked ${APIDailyResetHandler.name}`)
-  performBasicChecks(req, [HttpMethod.GET])
+  if (req.query?.api_key !== ENV.APP_API_KEY) {
+    devError('Invalid API key')
+    res.status(HttpStatus.NOT_FOUND).end()
+    return // Early exit
+  }
   const batch = new BatchOperator()
   await batch.deleteCollection(DBCollection.Tickets)
   await batch.deleteCollection(DBCollection.SwapRequests)
