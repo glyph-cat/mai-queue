@@ -8,14 +8,14 @@ import {
 } from './abstractions'
 
 /**
- * @deprecated For the time being, use `APISetFriendCodeAlt`.
+ * @deprecated Use `APISetPlayerInfo` instead.
  */
 export async function APISetFriendCode(
   params: APISetFriendCodeHandlerParams
 ): Promise<APISetFriendCodeReturnData> {
   await networkGet<APISetFriendCodeHandlerParams, APISetFriendCodeHandlerReturnData>(
     // NOTE: `API_ROUTE.DEVICE_SET_FRIEND_CODE` is removed for now
-    '/api/device/set-friend-code-alt',
+    '/api/device/set-friend-code',
     params,
   )
 }

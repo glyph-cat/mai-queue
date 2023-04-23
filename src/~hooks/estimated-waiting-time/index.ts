@@ -113,7 +113,7 @@ export function getAggregatedAverage(
  */
 export function getDatetimeAverage(...ab: [DateTime, DateTime]): DateTime {
   if (ab[0].equals(ab[1])) { return ab[0] } // Early exit
-  // Make sure a is always the smaller value
+  // Make sure `a` is always the smaller value
   const [a, b] = ab.sort()
   const diff = b.diff(a).as('seconds')
   const padding = diff / 2

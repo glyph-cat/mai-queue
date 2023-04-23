@@ -1,21 +1,28 @@
-import { Nullable } from '@glyph-cat/swiss-army-knife'
-import { VoteCollection } from '~abstractions/vote'
 import { Field } from '~constants'
 import { IBaseModelObject, IBaseSnapshot } from '../base'
+
+export enum IncidentReportStatus {
+  ACTIVE = 1,
+  RESOLVED,
+}
 
 export enum IncidentReportType {
   /**
    * Miscellaneous reasons.
    */
-  OTHER,
-  /**
-   * Arcade not open during supposed operating hours.
-   */
-  ARCADE_NOT_OPEN,
+  OTHER = 1,
   /**
    * Cabinets cannot connect to server for some reason.
    */
   CABINET_OFFLINE,
+  /**
+   * Arcade is open, but cabinets are not available for play due to maintenance.
+   */
+  MAINTENANCE_IN_PROGRESS,
+  /**
+   * Arcade not open during supposed operating hours.
+   */
+  ARCADE_NOT_OPEN,
   /**
    * Power outage.
    */
@@ -30,14 +37,12 @@ export interface IIncidentReportsModelObject extends IBaseModelObject {
   [Field.arcadeId]: string
   [Field.deviceKey]: string
   [Field.incidentReportType]: IncidentReportType
-  [Field.incidentReportComment]: Nullable<string>
-  [Field.votes]: VoteCollection
+  [Field.incidentReportStatus]: IncidentReportStatus
 }
 
 export interface IIncidentReportsSnapshot extends IBaseSnapshot {
   [Field.arcadeId]: IIncidentReportsModelObject[Field.arcadeId]
   [Field.deviceKey]: IIncidentReportsModelObject[Field.deviceKey]
   [Field.incidentReportType]: IIncidentReportsModelObject[Field.incidentReportType]
-  [Field.incidentReportComment]: IIncidentReportsModelObject[Field.incidentReportComment]
-  [Field.votes]: IIncidentReportsModelObject[Field.votes]
+  [Field.incidentReportStatus]: IIncidentReportsModelObject[Field.incidentReportStatus]
 }

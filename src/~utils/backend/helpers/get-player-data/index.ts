@@ -27,7 +27,6 @@ export async function getPlayerDataAlt(
   devInfo('Sending GET request...')
   const res = await axios.get(apiUrl, { headers: { api_key: ENV.APP_API_KEY } })
   devInfo('Obtained response!')
-  console.log('res.data', res.data)
   if (isString(res.data)) {
     if (res.data === 'INVALID_FRIEND_CODE') {
       throw new InvalidFriendCodeError()

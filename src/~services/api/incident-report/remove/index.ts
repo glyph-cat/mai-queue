@@ -6,7 +6,7 @@ import {
   APIRemoveIncidentReportReturnData,
 } from './abstractions'
 
-export async function APISubmitIncidentReport(
+export async function APIRemoveIncidentReport(
   params?: APIRemoveIncidentReportHandlerParams
 ): Promise<APIRemoveIncidentReportReturnData> {
   const res = await networkDelete<APIRemoveIncidentReportHandlerParams, APIRemoveIncidentReportHandlerReturnData>(

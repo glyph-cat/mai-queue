@@ -1,10 +1,10 @@
 /* eslint-disable lines-between-class-members, padded-blocks */
 import { HttpStatus, isNumber, isString } from '@glyph-cat/swiss-army-knife'
-import { ARCADE_LIST } from '~services/arcade-info'
-import { CustomAPIError } from './classes'
 import { SwapRequestStatus } from '~abstractions'
-import { formatArcadeName } from '~utils/format-arcade-name'
 import { Field } from '~constants'
+import { ARCADE_LIST } from '~services/arcade-info/list'
+import { formatArcadeName } from '~utils/format-arcade-name'
+import { CustomAPIError } from './classes'
 
 function getStillInQueueErrorMessage(arcadeId: string): string {
   if (isString(arcadeId)) {
@@ -240,17 +240,23 @@ export class SwapRequestAlreadyClosedError extends CustomAPIError {
  */
 export class ExceededMaximumStaleFlagsError extends CustomAPIError {
   static readonly http = HttpStatus.TOO_MANY_REQUESTS
-  static readonly code = 21
+  static readonly code = 20
   readonly message = 'This ticket has received the maximum amount of stale flags'
 }
 
 export class IncidentReportNotFoundError extends CustomAPIError {
   static readonly http = HttpStatus.NOT_FOUND
-  static readonly code = 22
+  static readonly code = 21
   constructor(incidentReportId?: string) {
     super(incidentReportId
       ? `Incident report (id: ${incidentReportId}) not found`
       : 'Incident report not found'
     )
   }
+}
+
+export class PlayerNameTooLongError extends CustomAPIError {
+  static readonly http = HttpStatus.NOT_FOUND
+  static readonly code = 22
+  readonly message = 'Player name too long'
 }

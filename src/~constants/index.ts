@@ -13,6 +13,8 @@ export const MAX_ALLOWED_SWAP_REQUEST_RETRY_COUNT = 3
 
 export const MAX_ALLOWED_STALE_FLAG_COUNT = 5
 
+export const MAX_PLAYER_NAME_CHAR_COUNT = 8
+
 export const INCIDENT_REPORT_COMMENT_MAX_CHARACTERS = 200
 
 /**
@@ -30,7 +32,8 @@ export const OPEN_IN_NEW_TAB_PROPS = {
 }
 
 export enum DateTimeFormat {
-  USER_TIME_SHORT = 'hh:mm:ss a',
+  USER_TIME_SHORT = 'hh:mm a',
+  USER_TIME = 'hh:mm:ss a',
   LEGAL_DATE = 'd LLLL yyyy',
 }
 

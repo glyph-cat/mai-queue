@@ -1,4 +1,4 @@
-import { IArcadeInfo } from '~services/arcade-info'
+import type { IArcadeInfo } from '~services/arcade-info'
 
 export function formatArcadeName(
   arcade: Omit<IArcadeInfo, 'id'> & { id?: string }

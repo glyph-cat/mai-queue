@@ -1,4 +1,5 @@
 import { useVersioningMetadata } from '~hooks/versioning'
+import { useIncidentReportRootListener } from '~services/arcade-info'
 import { useGeolocationPositionRoot } from '~services/geolocation'
 import { useCurrentQueueProvider } from '~services/queue-watcher/current'
 import { useLastPlayedQueueProvider } from '~services/queue-watcher/last-played'
@@ -16,6 +17,7 @@ export function WatchersAndListeners(): JSX.Element {
   usePastQueueProvider()
   useLastPlayedQueueProvider()
   useGeolocationPositionRoot()
+  useIncidentReportRootListener()
   useWebWorker()
 
   // Miscellaneous

@@ -25,5 +25,17 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+    match /PROD_IncidentReports/{incidentReport} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /PREVIEW_IncidentReports/{incidentReport} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /INTERNAL_IncidentReports/{incidentReport} {
+      allow read: if true;
+      allow write: if false;
+    }
   }
 }

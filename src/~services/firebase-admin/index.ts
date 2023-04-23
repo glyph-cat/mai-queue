@@ -91,8 +91,7 @@ export const DBCollection = {
         [Field.deviceKey]: String(modelObject[Field.deviceKey]),
         [Field.incidentReportType]: Number(modelObject[Field.incidentReportType]),
         [Field.arcadeId]: String(modelObject[Field.arcadeId]),
-        [Field.incidentReportComment]: String(modelObject[Field.incidentReportComment]),
-        [Field.votes]: modelObject[Field.votes],
+        [Field.incidentReportStatus]: Number(modelObject[Field.incidentReportStatus]),
       }
     },
     fromFirestore(snapshot: QueryDocumentSnapshot<IIncidentReportsSnapshot>): IIncidentReportsModelObject {

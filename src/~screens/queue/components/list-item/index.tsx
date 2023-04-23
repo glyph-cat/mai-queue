@@ -159,14 +159,14 @@ export const ListItem = memo(({ data, index, style }: ListItemProps): JSX.Elemen
           <div className={styles.ticketInfoContainer}>
             <div className={styles.ticketUpperContainer}>
               <span className={styles.ctime}>
-                {cTime.toFormat(DateTimeFormat.USER_TIME_SHORT)}
+                {cTime.toFormat(DateTimeFormat.USER_TIME)}
                 {xTime && xReason && <>{` (${xReason === CloseTicketReason.CLOSE
                   ? 'Closed'
                   : xReason === CloseTicketReason.WITHDRAW
                     ? 'Withdrawn'
                     : 'Stale'
                   // eslint-disable-next-line indent
-                  }: ${xTime.toFormat(DateTimeFormat.USER_TIME_SHORT)})`}</>}
+                  }: ${xTime.toFormat(DateTimeFormat.USER_TIME)})`}</>}
               </span>
               {hasStaleFlags && (
                 <span className={styles.staleFlagContainer}>

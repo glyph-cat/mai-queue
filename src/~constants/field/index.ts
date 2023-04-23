@@ -9,7 +9,8 @@ export enum Field {
   staleFlags = 'g', // for tickets
   incidentReportId = 'id',
   incidentReportType = 'it',
-  incidentReportComment = 'ic',
+  // incidentReportComment = 'ic',
+  incidentReportStatus = 'is',
   playerName = 'n',
   ticketId = 't',
   ticketNumber = 'tn',

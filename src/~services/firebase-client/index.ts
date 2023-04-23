@@ -64,7 +64,6 @@ export const DBCollection = {
       return {
         ...snapshotData,
         [Field.cTime]: safelyConvertToLuxonDatetime(snapshotData[Field.cTime]),
-        [Field.deviceKey]: null,
       }
     }
   })

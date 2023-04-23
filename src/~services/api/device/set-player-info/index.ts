@@ -13,22 +13,22 @@ import { devError, devInfo } from '~utils/dev'
 import { networkGet } from '~utils/network'
 import { APICheckFriendCode } from '../check-friend-code'
 import {
-  APISetFriendCodeAltHandlerParams,
-  APISetFriendCodeAltHandlerReturnData,
-  APISetFriendCodeAltHandlerSpecialParams,
-  APISetFriendCodeAltReturnData,
+  APISetPlayerInfoHandlerParams,
+  APISetPlayerInfoHandlerReturnData,
+  APISetPlayerInfoHandlerSpecialParams,
+  APISetPlayerInfoReturnData,
 } from './abstractions'
 
 const url = IS_DEBUG_ENV
   ? 'http://127.0.0.1:5001/mai-queue/us-central1/getPlayerData'
   : 'https://us-central1-mai-queue.cloudfunctions.net/getPlayerData'
 
-export async function APISetFriendCodeAlt(
-  params: APISetFriendCodeAltHandlerParams
-): Promise<APISetFriendCodeAltReturnData> {
+export async function APISetPlayerInfo(
+  params: APISetPlayerInfoHandlerParams
+): Promise<APISetPlayerInfoReturnData> {
 
   const { [Field.friendCode]: friendCode } = params
-  const specialParams: APISetFriendCodeAltHandlerSpecialParams = {
+  const specialParams: APISetPlayerInfoHandlerSpecialParams = {
     [Field.friendCode]: friendCode,
     [Field.playerName]: null,
     [Field.bannerUrl]: null,
@@ -68,7 +68,7 @@ export async function APISetFriendCodeAlt(
     specialParams[Field.playerName] = playerName
   }
 
-  await networkGet<APISetFriendCodeAltHandlerSpecialParams, APISetFriendCodeAltHandlerReturnData>(
+  await networkGet<APISetPlayerInfoHandlerSpecialParams, APISetPlayerInfoHandlerReturnData>(
     API_ROUTE.DEVICE_SET_FRIEND_CODE_ALT,
     specialParams,
   )

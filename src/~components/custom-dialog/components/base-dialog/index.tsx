@@ -8,6 +8,7 @@ import styles from './index.module.css'
 export interface BaseDialogProps {
   title: ReactNode
   description: ReactNode
+  disableMidPadding?: boolean
   children: ReactNode
   onDismiss(): void
   easyDismiss?: boolean
@@ -29,7 +30,14 @@ export class BaseDialog extends ReactComponent<BaseDialogProps, BaseDialogState>
   }
 
   render(): ReactNode {
-    const { title, description, children, onDismiss, easyDismiss } = this.props
+    const {
+      title,
+      description,
+      children,
+      onDismiss,
+      easyDismiss,
+      disableMidPadding,
+    } = this.props
     return (
       <AnimatedBackdrop
         visible={this.state.isVisible}
@@ -46,7 +54,7 @@ export class BaseDialog extends ReactComponent<BaseDialogProps, BaseDialogState>
               {description}
             </span>
           )}
-          <div style={{ height: 20 }} />
+          {!disableMidPadding && <div style={{ height: 20 }} />}
           {children}
         </AnimatedSheet>
       </AnimatedBackdrop>

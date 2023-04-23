@@ -39,7 +39,6 @@ function QueueScreen(): JSX.Element {
   const currentQueue = useCurrentQueueConsumer()
   const pastQueue = usePastQueueConsumer(null, isPastQueueRequested)
 
-  // TODO: [High priority] Merge past queue with last played
   const listToUse = viewMode === QueueViewMode.CURRENT
     ? currentQueue.data
     : pastQueue.data

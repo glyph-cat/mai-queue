@@ -4,7 +4,7 @@
 }
 
 .subContainer {
-  background-color: white;
+  background-color: var(--fixedWhite);
   border-radius: 10px;
   box-shadow: var(--dxShadow);
   gap: 20px;

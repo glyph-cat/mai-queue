@@ -1,0 +1,60 @@
+.incidentButtonStackContainer {
+  gap: 2px;
+}
+
+.incidentButtonContainer {
+  --size: 48px;
+  border: solid 3px transparent;
+  /* box-sizing: border-box; */
+  border-radius: 10px;
+  /* color: #75122b; */
+  cursor: pointer;
+  height: var(--size);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.incidentButtonUnderlay {
+  /* background-color: #ffd8d8; */
+  background-color: #d8d8d8;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+.incidentButtonContainer:active .incidentButtonUnderlay {
+  opacity: 0.5;
+}
+
+.incidentButtonSubContainer {
+  gap: 5px;
+  grid-template-columns: auto 1fr repeat(2, auto);
+  align-items: center;
+  margin-inline: 10px;
+}
+
+.incidentButtonLabel {
+  font-size: 9pt;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.time {
+  font-size: 10pt;
+  text-transform: uppercase;
+}
+
+.badge {
+  --badgeSize: 20px;
+  background-color: var(--fixedRed);
+  border-radius: var(--badgeSize);
+  color: var(--fixedWhite);
+  font-size: 10pt;
+  font-weight: bold;
+  height: var(--badgeSize);
+  place-items: center;
+  text-align: center;
+  width: var(--badgeSize);
+}

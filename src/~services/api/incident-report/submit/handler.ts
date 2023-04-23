@@ -1,7 +1,7 @@
 import { HttpMethod, isUndefined } from '@glyph-cat/swiss-army-knife'
 import { DateTime } from 'luxon'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { IncidentReportType } from '~abstractions'
+import { IncidentReportStatus, IncidentReportType } from '~abstractions'
 import { Field } from '~constants'
 import { InvalidParameterError } from '~errors'
 import { ARCADE_LIST } from '~services/arcade-info'
@@ -28,7 +28,6 @@ export default async function APISubmitIncidentReportHandler(
     const {
       [Field.incidentReportType]: incidentReportType,
       [Field.arcadeId]: arcadeId,
-      [Field.incidentReportComment]: incidentReportComment,
     } = req.body as APISubmitIncidentReportHandlerParams
 
     if (!ARCADE_LIST[arcadeId]) {
@@ -47,13 +46,14 @@ export default async function APISubmitIncidentReportHandler(
       // This would still require making API calls, which would not save a lot of cost.
       // This still needs more consideration and planning.
 
+      // TODO: Limit maximum report?
+
       await createDocInTransaction(tx, DBCollection.IncidentReports, {
         [Field.cTime]: DateTime.now(),
         [Field.deviceKey]: deviceInfo.deviceKey,
         [Field.incidentReportType]: incidentReportType,
         [Field.arcadeId]: arcadeId,
-        [Field.incidentReportComment]: incidentReportComment,
-        [Field.votes]: {},
+        [Field.incidentReportStatus]: IncidentReportStatus.ACTIVE,
       })
 
     })

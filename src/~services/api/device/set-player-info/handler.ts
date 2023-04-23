@@ -1,6 +1,6 @@
 import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { Field } from '~constants'
+import { Field, MAX_PLAYER_NAME_CHAR_COUNT } from '~constants'
 import { DBCollection } from '~services/firebase-admin'
 import { runTransaction } from '~services/firebase-admin/init'
 import { performBasicChecks } from '~utils/backend/helpers'
@@ -11,30 +11,30 @@ import {
 } from '~utils/backend/response-handlers'
 import { devInfo, devWarn } from '~utils/dev'
 import { getFormattedGuestName } from '~utils/get-formatted-guest-name'
-import { APISetFriendCodeAltHandlerSpecialParams } from './abstractions'
+import { APISetPlayerInfoHandlerSpecialParams } from './abstractions'
+import { PlayerNameTooLongError } from '~errors'
 
-/**
- * @returns `true` if the friendCode is already used in another active ticket.
- */
-export default async function APISetFriendCodeAltHandler(
+export default async function APISetPlayerInfoHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  devInfo(`Invoked ${APISetFriendCodeAltHandler.name}`)
+  devInfo(`Invoked ${APISetPlayerInfoHandler.name}`)
   try {
     performBasicChecks(req, [HttpMethod.GET])
 
     const deviceInfo = await getDeviceInfo(req)
 
+    const {
+      [Field.friendCode]: friendCode,
+      [Field.playerName]: playerName,
+      [Field.bannerUrl]: bannerUrl,
+    } = req.query as unknown as APISetPlayerInfoHandlerSpecialParams
+
+    if (playerName && playerName.length > MAX_PLAYER_NAME_CHAR_COUNT) {
+      throw new PlayerNameTooLongError()
+    }
+
     await runTransaction(async (tx) => {
-
-      // No validation is performed because either one of these fields can be undefined/null
-
-      const {
-        [Field.friendCode]: friendCode,
-        [Field.playerName]: playerName,
-        [Field.bannerUrl]: bannerUrl,
-      } = req.query as unknown as APISetFriendCodeAltHandlerSpecialParams
 
       const existingTicketQuery = await tx.get(DBCollection.Tickets
         .where(Field.deviceKey, '==', deviceInfo.deviceKey)

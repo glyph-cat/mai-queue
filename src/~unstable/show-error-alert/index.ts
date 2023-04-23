@@ -27,7 +27,7 @@ export async function handleClientError(
       }
     }
   } else if (error instanceof CustomAPIError) {
-    // We need this because of `SetFriendCodeAlt`
+    // We need this because of `SetPlayerInfo`
     await CustomDialog.alert(error.message, `Error (code:${error.code})`)
   } else if (error instanceof Error) {
     await CustomDialog.alert(error.name, error.message + (extraMessage ? `\n\n${extraMessage}` : ''))

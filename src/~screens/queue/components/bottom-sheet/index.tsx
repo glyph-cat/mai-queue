@@ -31,7 +31,7 @@ import { useResizeSensor } from '~hooks/resize-sensor'
 import { useCustomBrowserMultiFormatReader } from '~hooks/scanner'
 import { useSelfTicket } from '~hooks/self-ticket'
 import { APIRequestDeviceKey } from '~services/api/device/request-key'
-import { APISetFriendCodeAlt } from '~services/api/device/set-friend-code-alt'
+import { APISetPlayerInfo } from '~services/api/device/set-player-info'
 import { APICloseTicket } from '~services/api/ticket/close'
 import { APIGetNewTicket } from '~services/api/ticket/get-new'
 import { APITransferTicket } from '~services/api/ticket/transfer'
@@ -57,6 +57,7 @@ import {
   StepWizard,
   StepWizardSource,
 } from './source'
+import { Divider } from '~components/divider'
 
 const LABEL_YOU_MUST_BE_AT_ARCADE = 'You must be at the arcade to take a number.'
 
@@ -176,7 +177,7 @@ export function BottomSheet({
       try {
         await UnstableSource.set((s) => ({ ...s, isRetrievingPlayerInfo: true }))
         await delay(getRandomNumber(5000, 10000)) // See footnote [A]
-        await APISetFriendCodeAlt({ f: friendCode })
+        await APISetPlayerInfo({ f: friendCode })
       } catch (e) {
         handleClientError(e)
       } finally {
@@ -318,6 +319,7 @@ export function BottomSheet({
                           styles.buttonBase,
                           styles.button,
                         )}
+                        style={{ backgroundColor: palette.neutralFill }}
                       >
                         <Spinner
                           fgColor={palette.fixedWhite}
@@ -479,7 +481,7 @@ function GeneralConfigSection(): JSX.Element {
           onChange={onChangeAllowNotifications}
         />
       </div>
-      <div style={{ backgroundColor: `${palette.neutralGray}40`, height: 1 }} />
+      <Divider />
       <TextButton
         label={'Clear cache'}
         onPress={onRequestClearCache}
@@ -513,7 +515,7 @@ function SetFriendCodeSection(): JSX.Element {
       setSavingFriendCodeStatus(true)
       if (selfTicket) {
         await delay(getRandomNumber(3000, 7000)) // See footnote [A]
-        await APISetFriendCodeAlt({ f: friendCode })
+        await APISetPlayerInfo({ f: friendCode })
         await StepWizard.hideBottomSheet()
       }
       await delay(getRandomNumber(500, 1000))
