@@ -1,6 +1,20 @@
 {
   "indexes": [
     {
+      "collectionGroup": "INTERNAL_IncidentReports",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "c",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "INTERNAL_SwapRequests",
       "queryScope": "COLLECTION",
       "fields": [
@@ -87,6 +101,20 @@
       ]
     },
     {
+      "collectionGroup": "PREVIEW_IncidentReports",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "c",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "PREVIEW_SwapRequests",
       "queryScope": "COLLECTION",
       "fields": [
@@ -169,6 +197,20 @@
         {
           "fieldPath": "x",
           "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PROD_IncidentReports",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "c",
+          "order": "ASCENDING"
         }
       ]
     },
