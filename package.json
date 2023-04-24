@@ -2,7 +2,7 @@
   "author": "glyph-cat",
   "name": "mai-queue",
   "description": "A fan-made online queuing system for the maimai arcade rhythm game.",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "readme": "README.md",
   "scripts": {
     "bot:env": "ts-node ./scripts/env",
