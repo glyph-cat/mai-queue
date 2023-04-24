@@ -228,8 +228,8 @@ function ArcadeInfoPopupBase(): JSX.Element {
               {reportButtonStack}
             </CustomDialogButtonContainer>
             {!coordIsWithinRadius && (
-              <i style={{ fontSize: '10pt' }}>
-                {'NOTE: You can only submit reports when you\'re at the arcade.'}
+              <i style={{ fontSize: '10pt', textAlign: 'center' }}>
+                {'Note: You can only submit reports when you\'re at the arcade.'}
               </i>
             )}
           </>
