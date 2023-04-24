@@ -7,6 +7,7 @@ import { Divider } from '~components/divider'
 import { LinkButton, TextButton } from '~components/form'
 import { LoadingCover } from '~components/loading-cover'
 import { ANIMATED_BACKDROP_TRANSITION_DURATION, DateTimeFormat, Field } from '~constants'
+import { useGetDeviceKey } from '~hooks/get-device-key'
 import { APIRemoveIncidentReport } from '~services/api/incident-report/remove'
 import { APISubmitIncidentReport } from '~services/api/incident-report/submit'
 import {
@@ -77,28 +78,25 @@ function ArcadeInfoPopupBase(): JSX.Element {
     await UnstableSource.set(s => ({ ...s, shouldShowArcadeInfoPopup: false }))
   }, [])
 
-  // const deviceKey = useRelinkValue(ConfigSource, s => s.deviceKey)
-  // TOFIX: Device key could be `null` if is first time using the website
+  const [getDeviceKey] = useGetDeviceKey()
+  // Because device key could be `null` if is first time using the website
 
   const [selectedReportType, setSelectedReportType] = useState<IncidentReportType>(null)
   const onSetIncidentType = useCallback((value: IncidentReportType) => {
     setSelectedReportType(v => v === value ? null : value)
   }, [])
 
-  // NOTE: `selectedReportType` defaults to `null`
   const {
     hasOngoingIncidents,
     data: reportData,
     reportsBySelf,
   } = useRelinkValue(IncidentReportSource)
   const selectedReportData = reportData[selectedReportType] || DEFAULT_INCIDENT_REPORT_TYPE_DETAIL_DATA
-  const activeReportsBySelf = reportsBySelf[IncidentReportStatus.ACTIVE][selectedReportType]
-  const resolvedReportsBySelf = reportsBySelf[IncidentReportStatus.RESOLVED][selectedReportType]
+  const selfReportedAsActiveId = reportsBySelf[IncidentReportStatus.ACTIVE][selectedReportType]
+  const selfReportedAsResolvedId = reportsBySelf[IncidentReportStatus.RESOLVED][selectedReportType]
 
-  const [shouldShowReportOptions, setReportOptionsVisibility] = useState(hasOngoingIncidents)
-  const showReportOptions = useCallback(() => {
-    setReportOptionsVisibility(true)
-  }, [])
+  const [hasUserRequestedForReportOptions, setReportOptionsVisibility] = useState(false)
+  const showReportOptions = useCallback(() => { setReportOptionsVisibility(true) }, [])
 
   const [isBusy, setBusyStatus] = useState(false)
 
@@ -107,6 +105,7 @@ function ArcadeInfoPopupBase(): JSX.Element {
       if (isBusy || !selectedReportType || !coordIsWithinRadius) { return } // Early exit
       setBusyStatus(true)
       try {
+        await getDeviceKey()
         await APISubmitIncidentReport({
           [Field.arcadeId]: currentArcade.id,
           [Field.incidentReportType]: selectedReportType,
@@ -118,32 +117,31 @@ function ArcadeInfoPopupBase(): JSX.Element {
         setBusyStatus(false)
       }
     }
-  }, [coordIsWithinRadius, currentArcade.id, isBusy, selectedReportType])
+  }, [coordIsWithinRadius, currentArcade.id, getDeviceKey, isBusy, selectedReportType])
 
-  const factoryUndoIncidentReport = useCallback((reportStatus: IncidentReportStatus) => {
+  const factoryUndoIncidentReport = useCallback((reportId: string) => {
     return async () => {
-      if (isBusy || !selectedReportType) { return } // Early exit
+      if (isBusy) { return } // Early exit
       setBusyStatus(true)
       try {
-        await APIRemoveIncidentReport({
-          [Field.incidentReportId]: reportsBySelf[reportStatus][selectedReportType],
-        })
+        await getDeviceKey()
+        await APIRemoveIncidentReport({ [Field.incidentReportId]: reportId })
       } catch (e) {
         handleClientError(e)
       } finally {
         setBusyStatus(false)
       }
     }
-  }, [isBusy, reportsBySelf, selectedReportType])
+  }, [getDeviceKey, isBusy])
 
   const reportButtonStack = []
-  if (activeReportsBySelf) {
+  if (selfReportedAsActiveId) {
     reportButtonStack.push(
       <TextButton
         key='undo-report'
         label={'Undo report'}
         type='primary'
-        onPress={factoryUndoIncidentReport(IncidentReportStatus.ACTIVE)}
+        onPress={factoryUndoIncidentReport(selfReportedAsActiveId)}
         disabled={!selectedReportType}
       />
     )
@@ -159,23 +157,29 @@ function ArcadeInfoPopupBase(): JSX.Element {
     )
   }
   if (selectedReportData.reportCount > 0) {
-    if (resolvedReportsBySelf) {
+    if (selfReportedAsResolvedId) {
       reportButtonStack.push(
         <TextButton
           key='undo-resolved'
           label={'Undo'}
           type='safe'
-          onPress={factoryUndoIncidentReport(IncidentReportStatus.RESOLVED)}
+          onPress={factoryUndoIncidentReport(selfReportedAsResolvedId)}
           disabled={!selectedReportType}
         />
       )
-    } else {
+    } else if (!selfReportedAsActiveId) {
+      // KIV: (Enhancement) Undo + inform resolved?
       reportButtonStack.push(
         <TextButton
           key='inform-resolved'
           label={'Inform solved'}
           type='safe'
-          onPress={factorySubmitIncidentReport(IncidentReportStatus.RESOLVED)}
+          onPress={selfReportedAsActiveId
+            // If self attempts to report resolved on an issue that self has
+            // previously reported active, then just remove that report instead.
+            ? factoryUndoIncidentReport(selfReportedAsActiveId)
+            : factorySubmitIncidentReport(IncidentReportStatus.RESOLVED)
+          }
           disabled={!selectedReportType || !coordIsWithinRadius}
         />
       )
@@ -196,6 +200,8 @@ function ArcadeInfoPopupBase(): JSX.Element {
       />
     )
   }
+
+  const shouldShowReportOptions = hasUserRequestedForReportOptions || hasOngoingIncidents
 
   return (
     <>
@@ -218,7 +224,7 @@ function ArcadeInfoPopupBase(): JSX.Element {
           </span>
         )}
 
-        {shouldShowReportOptions && (
+        {(hasUserRequestedForReportOptions || hasOngoingIncidents) && (
           <>
             <span>{hasOngoingIncidents ? 'Incident reports:' : 'Report an incident:'}</span>
             <div className={styles.incidentButtonStackContainer}>

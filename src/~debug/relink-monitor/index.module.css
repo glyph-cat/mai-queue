@@ -1,12 +1,14 @@
 .container {
-  background-color: #000000C0;
+  background-color: #000000c0;
   backdrop-filter: blur(2px);
   color: #ffffff;
   height: 100vh;
+  left: 0;
   overflow: scroll;
   position: fixed;
   width: 100vw;
   padding: 20px;
+  top: 0;
   z-index: 1;
 }
 

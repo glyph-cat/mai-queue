@@ -11,6 +11,7 @@ import { IArcadeInfo } from './abstractions'
 import { ARCADE_LIST } from './list'
 import { ConfigSource } from '~sources/config'
 import { devWarn } from '~utils/dev'
+import { pickLast } from '~unstable/pick-last'
 
 const ArcadeInfoContext = createContext<IArcadeInfo>(null)
 
@@ -156,7 +157,7 @@ export function useIncidentReportRootListener(): void {
             newStateData[reportType] = { ...DEFAULT_INCIDENT_REPORT_TYPE_DETAIL_DATA }
           } else {
             newStateData[reportType] = {
-              timestamp: activeReportTimestamps.sort()[0],
+              timestamp: pickLast(activeReportTimestamps.sort()),
               reportCount: activeReportCount,
             }
             hasOngoingIncidents = true

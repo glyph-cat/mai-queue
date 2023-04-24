@@ -57,6 +57,7 @@ import {
   StepWizard,
   StepWizardSource,
 } from './source'
+import { useGetDeviceKey } from '~hooks/get-device-key'
 
 const LABEL_YOU_MUST_BE_AT_ARCADE = 'You must be at the arcade to take a number.'
 
@@ -82,10 +83,10 @@ export function BottomSheet({
   // #region Hooks & derivative data
   const currentQueueLastFetchedTime = useCurrentQueueConsumer(s => s.lastFetched)
   const isFetchingQueue = Object.is(currentQueueLastFetchedTime, null)
-  const { deviceKey, friendCode } = useRelinkValue(ConfigSource)
+  const friendCode = useRelinkValue(ConfigSource, s => s.friendCode)
   const currentArcade = useArcadeInfo()
   const coordIsWithinRadius = useGeolocationChecking()
-
+  const [getDeviceKey] = useGetDeviceKey()
   // #endregion Hooks & derivative data
 
   // #region Ticket status
@@ -121,13 +122,9 @@ export function BottomSheet({
       return // Early exit
     }
     let isRequestSuccessful = false
+    setNumberRequestState(true)
     try {
-      setNumberRequestState(true)
-      let $deviceKey = deviceKey
-      if (!$deviceKey) {
-        $deviceKey = await APIRequestDeviceKey()
-        await ConfigSource.set(s => ({ ...s, deviceKey: $deviceKey }))
-      }
+      await getDeviceKey()
       const ticketId = await APIGetNewTicket({
         [Field.arcadeId]: currentArcade.id,
         [Field.friendCode]: friendCode,
@@ -171,7 +168,7 @@ export function BottomSheet({
         await UnstableSource.set(s => ({ ...s, isRetrievingPlayerInfo: false }))
       }
     }
-  }, [coordIsWithinRadius, currentArcade.id, deviceKey, friendCode, isProbablyMyTurnNext, onScrollToTicketInList])
+  }, [coordIsWithinRadius, currentArcade.id, friendCode, getDeviceKey, isProbablyMyTurnNext, onScrollToTicketInList])
 
   // TODO: [High priority] Mimic TextButton to show loading state when closing ticket
   const [isClosingTicket, setTicketClosingState] = useState(false)
