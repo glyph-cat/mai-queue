@@ -9,6 +9,7 @@ import {
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { AppErrorBoundary } from '~components/__app-tsx__/app-error-boundary'
+import { ArcadeInfoPopup } from '~components/__app-tsx__/arcade-info-popup'
 import { Footer } from '~components/__app-tsx__/footer'
 import { IncomingSwapNumberRequestPopup } from '~components/__app-tsx__/incoming-swap-number-request-popup'
 import { OnlineStatusBanner } from '~components/__app-tsx__/online-status-banner'
@@ -48,12 +49,13 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
           <OnlineStatusBanner />
           <VisualHeader />
           <Component {...pageProps} />
-          <LoadingCoverCanvas />
           <Footer />
           <RenderInClientOnly>
             <OutgoingSwapNumberRequestPopup />
             <IncomingSwapNumberRequestPopup />
+            <ArcadeInfoPopup />
             <PortalCanvas />
+            <LoadingCoverCanvas />
           </RenderInClientOnly>
         </ArcadeInfoProvider>
         <MaterialIconStyleSheet variants={['rounded']} />

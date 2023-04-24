@@ -1,3 +1,5 @@
+import { fullyEnumerate } from '~unstable/fully-enumerate'
+
 export enum Field {
   arcadeId = 'a',
   bannerUrl = 'b',
@@ -24,4 +26,4 @@ export enum Field {
   xTime = 'x', // Termination time (or for tickets' case - closed time)
   xReason = 'y', // Termination reason (or for tickets' case - closed reason)
   sourcePlayerName = 'z', // for swap requests
-}
+} fullyEnumerate(Field)

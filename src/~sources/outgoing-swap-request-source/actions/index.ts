@@ -25,5 +25,5 @@ export async function onSendRequestSwapNumber(
     [Field.sourceTicketId]: sourceTicketId,
     [Field.targetTicketId]: targetTicketId,
   })
-  await OutgoingSwapRequestSource.set((s) => ({ ...s, requestId }))
+  await OutgoingSwapRequestSource.set(s => ({ ...s, requestId }))
 }

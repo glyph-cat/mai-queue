@@ -29,6 +29,7 @@
   cursor: pointer;
   place-items: center;
   position: relative;
+  user-select: none;
 }
 
 .iconButton:active {

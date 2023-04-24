@@ -61,18 +61,18 @@ export class CustomBrowserMultiFormatReader {
     if (loading || !isUserMediaSupported) { return } // Early exit
     try {
       const res = await this.reader.decodeOnceFromVideoDevice(selectedDeviceId)
-      await this.state.set((s) => ({
+      await this.state.set(s => ({
         ...s,
         error: null,
         accessStatus: ScannerAccessStatus.GRANTED,
       }))
       if (res) {
-        await this.state.set((s) => ({ ...s, result: res.getText() }))
+        await this.state.set(s => ({ ...s, result: res.getText() }))
       }
     } catch (e) {
-      await this.state.set((s) => ({ ...s, error: e }))
+      await this.state.set(s => ({ ...s, error: e }))
       if (e instanceof DOMException) {
-        await this.state.set((s) => ({
+        await this.state.set(s => ({
           ...s,
           accessStatus: ScannerAccessStatus.DENIED,
         }))
@@ -89,15 +89,15 @@ export class CustomBrowserMultiFormatReader {
         selectedDeviceId,
         this.videoRef.current,
         async (res, err) => {
-          await this.state.set((s) => ({
+          await this.state.set(s => ({
             ...s,
             isActive: true,
             accessStatus: ScannerAccessStatus.GRANTED,
           }))
           if (res) {
-            await this.state.set((s) => ({ ...s, result: res.getText() }))
+            await this.state.set(s => ({ ...s, result: res.getText() }))
           }
-          await this.state.set((s) => ({ ...s, error: err ? err : null }))
+          await this.state.set(s => ({ ...s, error: err ? err : null }))
           // As long as this error belongs into one of the following categories
           // the code reader is going to continue as excepted. Any other error
           // will stop the decoding loop.
@@ -109,14 +109,14 @@ export class CustomBrowserMultiFormatReader {
             err instanceof ZXingChecksumException
             // └─ A code was found, but it was in a invalid format.
           )) {
-            await this.state.set((s) => ({ ...s, isActive: false }))
+            await this.state.set(s => ({ ...s, isActive: false }))
           }
         }
       )
     } catch (e) {
       devWarn(e)
       if (e instanceof DOMException) {
-        await this.state.set((s) => ({
+        await this.state.set(s => ({
           ...s,
           accessStatus: ScannerAccessStatus.DENIED,
         }))
@@ -126,12 +126,12 @@ export class CustomBrowserMultiFormatReader {
 
   async stop(): Promise<void> {
     this.reader.reset()
-    await this.state.set((s) => ({ ...s, isActive: false }))
+    await this.state.set(s => ({ ...s, isActive: false }))
   }
 
   async reset(): Promise<void> {
     this.stop()
-    await this.state.set((s) => ({
+    await this.state.set(s => ({
       ...s,
       result: this.state.default.result,
       error: this.state.default.error,
@@ -141,20 +141,20 @@ export class CustomBrowserMultiFormatReader {
 
   async refreshDeviceList(): Promise<void> {
     try {
-      await this.state.set((s) => ({ ...s, loading: true }))
+      await this.state.set(s => ({ ...s, loading: true }))
       const videoInputDevices = await this.reader.listVideoInputDevices()
-      await this.state.set((s) => ({ ...s, deviceList: videoInputDevices }))
+      await this.state.set(s => ({ ...s, deviceList: videoInputDevices }))
     } catch (e) {
       devInfo('Error fetching device list')
       devError(e)
-      await this.state.set((s) => ({ ...s, error: e }))
+      await this.state.set(s => ({ ...s, error: e }))
     } finally {
-      await this.state.set((s) => ({ ...s, loading: false }))
+      await this.state.set(s => ({ ...s, loading: false }))
     }
   }
 
   async forgetResult(): Promise<void> {
-    await this.state.set((s) => ({
+    await this.state.set(s => ({
       ...s,
       result: this.state.default.result,
     }))
@@ -182,7 +182,7 @@ export function useCustomBrowserMultiFormatReader(): CustomBrowserMultiFormatRea
           }],
         },
       }).then(async (res) => {
-        await customQRCodeReader.current.state.set((s) => ({
+        await customQRCodeReader.current.state.set(s => ({
           ...s,
           selectedDeviceId: res.id,
         }))

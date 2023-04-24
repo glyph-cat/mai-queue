@@ -1,5 +1,6 @@
 .contentContainer {
   gap: 10px;
+  margin-top: -10%;
 }
 
 .title {
@@ -12,23 +13,9 @@
 }
 
 .sizingDefault {
-  max-height: 90vh;
-  max-width: 95vw;
-  min-height: 100px;
-  min-width: 50vw;
+  max-height: min(700px, 75vh);
+  max-width: min(500px, 95vw);
+  min-width: 300px;
+  overflow-y: scroll;
   width: 400px;
-}
-
-.sizingLarge {
-  max-height: 65vh;
-  max-width: 80vw;
-  min-height: 250px;
-  min-width: 600px;
-}
-
-.sizingExtraLarge {
-  max-height: 75vh;
-  max-width: 85vw;
-  min-height: 450px;
-  min-width: 800px;
 }

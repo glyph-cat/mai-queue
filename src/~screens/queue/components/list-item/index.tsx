@@ -20,7 +20,7 @@ import { APIReportStaleTicket } from '~services/api/ticket/report-stale'
 import { onConfirmRequestSwapNumber } from '~sources/outgoing-swap-request-source'
 import { UnstableSource } from '~sources/unstable'
 import { hasProperty } from '~unstable/has-property'
-import { handleClientError } from '~unstable/show-error-alert'
+import { handleClientError } from '~utils/show-error-alert'
 import { ListItemMenu, ListItemMenuProps, ListItemMenuResponse } from '../list-item-menu'
 import { PlayerInfoDisplay } from '../player-info-display'
 import styles from './index.module.css'
@@ -124,7 +124,7 @@ export const ListItem = memo(({ data, index, style }: ListItemProps): JSX.Elemen
 
   const isRetrievingPlayerInfo = useRelinkValue(
     UnstableSource,
-    (s) => s.isRetrievingPlayerInfo,
+    s => s.isRetrievingPlayerInfo,
     currentTicketBelongsToSelf
   )
 

@@ -5,8 +5,8 @@ import { Field } from '~constants'
 import { InvalidDeviceKeyError } from '~errors'
 import { APIValidateDeviceKey } from '~services/api/device/validate-key'
 import { ConfigSource } from '~sources/config'
-import { clearCache } from '~unstable/clear-cache'
-import { handleClientError } from '~unstable/show-error-alert'
+import { clearCache } from '~utils/clear-cache'
+import { handleClientError } from '~utils/show-error-alert'
 
 export function useDeviceKeyValidation(deviceKey: string): boolean {
   const isInitialDeviceKeyValidationPerformed = useRef(false)
@@ -26,7 +26,7 @@ export function useDeviceKeyValidation(deviceKey: string): boolean {
           if (e instanceof InvalidDeviceKeyError || e.response?.data?.code === InvalidDeviceKeyError.code) {
             // Cannot just reset silently in case there is an open ticket
             await CustomDialog.alert('Device key has probably expired')
-            await ConfigSource.set((s) => ({ ...s, deviceKey: null }))
+            await ConfigSource.set(s => ({ ...s, deviceKey: null }))
           } else {
             await handleClientError(e, 'Unable to validate device key, please refresh the page')
             await clearCache({ noReload: true })

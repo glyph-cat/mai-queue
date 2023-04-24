@@ -6,8 +6,9 @@
   border-radius: var(--containerSize);
   cursor: pointer;
   height: var(--containerSize);
-  width: calc(var(--containerSize) * 2);
   transition: background-color var(--transitionDuration);
+  user-select: none;
+  width: calc(var(--containerSize) * 2);
 }
 
 .containerOn {

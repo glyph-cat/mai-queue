@@ -8,7 +8,7 @@ import {
 } from './abstractions'
 
 export async function APISubmitIncidentReport(
-  params?: APISubmitIncidentReportHandlerParams
+  params: APISubmitIncidentReportHandlerParams
 ): Promise<APISubmitIncidentReportReturnData> {
   const res = await networkPost<EmptyRecord, APISubmitIncidentReportHandlerParams, APISubmitIncidentReportHandlerReturnData>(
     API_ROUTE.INCIDENT_REPORT_SUBMIT,

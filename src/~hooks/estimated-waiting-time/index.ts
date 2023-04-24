@@ -16,7 +16,7 @@ export function useEstimatedWaitingTime(positionOfTicketInQueue: number): number
   const arcadeInfo = useArcadeInfo()
   const hasTicket = isNumber(positionOfTicketInQueue)
   const currentDateTime = useCurrentDateTime(hasTicket ? 60000 : null)
-  const lastPlayedQueue = useLastPlayedQueueConsumer((s) => s.data, hasTicket)
+  const lastPlayedQueue = useLastPlayedQueueConsumer(s => s.data, hasTicket)
   return useMemo(() => {
     if (!hasTicket) { return NaN }
     return getEstimatedWaitingTime(

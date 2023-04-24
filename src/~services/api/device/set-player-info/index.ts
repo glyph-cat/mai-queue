@@ -4,7 +4,7 @@ import { stringifyUrl } from 'query-string'
 import { ENV, Field } from '~constants'
 import {
   FriendCodeAlreadyInUseError,
-  InternalClientError,
+  InternalAPIError,
   InvalidAPIKeyError,
   InvalidFriendCodeError,
 } from '~errors'
@@ -57,7 +57,7 @@ export async function APISetPlayerInfo(
         throw new InvalidAPIKeyError()
       } else {
         devError(res)
-        throw new InternalClientError('Z1')
+        throw new InternalAPIError('Z1')
       }
     }
     const {

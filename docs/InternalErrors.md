@@ -10,6 +10,8 @@ Errors prefixes and meanings:
 * Format: `X1-0,1,2`
 * Description: Since cabinet count is `{0}`, expected xtimeStack.length to be `{1}` but got `{2}` instead.
 
+## API Errors
+
 ### `Z1`
 * Format `Z1` (no parameters)
 * Description: Errors from Google Cloud Functions are returned as error strings with status `200` for easy parsing. For set-friend-code, the only possible errors (string values) are `INVALID_FRIEND_CODE` or `INVALID_API_KEY`, but a different value eas received.

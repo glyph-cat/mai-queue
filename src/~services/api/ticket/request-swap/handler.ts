@@ -6,7 +6,6 @@ import { ITicketsModelObject, SwapRequestStatus } from '~abstractions'
 import { Field, MAX_ALLOWED_SWAP_REQUEST_RETRY_COUNT } from '~constants'
 import {
   DeviceKeyMismatchError,
-  InvalidTicketIdError,
   MissingParameterError,
   SwapRequestDeclineLimitError,
   TicketAlreadyClosedError,

@@ -10,8 +10,8 @@ import { useCurrentQueueConsumer } from '~services/queue-watcher/current'
 import { IncomingSwapRequestSource } from '~sources/incoming-swap-request-source'
 
 export function useIncomingSwapRequestWatcher(myTicketId: string): void {
-  const requestId = useRelinkValue(IncomingSwapRequestSource, (s) => s?.requestId)
-  const currentQueue = useCurrentQueueConsumer((q) => q.data)
+  const requestId = useRelinkValue(IncomingSwapRequestSource, s => s?.requestId)
+  const currentQueue = useCurrentQueueConsumer(q => q.data)
   const currentArcade = useArcadeInfo()
   // TODO: [High priority] Concerning this, try to send a request so the popup appears on the receiver's end, then take or close another random ticket to trigger change in the queueState and see if the popup flashes
   useEffect(() => {
@@ -27,10 +27,10 @@ export function useIncomingSwapRequestWatcher(myTicketId: string): void {
       if (!querySnapshot.empty) {
         const querySnapshotDoc = querySnapshot.docs[0]
         const snapshotData = querySnapshotDoc.data()
-        const sourceTicket = currentQueue.find((ticket) => {
+        const sourceTicket = currentQueue.find(ticket => {
           return ticket.id === snapshotData[Field.sourceTicketId]
         })
-        const targetTicket = currentQueue.find((ticket) => {
+        const targetTicket = currentQueue.find(ticket => {
           return ticket.id === snapshotData[Field.targetTicketId]
         })
         await IncomingSwapRequestSource.set({

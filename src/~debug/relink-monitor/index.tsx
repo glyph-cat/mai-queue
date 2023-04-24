@@ -1,5 +1,6 @@
 import { RenderInClientOnly, concatClassNames } from '@glyph-cat/swiss-army-knife'
 import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useRelinkValue } from 'react-relink'
 import { ENV } from '~constants'
 import { StepWizardSource } from '~screens/queue/components/bottom-sheet/source'
@@ -64,7 +65,7 @@ function RelinkMonitorBase(): JSX.Element {
   }, [configState, debugConfigState, incidentReportState, incomingSwapRequestState, notificationState, outgoingSwapRequestState, stepWizardState, unstableState, userPreferencesState])
 
   if (shouldShowOverlay) {
-    return (
+    return createPortal(
       <div className={concatClassNames(
         styles.container,
         shouldBeInteractive ? null : styles.containerNonInteractive,
@@ -74,7 +75,8 @@ function RelinkMonitorBase(): JSX.Element {
             {allStateData}
           </code>
         </pre>
-      </div>
+      </div>,
+      document.body
     )
   }
 

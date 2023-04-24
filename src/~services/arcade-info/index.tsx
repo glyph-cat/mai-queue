@@ -3,12 +3,14 @@ import { limit, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import { DateTime } from 'luxon'
 import { useRouter } from 'next/router'
 import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react'
-import { RelinkSource } from 'react-relink'
+import { RelinkSource, useRelinkValue } from 'react-relink'
 import { IncidentReportStatus, IncidentReportType } from '~abstractions'
 import { Field } from '~constants'
 import { DBCollection } from '~services/firebase-client'
 import { IArcadeInfo } from './abstractions'
 import { ARCADE_LIST } from './list'
+import { ConfigSource } from '~sources/config'
+import { devWarn } from '~utils/dev'
 
 const ArcadeInfoContext = createContext<IArcadeInfo>(null)
 
@@ -61,18 +63,20 @@ type IncidentReportFiltrationSchema = Partial<Record<IncidentReportType, Partial
 
 export interface IIncidentReportTypeDetails {
   reportCount: number
-  deviceKeys: Array<string>
   timestamp: Nullable<DateTime>
 }
 
 export const DEFAULT_INCIDENT_REPORT_TYPE_DETAIL_DATA: IIncidentReportTypeDetails = {
   reportCount: 0,
-  deviceKeys: [],
   timestamp: null,
 }
 
 export interface IIncidentReportSource {
   hasOngoingIncidents: boolean
+  /**
+   * Where string is the reportId.
+   */
+  reportsBySelf: Record<IncidentReportStatus, Partial<Record<IncidentReportType, string>>>
   data: Record<IncidentReportType, IIncidentReportTypeDetails>
 }
 
@@ -80,6 +84,10 @@ export const IncidentReportSource = new RelinkSource<IIncidentReportSource>({
   key: 'incident-report',
   default: {
     hasOngoingIncidents: false,
+    reportsBySelf: {
+      [IncidentReportStatus.ACTIVE]: {},
+      [IncidentReportStatus.RESOLVED]: {},
+    },
     data: {
       [IncidentReportType.OTHER]: DEFAULT_INCIDENT_REPORT_TYPE_DETAIL_DATA,
       [IncidentReportType.CABINET_OFFLINE]: DEFAULT_INCIDENT_REPORT_TYPE_DETAIL_DATA,
@@ -93,6 +101,7 @@ export const IncidentReportSource = new RelinkSource<IIncidentReportSource>({
 
 export function useIncidentReportRootListener(): void {
   const currentArcade = useArcadeInfo()
+  const deviceKey = useRelinkValue(ConfigSource, s => s.deviceKey)
   useEffect(() => {
     if (!currentArcade) { return } // Early exit
     const unsubscribeListener = onSnapshot(
@@ -103,6 +112,10 @@ export function useIncidentReportRootListener(): void {
         limit(30)
       ),
       async (querySnapshot) => {
+        const reportsBySelf: IIncidentReportSource['reportsBySelf'] = {
+          [IncidentReportStatus.ACTIVE]: {},
+          [IncidentReportStatus.RESOLVED]: {},
+        }
         const filtrationData: IncidentReportFiltrationSchema = {}
         querySnapshot.forEach((doc) => {
           const {
@@ -118,6 +131,12 @@ export function useIncidentReportRootListener(): void {
             filtrationData[reportType][reportStatus] = {}
           }
           filtrationData[reportType][reportStatus][reporterDeviceKey] = reportTime
+          if (reporterDeviceKey === deviceKey) {
+            if (reportsBySelf[reportStatus][reportType]) {
+              devWarn(`Duplicate report from same user '${doc.id}'`)
+            }
+            reportsBySelf[reportStatus][reportType] = doc.id
+          }
         })
         let hasOngoingIncidents = false
         const newStateData: Partial<IIncidentReportSource['data']> = {}
@@ -133,15 +152,15 @@ export function useIncidentReportRootListener(): void {
           const activeReportTimestamps = Object.values(activeReports)
           const activeReportCount = activeReportDeviceKeys.length
           const resolvedReportCount = Object.keys(resolvedReports).length
-          newStateData[reportType] = {
-            deviceKeys: activeReportDeviceKeys,
-            timestamp: activeReportTimestamps.sort()[0],
-            reportCount: resolvedReportCount > activeReportCount
-              ? 0
-              : activeReportCount,
+          if (resolvedReportCount >= activeReportCount) {
+            newStateData[reportType] = { ...DEFAULT_INCIDENT_REPORT_TYPE_DETAIL_DATA }
+          } else {
+            newStateData[reportType] = {
+              timestamp: activeReportTimestamps.sort()[0],
+              reportCount: activeReportCount,
+            }
+            hasOngoingIncidents = true
           }
-          hasOngoingIncidents = true
-          // ^ As long as the iteration executes, it means there are ongoing incidents
         })
         await IncidentReportSource.set({
           ...IncidentReportSource.default,
@@ -149,12 +168,13 @@ export function useIncidentReportRootListener(): void {
             ...IncidentReportSource.default.data,
             ...newStateData,
           },
+          reportsBySelf,
           hasOngoingIncidents,
         })
       }
     )
     return () => { unsubscribeListener() }
-  }, [currentArcade])
+  }, [currentArcade, deviceKey])
 }
 
 export * from './abstractions'

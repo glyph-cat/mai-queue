@@ -29,7 +29,7 @@ export function useWebWorker(): void {
   const selfTicketId = selfTicket?.id
   const selfTicketCTime = selfTicket?.cTime
   const currentArcade = useArcadeInfo()
-  const allowNotifications = useRelinkValue(UserPreferencesSource, (s) => s.allowNotifications)
+  const allowNotifications = useRelinkValue(UserPreferencesSource, s => s.allowNotifications)
 
   const shouldCreateNotification = useCallback(() => {
     if (allowNotifications) {
@@ -47,7 +47,7 @@ export function useWebWorker(): void {
     const { key, ...remainingMessageData } = messageData
     await checkNotificationPermission()
     workerRef.current.postMessage(JSON.stringify(remainingMessageData))
-    await NotificationSource.set((s) => ({ ...s, cache: { ...s.cache, [key]: true } }))
+    await NotificationSource.set(s => ({ ...s, cache: { ...s.cache, [key]: true } }))
   }, [])
 
   const estimatedWaitingTime = useEstimatedWaitingTime(selfTicket?.positionInQueue)

@@ -46,25 +46,22 @@ Project Links:
 * The device key will be revoked and the page will be refreshed.
 * If the active ticket cannot be closed due to said anomaly, the player will no longer have access to the ticket either.
 
-### 🚧 Automatically Delete Old Data
-* Work inprogress.
-* Data to be deleted includes:
-  * Tickets and 
-  * Swap Requests
-  * Screenshots of player banners
+### ✅ Reporting Incidents
+Players can report incidents happening at an arcade such as:
+* Cabinets cannot connect to server for some reason
+* Maintenance in progress
+* Arcade not open during supposed operating hours
+* Power outage
+* Flood
+* Miscellaneous
+
+### ✅ Automatically Delete Old Data
+Each day at 12:00 AM MYT, tickets, swap requests, and incident reports will be deleted.
 
 ### 🚧 Receive Notifications (Phase 2)
-* Players can opt in to receive notifications when:
-  * it's their turn next
-  * another player requests for a ticket swap
-
-### 🚧 Reporting Incidents (Phase 2)
-* Players can report incidents happening at an arcade such as:
-  * Arcade not open during supposed operating hours
-  * Cabinets cannot connect to server for some reason
-  * Power outage
-  * Flood
-  * Miscellaneous
+Players can opt in to receive notifications when:
+* it's their turn next
+* another player requests for a ticket swap
 
 ### 🚧 Set Player Name (still considering)
 * Allow players to at least set their player name if they don't have access to their maimai account or don't have a card.

@@ -13,7 +13,7 @@ import {
   IIncomingSwapRequestSource,
   IncomingSwapRequestSource,
 } from '~sources/incoming-swap-request-source'
-import { handleClientError } from '~unstable/show-error-alert'
+import { handleClientError } from '~utils/show-error-alert'
 import { useIncomingSwapRequestWatcher } from './hooks/use-incoming-swap-request-watcher'
 
 export function IncomingSwapNumberRequestPopup(): JSX.Element {

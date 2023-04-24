@@ -15,6 +15,7 @@ import { CloseTicketReason } from '~abstractions'
 import { AnimatedBackdrop } from '~components/animated-backdrop'
 import { CustomDialog } from '~components/custom-dialog'
 import { ChoiceItem } from '~components/custom-dialog/choice'
+import { Divider } from '~components/divider'
 import { LinkButton, TextButton, ToggleSwitchWithLabel } from '~components/form'
 import { LiveVideoCanvas } from '~components/live-video-canvas'
 import { LoadingCover } from '~components/loading-cover'
@@ -36,7 +37,7 @@ import { APICloseTicket } from '~services/api/ticket/close'
 import { APIGetNewTicket } from '~services/api/ticket/get-new'
 import { APITransferTicket } from '~services/api/ticket/transfer'
 import { useArcadeInfo } from '~services/arcade-info'
-import { useGeolocationPosition } from '~services/geolocation'
+import { useGeolocationChecking } from '~services/geolocation'
 import { CLIENT_ROUTE } from '~services/navigation'
 import { useCurrentQueueConsumer } from '~services/queue-watcher/current'
 import { useTheme } from '~services/theme'
@@ -44,10 +45,9 @@ import { ConfigSource } from '~sources/config'
 import { DebugConfigSource } from '~sources/debug'
 import { UnstableSource } from '~sources/unstable'
 import { UserPreferencesSource } from '~sources/user-preferences'
-import { clearCache } from '~unstable/clear-cache'
-import { handleClientError } from '~unstable/show-error-alert'
-import { checkIfCoordIsWithinRadius } from '~utils/coords-intersection'
+import { clearCache } from '~utils/clear-cache'
 import { QR_EXPIRY_DURATION, decryptDeviceKeyQR, useDeviceKeyQRValue } from '~utils/qr'
+import { handleClientError } from '~utils/show-error-alert'
 import { PaginationDotIndicator } from './components/pagination-dot-indicator'
 import { StepButton } from './components/step-button'
 import styles from './index.module.css'
@@ -57,7 +57,6 @@ import {
   StepWizard,
   StepWizardSource,
 } from './source'
-import { Divider } from '~components/divider'
 
 const LABEL_YOU_MUST_BE_AT_ARCADE = 'You must be at the arcade to take a number.'
 
@@ -81,23 +80,11 @@ export function BottomSheet({
   // #endregion UI
 
   // #region Hooks & derivative data
-  const { disableGeoChecking } = useRelinkValue(DebugConfigSource)
-  const currentQueueLastFetchedTime = useCurrentQueueConsumer((s) => s.lastFetched)
+  const currentQueueLastFetchedTime = useCurrentQueueConsumer(s => s.lastFetched)
   const isFetchingQueue = Object.is(currentQueueLastFetchedTime, null)
   const { deviceKey, friendCode } = useRelinkValue(ConfigSource)
   const currentArcade = useArcadeInfo()
-  const geolocationPosition = useGeolocationPosition()
-  const coordIsWithinRadius: boolean = (() => {
-    if (ENV.VERCEL_ENV !== 'production' && disableGeoChecking) {
-      return true
-    } else {
-      return checkIfCoordIsWithinRadius(
-        geolocationPosition.coords,
-        currentArcade.coordinates,
-        300
-      )
-    }
-  })()
+  const coordIsWithinRadius = useGeolocationChecking()
 
   // #endregion Hooks & derivative data
 
@@ -139,7 +126,7 @@ export function BottomSheet({
       let $deviceKey = deviceKey
       if (!$deviceKey) {
         $deviceKey = await APIRequestDeviceKey()
-        await ConfigSource.set((s) => ({ ...s, deviceKey: $deviceKey }))
+        await ConfigSource.set(s => ({ ...s, deviceKey: $deviceKey }))
       }
       const ticketId = await APIGetNewTicket({
         [Field.arcadeId]: currentArcade.id,
@@ -148,22 +135,22 @@ export function BottomSheet({
       onScrollToTicketInList(ticketId)
       isRequestSuccessful = true
       if (!friendCode) {
-        await StepWizardSource.set((s) => ({ ...s, step: StepIndex.SET_FRIEND_CODE }))
+        await StepWizardSource.set(s => ({ ...s, step: StepIndex.SET_FRIEND_CODE }))
       } else if (!isProbablyMyTurnNext) {
-        await StepWizardSource.set((s) => ({ ...s, step: StepWizardSource.default.step }))
+        await StepWizardSource.set(s => ({ ...s, step: StepWizardSource.default.step }))
       }
     } catch (e) {
       const errorCode = e.response?.data?.code
       if (errorCode === InvalidDeviceKeyError.code) {
         handleClientError(e, 'Device key has changed, please try again.')
-        await ConfigSource.set((s) => ({
+        await ConfigSource.set(s => ({
           ...s,
           deviceKey: ConfigSource.default.deviceKey,
         }))
       } else if (errorCode === InvalidFriendCodeError.code) {
         handleClientError(e)
-        await StepWizardSource.set((s) => ({ ...s, step: StepIndex.SET_FRIEND_CODE }))
-        await ConfigSource.set((s) => ({
+        await StepWizardSource.set(s => ({ ...s, step: StepIndex.SET_FRIEND_CODE }))
+        await ConfigSource.set(s => ({
           ...s,
           friendCode: ConfigSource.default.friendCode,
         }))
@@ -175,13 +162,13 @@ export function BottomSheet({
     }
     if (isRequestSuccessful && friendCode) {
       try {
-        await UnstableSource.set((s) => ({ ...s, isRetrievingPlayerInfo: true }))
+        await UnstableSource.set(s => ({ ...s, isRetrievingPlayerInfo: true }))
         await delay(getRandomNumber(5000, 10000)) // See footnote [A]
         await APISetPlayerInfo({ f: friendCode })
       } catch (e) {
         handleClientError(e)
       } finally {
-        await UnstableSource.set((s) => ({ ...s, isRetrievingPlayerInfo: false }))
+        await UnstableSource.set(s => ({ ...s, isRetrievingPlayerInfo: false }))
       }
     }
   }, [coordIsWithinRadius, currentArcade.id, deviceKey, friendCode, isProbablyMyTurnNext, onScrollToTicketInList])
@@ -430,11 +417,11 @@ export function BottomSheet({
 }
 
 async function onChangeDisableGeoChecking(newValue: boolean) {
-  await DebugConfigSource.set((s) => ({ ...s, disableGeoChecking: newValue }))
+  await DebugConfigSource.set(s => ({ ...s, disableGeoChecking: newValue }))
 }
 
 async function onChangeAllowNotifications(newAllowNotificationsState: boolean) {
-  await UserPreferencesSource.set((s) => ({
+  await UserPreferencesSource.set(s => ({
     ...s,
     allowNotifications: newAllowNotificationsState,
   }))
@@ -446,8 +433,8 @@ function GeneralConfigSection(): JSX.Element {
   const selfTicketId = selfTicket?.id
   const selfTicketNumber = selfTicket?.ticketNumber
 
-  const disableGeoChecking = useRelinkValue(DebugConfigSource, (s) => s.disableGeoChecking)
-  const allowNotifications = useRelinkValue(UserPreferencesSource, (s) => s.allowNotifications)
+  const disableGeoChecking = useRelinkValue(DebugConfigSource, s => s.disableGeoChecking)
+  const allowNotifications = useRelinkValue(UserPreferencesSource, s => s.allowNotifications)
 
   const onRequestClearCache = useCallback(async () => {
     const shouldProceed = await CustomDialog.confirm(
@@ -519,7 +506,7 @@ function SetFriendCodeSection(): JSX.Element {
         await StepWizard.hideBottomSheet()
       }
       await delay(getRandomNumber(500, 1000))
-      await ConfigSource.set((s) => ({ ...s, friendCode }))
+      await ConfigSource.set(s => ({ ...s, friendCode }))
     } catch (e) {
       handleClientError(e)
     } finally {
@@ -568,9 +555,9 @@ function ShowQRSection({
   onScrollToTicketInList,
 }: ShowQRSectionProps): JSX.Element {
   const { palette } = useTheme()
-  const deviceKey = useRelinkValue(ConfigSource, (s) => s.deviceKey)
+  const deviceKey = useRelinkValue(ConfigSource, s => s.deviceKey)
   const [qrValue, timeLeft] = useDeviceKeyQRValue(deviceKey)
-  const selfTicket = useCurrentQueueConsumer((s) => s.data.find((item) => item.deviceKey === deviceKey))
+  const selfTicket = useCurrentQueueConsumer(s => s.data.find((item) => item.deviceKey === deviceKey))
   useEffect(() => {
     if (selfTicket) {
       StepWizard.hideBottomSheet()

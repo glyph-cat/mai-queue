@@ -28,6 +28,7 @@ export default async function APISubmitIncidentReportHandler(
     const {
       [Field.incidentReportType]: incidentReportType,
       [Field.arcadeId]: arcadeId,
+      [Field.incidentReportStatus]: incidentReportStatus,
     } = req.body as APISubmitIncidentReportHandlerParams
 
     if (!ARCADE_LIST[arcadeId]) {
@@ -36,6 +37,10 @@ export default async function APISubmitIncidentReportHandler(
 
     if (isUndefined(IncidentReportType[incidentReportType])) {
       throw new InvalidParameterError(Field.incidentReportType, incidentReportType)
+    }
+
+    if (isUndefined(IncidentReportStatus[incidentReportStatus])) {
+      throw new InvalidParameterError(Field.incidentReportStatus, incidentReportStatus)
     }
 
     await runTransaction(async (tx) => {
@@ -53,7 +58,7 @@ export default async function APISubmitIncidentReportHandler(
         [Field.deviceKey]: deviceInfo.deviceKey,
         [Field.incidentReportType]: incidentReportType,
         [Field.arcadeId]: arcadeId,
-        [Field.incidentReportStatus]: IncidentReportStatus.ACTIVE,
+        [Field.incidentReportStatus]: incidentReportStatus,
       })
 
     })

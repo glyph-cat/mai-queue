@@ -13,7 +13,7 @@ import { useTheme } from '~services/theme'
 import { onSendRequestSwapNumber } from '~sources/outgoing-swap-request-source'
 import { IOutgoingSwapRequestSource } from '~sources/outgoing-swap-request-source/abstractions'
 import { OutgoingSwapRequestSource } from '~sources/outgoing-swap-request-source/source'
-import { handleClientError } from '~unstable/show-error-alert'
+import { handleClientError } from '~utils/show-error-alert'
 import { useOutgoingSwapRequestWatcher } from './hooks/use-outgoing-swap-request-watcher'
 import styles from './index.module.css'
 
@@ -47,7 +47,7 @@ function OutgoingSwapNumberRequestPopupBase({
     await OutgoingSwapRequestSource.reset()
   }, [])
 
-  const currentQueueLength = useCurrentQueueConsumer((s) => s.data.length)
+  const currentQueueLength = useCurrentQueueConsumer(s => s.data.length)
   useOutgoingSwapRequestWatcher(
     currentQueueLength,
     requestId,

@@ -26,7 +26,9 @@ export class CustomAPIError extends Error {
   static readonly http: HttpStatus
   static readonly code: number
 
-  readonly message: string = '<InternalClientError>'
+  constructor(readonly message: string = '<CustomAPIError>') {
+    super(message)
+  }
 
   get http(): HttpStatus {
     return (this.constructor as typeof CustomAPIError).http

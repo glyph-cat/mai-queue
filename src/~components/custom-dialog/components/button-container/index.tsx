@@ -8,8 +8,11 @@ export interface CustomDialogButtonContainerProps {
 export function CustomDialogButtonContainer({
   children,
 }: CustomDialogButtonContainerProps): JSX.Element {
-  // Buttons will be displayed horizontally has two buttons, otherwise vertically.
-  if (Children.count(children) === 2) {
+  const childrenCount = Children.count(children)
+  if (childrenCount <= 0) {
+    return null
+  } else if (childrenCount === 2) {
+    // Buttons will be displayed horizontally has two buttons, otherwise vertically.
     return (
       <div className={styles.simpleContainer}>
         {/* Reverse to show the important item on the right side */}

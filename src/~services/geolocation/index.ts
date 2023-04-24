@@ -1,6 +1,10 @@
 import { useEffect } from 'react'
 import { RelinkSource, useRelinkValue } from 'react-relink'
+import { ENV } from '~constants'
+import { useArcadeInfo } from '~services/arcade-info'
+import { DebugConfigSource } from '~sources/debug'
 import { DataSubscriptionHookCoordinator } from '~unstable/hook-coordinator'
+import { checkIfCoordIsWithinRadius } from '~utils/coords-intersection'
 
 export interface ExtendedGeolocationPosition extends GeolocationPosition {
   isUserEnabled: boolean
@@ -40,7 +44,7 @@ export function useGeolocationPositionRoot(): void {
         isUserEnabled: true,
       })
     }, (positionError: GeolocationPositionError) => {
-      GeolocationPositionSource.set((s) => ({ ...s, error: positionError }))
+      GeolocationPositionSource.set(s => ({ ...s, error: positionError }))
     }, {
       enableHighAccuracy: true,
     })
@@ -48,7 +52,25 @@ export function useGeolocationPositionRoot(): void {
   }, [shouldBeActive])
 }
 
-export function useGeolocationPosition(): ExtendedGeolocationPosition {
-  useAsConsumer(true)
-  return useRelinkValue(GeolocationPositionSource)
+export function useGeolocationPosition(active = true): ExtendedGeolocationPosition {
+  useAsConsumer(active)
+  return useRelinkValue(GeolocationPositionSource, null, active)
+}
+
+/**
+ * @returns `true` if self is near arcade.
+ */
+export function useGeolocationChecking(): boolean {
+  const { disableGeoChecking } = useRelinkValue(DebugConfigSource)
+  const currentArcade = useArcadeInfo()
+  const geolocationPosition = useGeolocationPosition(!disableGeoChecking)
+  if (ENV.VERCEL_ENV !== 'production' && disableGeoChecking) {
+    return true
+  } else {
+    return checkIfCoordIsWithinRadius(
+      geolocationPosition.coords,
+      currentArcade.coordinates,
+      300
+    )
+  }
 }

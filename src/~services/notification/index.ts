@@ -63,7 +63,7 @@ export async function checkNotificationPermission(): Promise<boolean> {
   const { permission: initialPermission } = await NotificationSource.getAsync()
   if (initialPermission === NotificationPermission.DEFAULT) {
     const newPermission = await Notification.requestPermission() as NotificationPermission
-    await NotificationSource.set((s) => ({ ...s, permission: newPermission }))
+    await NotificationSource.set(s => ({ ...s, permission: newPermission }))
     return isPermissionGranted(newPermission)
   }
   // If already granted or already denied, no need to take further action.

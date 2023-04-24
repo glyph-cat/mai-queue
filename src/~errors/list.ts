@@ -61,7 +61,6 @@ export class MissingParameterError extends CustomAPIError {
   }
 }
 
-
 /**
  * When an invalid device key is provided.
  */

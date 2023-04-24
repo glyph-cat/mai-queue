@@ -35,7 +35,7 @@ export const StepWizardSource = new RelinkSource<IStepWizard>({
 export namespace StepWizard {
 
   export async function showBottomSheet(): Promise<void> {
-    await StepWizardSource.set((s) => ({
+    await StepWizardSource.set(s => ({
       ...s,
       shouldShowBottomSheet: true,
       shouldMountAnimatedBackdrop: true,
@@ -52,14 +52,14 @@ export namespace StepWizard {
   }
 
   export async function stepBackward(): Promise<void> {
-    await StepWizardSource.set((s) => ({
+    await StepWizardSource.set(s => ({
       ...s,
       step: Math.max(MIN_VISIBLE_STEP_INDEX, s.step - 1),
     }))
   }
 
   export async function stepForward(): Promise<void> {
-    await StepWizardSource.set((s) => ({
+    await StepWizardSource.set(s => ({
       ...s,
       step: Math.min(s.step + 1, MAX_VISIBLE_STEP_INDEX),
     }))
@@ -70,20 +70,20 @@ export namespace StepWizard {
   }
 
   export async function showQR(): Promise<void> {
-    await StepWizardSource.set((s) => ({ ...s, step: StepIndex.SHOW_QR }))
+    await StepWizardSource.set(s => ({ ...s, step: StepIndex.SHOW_QR }))
     const { deviceKey } = await ConfigSource.getAsync()
     if (!deviceKey) {
       const newDeviceKey = await APIRequestDeviceKey()
-      await ConfigSource.set((s) => ({ ...s, deviceKey: newDeviceKey }))
+      await ConfigSource.set(s => ({ ...s, deviceKey: newDeviceKey }))
     }
   }
 
   export async function showCamera(): Promise<void> {
-    await StepWizardSource.set((s) => ({ ...s, step: StepIndex.SHOW_CAMERA }))
+    await StepWizardSource.set(s => ({ ...s, step: StepIndex.SHOW_CAMERA }))
   }
 
   export async function returnToTicketSection(): Promise<void> {
-    await StepWizardSource.set((s) => ({ ...s, step: StepIndex.TAKE_TICKET }))
+    await StepWizardSource.set(s => ({ ...s, step: StepIndex.TAKE_TICKET }))
   }
 
 }

@@ -62,9 +62,9 @@ export function useDeviceKeyQRValue(deviceKey: string): [qrValue: string, timeLe
   }))
   useEffect(() => {
     if (!isString(deviceKey)) { return } // Early exit
-    setState((s) => ({ ...s, qrValue: createDeviceKeyQRData(deviceKey) }))
+    setState(s => ({ ...s, qrValue: createDeviceKeyQRData(deviceKey) }))
     const intervalRef = setInterval(() => {
-      setState((s) => {
+      setState(s => {
         let nextState = { ...s, timeLeft: s.timeLeft - 1 }
         if (nextState.timeLeft <= 0) {
           nextState = {

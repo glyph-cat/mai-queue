@@ -1,8 +1,6 @@
 import { Watcher } from '@glyph-cat/swiss-army-knife'
 import { useEffect, useId, useReducer } from 'react'
 
-// TODO: [Low priority] Transfer to '@glyph-cat/swiss-army-knife'
-
 export class DataSubscriptionHookCoordinator {
 
   private __hookWatchers__: Record<string, true> = {}
