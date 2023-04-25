@@ -7,9 +7,8 @@
   "scripts": {
     "bot:env": "ts-node ./scripts/env",
     "bot:api-routes": "ts-node ./scripts/api-routes",
-    "bot:fields": "ts-node ./scripts/check-duplicate-fields",
-    "bot:errorCodes": "ts-node ./scripts/check-duplicate-error-codes",
-    "bot": "yarn bot:env && yarn bot:fields && yarn bot:errorCodes && yarn bot:api-routes",
+    "bot:check": "ts-node ./scripts/code-check",
+    "bot": "yarn bot:env && yarn bot:check && yarn bot:api-routes",
     "postinstall": "next telemetry disable",
     "prestart": "yarn bot",
     "start": "next dev",

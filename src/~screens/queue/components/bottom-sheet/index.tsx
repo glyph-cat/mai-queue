@@ -28,10 +28,10 @@ import {
 } from '~constants'
 import { InvalidDeviceKeyError, InvalidFriendCodeError } from '~errors'
 import { useEstimatedWaitingTime } from '~hooks/estimated-waiting-time'
+import { useGetDeviceKey } from '~hooks/get-device-key'
 import { useResizeSensor } from '~hooks/resize-sensor'
 import { useCustomBrowserMultiFormatReader } from '~hooks/scanner'
 import { useSelfTicket } from '~hooks/self-ticket'
-import { APIRequestDeviceKey } from '~services/api/device/request-key'
 import { APISetPlayerInfo } from '~services/api/device/set-player-info'
 import { APICloseTicket } from '~services/api/ticket/close'
 import { APIGetNewTicket } from '~services/api/ticket/get-new'
@@ -57,7 +57,6 @@ import {
   StepWizard,
   StepWizardSource,
 } from './source'
-import { useGetDeviceKey } from '~hooks/get-device-key'
 
 const LABEL_YOU_MUST_BE_AT_ARCADE = 'You must be at the arcade to take a number.'
 
@@ -478,7 +477,6 @@ function GeneralConfigSection(): JSX.Element {
 
 function SetFriendCodeSection(): JSX.Element {
   const selfTicket = useSelfTicket()
-  // TODO: [Mid priority] this should be based on current queue if player has ticket in the queue
   const firstFriendCodeSnapshot = useRef(() => ConfigSource.get().friendCode)
   const [friendCode, setFriendCode] = useState(firstFriendCodeSnapshot.current)
   const configState = useRelinkValue(ConfigSource)

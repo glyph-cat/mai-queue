@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { ENCODING_UTF_8 } from '../_constants_'
+import { ENCODING_UTF_8 } from '../../_constants_'
 
 const rawFileData = readFileSync('./src/~errors/list.ts', ENCODING_UTF_8)
 

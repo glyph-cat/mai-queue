@@ -1,7 +1,7 @@
 import { forEachInObject } from '@glyph-cat/swiss-army-knife'
 import { readFileSync } from 'fs'
 import { parse as parseJsonc } from 'jsonc-parser'
-import { ENCODING_UTF_8 } from '../_constants_'
+import { ENCODING_UTF_8 } from '../../_constants_'
 
 const rawFileData = readFileSync('./src/~constants/field/index.ts', ENCODING_UTF_8)
   .replace(/^export enum Field /, '')
