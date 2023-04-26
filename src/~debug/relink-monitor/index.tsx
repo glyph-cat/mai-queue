@@ -2,7 +2,7 @@ import { RenderInClientOnly, concatClassNames } from '@glyph-cat/swiss-army-knif
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useRelinkValue } from 'react-relink'
-import { ENV } from '~constants'
+import { ENV, VercelEnv } from '~constants'
 import { StepWizardSource } from '~screens/queue/components/bottom-sheet/source'
 import { IncidentReportSource } from '~services/arcade-info'
 import { NotificationSource } from '~services/notification'
@@ -16,7 +16,7 @@ import styles from './index.module.css'
 import { PermissionsSource } from '~services/permissions'
 
 export function RelinkMonitor(): JSX.Element {
-  if (ENV.VERCEL_ENV === 'production') { return null } // Early exit
+  if (ENV.VERCEL_ENV === VercelEnv.PRODUCTION) { return null } // Early exit
   return (
     <RenderInClientOnly>
       <RelinkMonitorBase />
@@ -29,7 +29,6 @@ function RelinkMonitorBase(): JSX.Element {
   const [shouldShowOverlay, setOverlayVisibility] = useState(false)
   const [shouldBeInteractive, setInteractivity] = useState(true)
   useEffect(() => {
-    if (ENV.VERCEL_ENV === 'production') { return } // Early exit
     const onKeyDown = (ev: KeyboardEvent) => {
       if (/^z$/i.test(ev.key)) {
         setOverlayVisibility(v => !v)

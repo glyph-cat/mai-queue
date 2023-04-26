@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { ENV } from './env'
+import { ENV, VercelEnv } from './env'
 
 export const PROJECT_NAME = 'mai Queue'
 
@@ -7,7 +7,7 @@ export const PROJECT_NAME = 'mai Queue'
  * The estimated time (in minutes) it takes to play one round.
  * Has a shortened duration in non-production builds to make it easier to test.
  */
-export const ESTIMATED_PLAY_TIME_PER_ROUND = ENV.VERCEL_ENV === 'production' ? 15 : 5
+export const ESTIMATED_PLAY_TIME_PER_ROUND = ENV.VERCEL_ENV === VercelEnv.PRODUCTION ? 15 : 5
 
 export const MAX_ALLOWED_SWAP_REQUEST_RETRY_COUNT = 3
 
@@ -47,3 +47,4 @@ export * from './env'
 export * from './field'
 export * from './firestore'
 export * from './styling'
+

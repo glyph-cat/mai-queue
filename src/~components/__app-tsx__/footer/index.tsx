@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode } from 'react'
-import { ENV, OPEN_IN_NEW_TAB_PROPS } from '~constants'
+import { ENV, OPEN_IN_NEW_TAB_PROPS, VercelEnv } from '~constants'
 import { CLIENT_ROUTE } from '~services/navigation'
 import styles from './index.module.css'
 
-const isNotProductionEnv = ENV.VERCEL_ENV !== 'production'
+const isNotProductionEnv = ENV.VERCEL_ENV !== VercelEnv.PRODUCTION
 
 export function Footer(): JSX.Element {
   const { route } = useRouter()

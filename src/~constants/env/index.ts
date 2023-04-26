@@ -4,8 +4,12 @@ import {
   __SCRIPTED_GIT_COMMIT_SHA__,
 } from './data.scripted'
 
-// TODO: convert to enum
-export type NextPublicVercelEnvType = 'production' | 'preview' | 'development' | 'localhost'
+export enum VercelEnv {
+  LOCALHOST,
+  PRODUCTION,
+  PREVIEW,
+  DEVELOPMENT,
+}
 
 const __PRIVATE_FLAG_IS_CI_ENVIRONMENT__ = parseInt(process.env.CI, 10) === 1
 
@@ -53,12 +57,14 @@ export const ENV = {
   IS_CI_ENVIRONMENT: __PRIVATE_FLAG_IS_CI_ENVIRONMENT__,
   /**
    * The environment that the app is deployed an running on.
-   * Possible values are:
-   * - `production`  — When in Vercel environment
-   * - `preview`     — When in Vercel environment
-   * - `development` — When in Vercel environment
-   * - `none`        — When NOT in Vercel environment (Eg: localhost)
    */
-  VERCEL_ENV: (process.env.NEXT_PUBLIC_VERCEL_ENV || 'localhost') as NextPublicVercelEnvType,
+  VERCEL_ENV: (() => {
+    switch (process.env.NEXT_PUBLIC_VERCEL_ENV) {
+      case 'production': return VercelEnv.PRODUCTION
+      case 'preview': return VercelEnv.PREVIEW
+      case 'development': return VercelEnv.DEVELOPMENT
+      default: VercelEnv.LOCALHOST
+    }
+  })() as VercelEnv,
 
 } as const

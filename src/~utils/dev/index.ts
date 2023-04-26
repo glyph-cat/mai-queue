@@ -1,4 +1,4 @@
-import { ENV } from '~constants'
+import { ENV, VercelEnv } from '~constants'
 
 /**
  * @public
@@ -15,7 +15,7 @@ export function devPrint(
   type: DevLogType,
   ...message: unknown[]
 ): void {
-  if (ENV.VERCEL_ENV !== 'production') {
+  if (ENV.VERCEL_ENV !== VercelEnv.PRODUCTION) {
     // eslint-disable-next-line no-console
     console[type](...message)
   }

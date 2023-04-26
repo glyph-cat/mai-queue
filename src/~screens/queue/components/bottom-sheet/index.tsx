@@ -25,6 +25,7 @@ import {
   Field,
   GlobalStyles,
   OPEN_IN_NEW_TAB_PROPS,
+  VercelEnv,
 } from '~constants'
 import { InvalidDeviceKeyError, InvalidFriendCodeError } from '~errors'
 import { useEstimatedWaitingTime } from '~hooks/estimated-waiting-time'
@@ -448,7 +449,7 @@ function GeneralConfigSection(): JSX.Element {
     <div style={{ gap: 20 }}>
       <span className={styles.stepTitle}>Settings</span>
       <div className={styles.notificationsField}>
-        {ENV.VERCEL_ENV !== 'production' && (
+        {ENV.VERCEL_ENV !== VercelEnv.PRODUCTION && (
           <>
             <ToggleSwitchWithLabel
               label={'Bypass geo checking'}

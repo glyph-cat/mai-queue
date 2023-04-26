@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { RelinkSource, useRelinkValue } from 'react-relink'
-import { ENV } from '~constants'
+import { ENV, VercelEnv } from '~constants'
 import { useArcadeInfo } from '~services/arcade-info'
 import { askForGeolocationPermission } from '~services/permissions'
 import { DebugConfigSource } from '~sources/debug'
@@ -60,7 +60,7 @@ export function useGeolocationChecking(): boolean {
   const { disableGeoChecking } = useRelinkValue(DebugConfigSource)
   const currentArcade = useArcadeInfo()
   const geolocationPosition = useRelinkValue(GeolocationPositionSource)
-  if (ENV.VERCEL_ENV !== 'production' && disableGeoChecking) {
+  if (ENV.VERCEL_ENV !== VercelEnv.PRODUCTION && disableGeoChecking) {
     return true
   } else {
     return checkIfCoordIsWithinRadius(

@@ -1,6 +1,6 @@
 import { HttpMethod } from '@glyph-cat/swiss-army-knife'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { ENV } from '~constants'
+import { ENV, VercelEnv } from '~constants'
 import { InternalAPIError } from '~errors'
 import { DBCollection } from '~services/firebase-admin'
 import { performBasicChecks } from '~utils/backend/helpers'
@@ -18,7 +18,7 @@ export default async function APIResetEnvHandler(
   devInfo(`Invoked ${APIResetEnvHandler.name}`)
   try {
     performBasicChecks(req, [HttpMethod.DELETE])
-    if (ENV.VERCEL_ENV === 'production') {
+    if (ENV.VERCEL_ENV === VercelEnv.PRODUCTION) {
       throw new InternalAPIError('Cannot reset in production env')
     }
     const batch = new BatchOperator()
