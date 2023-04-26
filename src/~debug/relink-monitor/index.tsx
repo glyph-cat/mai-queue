@@ -13,6 +13,7 @@ import { OutgoingSwapRequestSource } from '~sources/outgoing-swap-request-source
 import { UnstableSource } from '~sources/unstable'
 import { UserPreferencesSource } from '~sources/user-preferences'
 import styles from './index.module.css'
+import { PermissionsSource } from '~services/permissions'
 
 export function RelinkMonitor(): JSX.Element {
   if (ENV.VERCEL_ENV === 'production') { return null } // Early exit
@@ -48,6 +49,7 @@ function RelinkMonitorBase(): JSX.Element {
   const incomingSwapRequestState = useRelinkValue(IncomingSwapRequestSource, null, shouldShowOverlay)
   const outgoingSwapRequestState = useRelinkValue(OutgoingSwapRequestSource, null, shouldShowOverlay)
   const notificationState = useRelinkValue(NotificationSource, null, shouldShowOverlay)
+  const permissionsState = useRelinkValue(PermissionsSource, null, shouldShowOverlay)
   const unstableState = useRelinkValue(UnstableSource, null, shouldShowOverlay)
 
   const allStateData = useMemo(() => {
@@ -60,9 +62,10 @@ function RelinkMonitorBase(): JSX.Element {
       incomingSwapRequestState,
       outgoingSwapRequestState,
       notificationState,
+      permissionsState,
       unstableState,
     }, null, 2)
-  }, [configState, debugConfigState, incidentReportState, incomingSwapRequestState, notificationState, outgoingSwapRequestState, stepWizardState, unstableState, userPreferencesState])
+  }, [configState, debugConfigState, incidentReportState, incomingSwapRequestState, notificationState, outgoingSwapRequestState, permissionsState, stepWizardState, unstableState, userPreferencesState])
 
   if (shouldShowOverlay) {
     return createPortal(

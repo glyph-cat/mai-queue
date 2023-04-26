@@ -1,6 +1,7 @@
 import { ChangeEvent, useCallback, useState } from 'react'
+import { useRelinkValue } from 'react-relink'
 import { TextButton } from '~components/form'
-import { useGeolocationPosition } from '~services/geolocation'
+import { GeolocationPositionSource } from '~services/geolocation'
 import { useTheme } from '~services/theme'
 import { checkIfCoordIsWithinRadius } from '~utils/coords-intersection'
 import styles from './index.module.css'
@@ -57,7 +58,7 @@ function DebugGeoScreen(): JSX.Element {
     setParsedRadius(defaultRadius)
   }, [])
 
-  const geolocationPosition = useGeolocationPosition()
+  const geolocationPosition = useRelinkValue(GeolocationPositionSource)
   const isWithinRadius = checkIfCoordIsWithinRadius(
     geolocationPosition.coords,
     { latitude: parsedLatitude, longitude: parsedLongitude, altitude: 0 },

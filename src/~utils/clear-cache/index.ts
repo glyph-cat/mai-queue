@@ -5,6 +5,7 @@ import { Field } from '~constants'
 import { APIRevokeDeviceKey } from '~services/api/device/revoke-key'
 import { APICloseTicket } from '~services/api/ticket/close'
 import { NotificationSource } from '~services/notification'
+import { PermissionsSource } from '~services/permissions'
 import { ConfigSource } from '~sources/config'
 import { DebugConfigSource } from '~sources/debug'
 import { OutgoingSwapRequestSource } from '~sources/outgoing-swap-request-source/source'
@@ -38,6 +39,7 @@ export async function clearCache({
     OutgoingSwapRequestSource.reset(),
     UserPreferencesSource.reset(),
     NotificationSource.reset(),
+    PermissionsSource.reset(),
   ])
   sessionStorage.clear()
   localStorage.clear()

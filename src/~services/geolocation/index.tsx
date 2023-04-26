@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { RelinkSource, useRelinkValue } from 'react-relink'
 import { ENV } from '~constants'
 import { useArcadeInfo } from '~services/arcade-info'
+import { askForGeolocationPermission } from '~services/permissions'
 import { DebugConfigSource } from '~sources/debug'
-import { DataSubscriptionHookCoordinator } from '~unstable/hook-coordinator'
 import { checkIfCoordIsWithinRadius } from '~utils/coords-intersection'
 
 export interface ExtendedGeolocationPosition extends GeolocationPosition {
@@ -11,9 +11,7 @@ export interface ExtendedGeolocationPosition extends GeolocationPosition {
   error: GeolocationPositionError
 }
 
-const { useAsConsumer, useAsProvider } = new DataSubscriptionHookCoordinator()
-
-const GeolocationPositionSource = new RelinkSource<ExtendedGeolocationPosition>({
+export const GeolocationPositionSource = new RelinkSource<ExtendedGeolocationPosition>({
   key: 'geolocation-position',
   default: {
     isUserEnabled: null,
@@ -32,10 +30,13 @@ const GeolocationPositionSource = new RelinkSource<ExtendedGeolocationPosition>(
 })
 
 export function useGeolocationPositionRoot(): void {
-  const shouldBeActive = useAsProvider()
+  const [hasPermissionOrAPISupported, setState] = useState(false)
   useEffect(() => {
-    if (!shouldBeActive) { return }
-    if (!navigator.geolocation) { return }
+    askForGeolocationPermission()
+    setState(true)
+  }, [])
+  useEffect(() => {
+    if (!hasPermissionOrAPISupported) { return }
     const watchId = navigator.geolocation.watchPosition(async (position: GeolocationPosition) => {
       await GeolocationPositionSource.set({
         timestamp: position.timestamp,
@@ -49,12 +50,7 @@ export function useGeolocationPositionRoot(): void {
       enableHighAccuracy: true,
     })
     return () => { navigator.geolocation.clearWatch(watchId) }
-  }, [shouldBeActive])
-}
-
-export function useGeolocationPosition(active = true): ExtendedGeolocationPosition {
-  useAsConsumer(active)
-  return useRelinkValue(GeolocationPositionSource, null, active)
+  }, [hasPermissionOrAPISupported])
 }
 
 /**
@@ -63,7 +59,7 @@ export function useGeolocationPosition(active = true): ExtendedGeolocationPositi
 export function useGeolocationChecking(): boolean {
   const { disableGeoChecking } = useRelinkValue(DebugConfigSource)
   const currentArcade = useArcadeInfo()
-  const geolocationPosition = useGeolocationPosition(!disableGeoChecking)
+  const geolocationPosition = useRelinkValue(GeolocationPositionSource)
   if (ENV.VERCEL_ENV !== 'production' && disableGeoChecking) {
     return true
   } else {

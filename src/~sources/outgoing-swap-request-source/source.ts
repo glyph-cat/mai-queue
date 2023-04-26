@@ -3,6 +3,7 @@ import { RelinkSource } from 'react-relink'
 import { SwapRequestStatus } from '~abstractions'
 import { Field } from '~constants'
 import { DBCollection } from '~services/firebase-client'
+import { strictMerge } from '~unstable/strict-merge'
 import { devError } from '~utils/dev'
 import { IOutgoingSwapRequestSource } from './abstractions'
 
@@ -28,7 +29,7 @@ export const OutgoingSwapRequestSource = new RelinkSource<IOutgoingSwapRequestSo
           if (docSnapshot.exists()) {
             const docData = docSnapshot.data()
             if (docData[Field.swapRequestStatus] === SwapRequestStatus.PENDING) {
-              return commit({ ...defaultState, ...parsedData }) // Early exit
+              return commit(strictMerge(defaultState, parsedData)) // Early exit
             }
           }
         } catch (e) {

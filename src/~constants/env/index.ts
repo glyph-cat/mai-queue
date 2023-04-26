@@ -4,6 +4,7 @@ import {
   __SCRIPTED_GIT_COMMIT_SHA__,
 } from './data.scripted'
 
+// TODO: convert to enum
 export type NextPublicVercelEnvType = 'production' | 'preview' | 'development' | 'localhost'
 
 const __PRIVATE_FLAG_IS_CI_ENVIRONMENT__ = parseInt(process.env.CI, 10) === 1

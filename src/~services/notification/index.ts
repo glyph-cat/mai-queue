@@ -1,7 +1,11 @@
 import { IS_CLIENT_ENV } from '@glyph-cat/swiss-army-knife'
 import { RelinkSource } from 'react-relink'
+import { strictMerge } from '~unstable/strict-merge'
 import { devError } from '~utils/dev'
 
+/**
+ * @deprecated Use `PermissionsSource`
+ */
 export enum NotificationPermission {
   DEFAULT = 'default',
   DENIED = 'denied',
@@ -11,6 +15,7 @@ export enum NotificationPermission {
 export interface INotificationSource {
   /**
    * Whether or not system permission is granted.
+   * @deprecated Use `PermissionsSource`
    */
   permission: NotificationPermission
   cache: Record<string, true>
@@ -29,11 +34,14 @@ export const NotificationSource = new RelinkSource<INotificationSource>({
       if (rawData) {
         try {
           const parsedData = JSON.parse(rawData)
-          return commit({
-            ...defaultState,
-            permission: NotificationPermission.DEFAULT, // TODO: [Low priority] Check from browser again
-            ...parsedData,
-          }) // Early exit
+          return commit(strictMerge(
+            defaultState,
+            {
+              // TODO: [Low priority] Check from browser again
+              permission: NotificationPermission.DEFAULT,
+            },
+            parsedData,
+          )) // Early exit
         } catch (e) {
           devError(e)
         }

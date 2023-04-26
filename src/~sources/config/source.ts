@@ -1,4 +1,5 @@
 import { RelinkSource } from 'react-relink'
+import { strictMerge } from '~unstable/strict-merge'
 import { devError } from '~utils/dev'
 import { IConfigSource } from './abstractions'
 
@@ -16,7 +17,7 @@ export const ConfigSource = new RelinkSource<IConfigSource>({
       if (rawData) {
         try {
           const parsedData = JSON.parse(rawData)
-          return commit({ ...defaultState, ...parsedData }) // Early exit
+          return commit(strictMerge(defaultState, parsedData)) // Early exit
         } catch (e) {
           devError(e)
         }
