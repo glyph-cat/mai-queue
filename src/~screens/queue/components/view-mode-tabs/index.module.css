@@ -2,6 +2,7 @@
   background-color: var(--basicBg);
   height: 48px;
   position: sticky;
+  z-index: 1;
 }
 
 .subContainer {
