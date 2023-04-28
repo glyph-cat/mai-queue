@@ -26,13 +26,9 @@ export function Footer(): JSX.Element {
           <DotSeparator />
           <Link href={CLIENT_ROUTE.credits}>Credits</Link>
         </LinkGroup>
-        <LinkGroup>
-          <Link href={CLIENT_ROUTE.privacyPolicy}>Privacy policy</Link>
-          <DotSeparator />
-          <Link href={CLIENT_ROUTE.termsConditions}>Terms & Conditions</Link>
-          <DotSeparator />
-          <Link href={ENV.GIT_REPO_HOMEPAGE} {...OPEN_IN_NEW_TAB_PROPS}>View on GitHub</Link>
-        </LinkGroup>
+        <Link href={CLIENT_ROUTE.privacyPolicy}>Privacy policy</Link>
+        <Link href={CLIENT_ROUTE.termsConditions}>Terms & Conditions</Link>
+        <Link href={ENV.GIT_REPO_HOMEPAGE} {...OPEN_IN_NEW_TAB_PROPS}>View on GitHub</Link>
         <span className={isNotProductionEnv ? styles.devVersionLabel : null}>
           {ENV.APP_VERSION ? `v${ENV.APP_VERSION}` : 'Version unknown'}
           {isNotProductionEnv && <span>{` (${ENV.VERCEL_ENV})`}</span>}

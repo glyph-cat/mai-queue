@@ -15,9 +15,9 @@ export function useIncomingSwapRequestWatcher(myTicketId: string): void {
   const currentArcade = useArcadeInfo()
   useEffect(() => {
     if (!myTicketId || currentQueue.length <= 0) { return }
+    // NOTE: arcadeId is not required because the ticketIds are specific enough
     const unsubscribeListener = onSnapshot(query(
       DBCollection.SwapRequests,
-      where(Field.arcadeId, '==', currentArcade.id),
       where(Field.targetTicketId, '==', myTicketId),
       where(Field.swapRequestStatus, '==', SwapRequestStatus.PENDING),
       where(Field.declineCount, '<', MAX_ALLOWED_SWAP_REQUEST_RETRY_COUNT),

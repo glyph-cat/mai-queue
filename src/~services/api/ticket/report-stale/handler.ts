@@ -5,7 +5,6 @@ import { CloseTicketReason } from '~abstractions'
 import { VoteType } from '~abstractions/vote'
 import { Field, MAX_ALLOWED_STALE_FLAG_COUNT } from '~constants'
 import {
-  ExceededMaximumStaleFlagsError,
   InvalidParameterError,
   InvalidTicketIdError,
   TicketAlreadyClosedError,
@@ -57,15 +56,12 @@ export default async function APIReportStaleTicketHandler(
       if (ticketData[Field.xTime]) {
         throw new TicketAlreadyClosedError(ticketData[Field.ticketNumber])
       }
-      if (Object.keys(ticketData[Field.staleFlags]).length) {
-        throw new ExceededMaximumStaleFlagsError()
-      }
 
       const staleFlags = ticketData[Field.staleFlags]
       if (voteType === VoteType.UPVOTE) {
         const newStaleFlags = { ...staleFlags, [deviceInfo.deviceKey]: voteType }
         tx.update(ticketDocRef, { [Field.staleFlags]: newStaleFlags })
-        if (Object.keys(newStaleFlags).length > MAX_ALLOWED_STALE_FLAG_COUNT) {
+        if (Object.keys(newStaleFlags).length >= MAX_ALLOWED_STALE_FLAG_COUNT) {
           tx.update(ticketDocRef, {
             [Field.xTime]: firestore.Timestamp.now(),
             [Field.xReason]: CloseTicketReason.STALE,

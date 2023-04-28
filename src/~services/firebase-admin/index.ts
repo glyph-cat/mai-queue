@@ -72,7 +72,7 @@ export const DBCollection = {
         [Field.sourcePlayerName]: String(modelObject[Field.sourcePlayerName]),
         [Field.sourcePlayerBannerUrl]: NullableString(modelObject[Field.sourcePlayerBannerUrl]),
         [Field.swapRequestStatus]: Number(modelObject[Field.swapRequestStatus]),
-        [Field.declineCount]: NotZeroOrNull(modelObject[Field.declineCount]),
+        [Field.declineCount]: Number(modelObject[Field.declineCount]),
       }
     },
     fromFirestore(snapshot: QueryDocumentSnapshot<ISwapRequestsSnapshot>): ISwapRequestsModelObject {

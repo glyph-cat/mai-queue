@@ -93,6 +93,7 @@ export const ListItem = memo(({ data, index, style }: ListItemProps): JSX.Elemen
       if (response === ListItemMenuResponse.REQUEST_SWAP) {
         await handleOnRequestSwapNumber()
         await waitForOutgoingSwapRequestSourceToBeNull()
+        response = CUSTOM_DIALOG_CANCEL_VALUE
       } else if (response === ListItemMenuResponse.REPORT_STALE) {
         const shouldProceed = await CustomDialog.confirm(
           'Flag as stale?',

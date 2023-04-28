@@ -19,10 +19,6 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "a",
-          "order": "ASCENDING"
-        },
-        {
           "fieldPath": "tt",
           "order": "ASCENDING"
         },
@@ -119,10 +115,6 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "a",
-          "order": "ASCENDING"
-        },
-        {
           "fieldPath": "tt",
           "order": "ASCENDING"
         },
@@ -218,10 +210,6 @@
       "collectionGroup": "PROD_SwapRequests",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "a",
-          "order": "ASCENDING"
-        },
         {
           "fieldPath": "tt",
           "order": "ASCENDING"

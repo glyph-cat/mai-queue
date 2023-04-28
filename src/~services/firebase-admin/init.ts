@@ -36,7 +36,7 @@ export async function runTransaction<T>(
 ): Promise<T> {
   const txResponse = await DB.runTransaction(async (transaction: Transaction): Promise<T> => {
     try {
-      await updateFunction(transaction)
+      return await updateFunction(transaction)
     } catch (e) {
       return Promise.resolve(e)
       // Abort transaction if it's an error other than due to too much contention.

@@ -234,18 +234,9 @@ export class SwapRequestAlreadyClosedError extends CustomAPIError {
   }
 }
 
-/**
- * When attempting to flag a ticket as stale but it already has too many flags.
- */
-export class ExceededMaximumStaleFlagsError extends CustomAPIError {
-  static readonly http = HttpStatus.TOO_MANY_REQUESTS
-  static readonly code = 20
-  readonly message = 'This ticket has received the maximum amount of stale flags'
-}
-
 export class IncidentReportNotFoundError extends CustomAPIError {
   static readonly http = HttpStatus.NOT_FOUND
-  static readonly code = 21
+  static readonly code = 20
   constructor(incidentReportId?: string) {
     super(incidentReportId
       ? `Incident report (id: ${incidentReportId}) not found`
@@ -256,6 +247,6 @@ export class IncidentReportNotFoundError extends CustomAPIError {
 
 export class PlayerNameTooLongError extends CustomAPIError {
   static readonly http = HttpStatus.NOT_FOUND
-  static readonly code = 22
+  static readonly code = 21
   readonly message = 'Player name too long'
 }
