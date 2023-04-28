@@ -335,9 +335,12 @@ export function BottomSheet({
                           }}>
                             {geolocationAPIPermission === PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE
                               ? LABEL_GPS_UNSUPPORTED_UNAVAILABLE
-                              : geolocationAPIPermission !== PermissionStatus.GRANTED
-                                ? <><br />{LABEL_REQUIRE_GPS_PERMISSION}</>
-                                : null
+                              : (<>
+                                {LABEL_YOU_MUST_BE_AT_ARCADE}
+                                {geolocationAPIPermission !== PermissionStatus.GRANTED
+                                  ? <><br />{LABEL_REQUIRE_GPS_PERMISSION}</>
+                                  : null}
+                              </>)
                             }
                           </span>
                         )}
@@ -448,7 +451,7 @@ async function onChangeDisableGeoChecking(newValue: boolean) {
 }
 
 async function onChangeAllowNotifications(newAllowNotificationsState: boolean) {
-  return
+  return // Temporary
   await UserPreferencesSource.set(s => ({
     ...s,
     allowNotifications: newAllowNotificationsState,

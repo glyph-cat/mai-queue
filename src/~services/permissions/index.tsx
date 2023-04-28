@@ -11,9 +11,10 @@ function getCurrentPosition(): Promise<GeolocationPosition> {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       (position) => { resolve(position) },
-      (positionError) => { reject(positionError) }
+      (positionError) => { reject(positionError) },
+      { timeout: 3000 }
     )
-    setTimeout(() => { reject() }, 3000)
+    // setTimeout(() => { reject() }, 3000)
   })
 }
 
@@ -38,10 +39,10 @@ export async function askForGeolocationPermission(): Promise<boolean> {
     if (e instanceof GeolocationPositionError) {
       if (e.code === GeolocationPositionError.PERMISSION_DENIED) {
         await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.DENIED)
+        return false // Early exit
       }
-    } else {
-      await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE)
     }
+    await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE)
     return false
   }
 }
