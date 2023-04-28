@@ -63,7 +63,7 @@ export const ENV = {
       case 'production': return VercelEnv.PRODUCTION
       case 'preview': return VercelEnv.PREVIEW
       case 'development': return VercelEnv.DEVELOPMENT
-      default: VercelEnv.LOCALHOST
+      default: return VercelEnv.LOCALHOST
     }
   })() as VercelEnv,
 

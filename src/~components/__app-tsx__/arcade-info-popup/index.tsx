@@ -6,7 +6,13 @@ import { BaseDialog, CustomDialogButtonContainer } from '~components/custom-dial
 import { Divider } from '~components/divider'
 import { LinkButton, TextButton } from '~components/form'
 import { LoadingCover } from '~components/loading-cover'
-import { ANIMATED_BACKDROP_TRANSITION_DURATION, DateTimeFormat, Field } from '~constants'
+import {
+  ANIMATED_BACKDROP_TRANSITION_DURATION,
+  DateTimeFormat,
+  Field,
+  LABEL_GPS_UNSUPPORTED_UNAVAILABLE,
+  LABEL_REQUIRE_GPS_PERMISSION,
+} from '~constants'
 import { useGetDeviceKey } from '~hooks/get-device-key'
 import { APIRemoveIncidentReport } from '~services/api/incident-report/remove'
 import { APISubmitIncidentReport } from '~services/api/incident-report/submit'
@@ -238,9 +244,12 @@ function ArcadeInfoPopupBase(): JSX.Element {
             {!coordIsWithinRadius && (
               <i style={{ fontSize: '10pt', textAlign: 'center' }}>
                 {'Note: You can only submit reports at the arcade. '}
-                {geolocationAPIPermission !== PermissionStatus.GRANTED && (
-                  'Permission to access GPS is required.'
-                )}
+                {geolocationAPIPermission === PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE
+                  ? LABEL_GPS_UNSUPPORTED_UNAVAILABLE
+                  : geolocationAPIPermission !== PermissionStatus.GRANTED
+                    ? LABEL_REQUIRE_GPS_PERMISSION
+                    : null
+                }
               </i>
             )}
           </>

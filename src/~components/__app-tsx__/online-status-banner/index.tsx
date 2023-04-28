@@ -22,7 +22,7 @@ export function OnlineStatusBanner(): JSX.Element {
       className={styles.container}
       style={{
         backgroundColor: isOnline ? '#008000' : '#ff2a2a',
-        color: isOnline ? palette.safeGreen : palette.fixedWhite,
+        color: isOnline ? '#80ff80' : palette.fixedWhite,
         height: delayedIsOnline ? 0 : 42,
         transform: delayedIsOnline ? 'translateY(-42px)' : 'translateY(0)',
       }}

@@ -31,7 +31,9 @@ export function Footer(): JSX.Element {
         <Link href={ENV.GIT_REPO_HOMEPAGE} {...OPEN_IN_NEW_TAB_PROPS}>View on GitHub</Link>
         <span className={isNotProductionEnv ? styles.devVersionLabel : null}>
           {ENV.APP_VERSION ? `v${ENV.APP_VERSION}` : 'Version unknown'}
-          {isNotProductionEnv && <span>{` (${ENV.VERCEL_ENV})`}</span>}
+          {isNotProductionEnv && <span style={{ textTransform: 'lowercase' }}>
+            {` (${VercelEnv[ENV.VERCEL_ENV]})`}
+          </span>}
         </span>
       </div>
     </footer>

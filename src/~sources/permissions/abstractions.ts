@@ -7,7 +7,7 @@ export enum PermissionStatus {
   PROMPT = 1,
   GRANTED,
   DENIED,
-  UNSUPPORTED,
+  UNSUPPORTED_OR_UNAVAILABLE,
 }
 
 export type PermissionCollection = Record<PermissionType, PermissionStatus>

@@ -24,6 +24,9 @@ import {
   ENV,
   Field,
   GlobalStyles,
+  LABEL_GPS_UNSUPPORTED_UNAVAILABLE,
+  LABEL_REQUIRE_GPS_PERMISSION,
+  LABEL_YOU_MUST_BE_AT_ARCADE,
   OPEN_IN_NEW_TAB_PROPS,
   VercelEnv,
 } from '~constants'
@@ -60,9 +63,6 @@ import {
   StepWizardSource,
 } from './source'
 
-const LABEL_YOU_MUST_BE_AT_ARCADE = 'You must be at the arcade to take a number. '
-const LABEL_REQUIRE_GPS_PERMISSION = 'Permission to access GPS is required.'
-
 export interface BottomSheetProps {
   onScrollToTicketInList(ticketId: string): void
 }
@@ -89,7 +89,7 @@ export function BottomSheet({
   const currentArcade = useArcadeInfo()
   const coordIsWithinRadius = useGeolocationChecking()
   const geolocationAPIPermission = useRelinkValue(PermissionsSource, s => s[PermissionType.GEOLOCATION])
-  const isGPSPermissionGranted = geolocationAPIPermission === PermissionStatus.GRANTED
+  // const isGPSPermissionGranted = geolocationAPIPermission === PermissionStatus.GRANTED
   const [getDeviceKey] = useGetDeviceKey()
   // #endregion Hooks & derivative data
 
@@ -123,7 +123,11 @@ export function BottomSheet({
     if (!coordIsWithinRadius) {
       await CustomDialog.alert(
         LABEL_YOU_MUST_BE_AT_ARCADE,
-        isGPSPermissionGranted ? null : LABEL_REQUIRE_GPS_PERMISSION,
+        geolocationAPIPermission === PermissionStatus.GRANTED
+          ? null
+          : geolocationAPIPermission === PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE
+            ? LABEL_GPS_UNSUPPORTED_UNAVAILABLE
+            : LABEL_REQUIRE_GPS_PERMISSION,
       )
       return // Early exit
     }
@@ -174,7 +178,7 @@ export function BottomSheet({
         await UnstableSource.set(s => ({ ...s, isRetrievingPlayerInfo: false }))
       }
     }
-  }, [coordIsWithinRadius, currentArcade.id, friendCode, getDeviceKey, isGPSPermissionGranted, isProbablyMyTurnNext, onScrollToTicketInList])
+  }, [coordIsWithinRadius, currentArcade.id, friendCode, geolocationAPIPermission, getDeviceKey, isProbablyMyTurnNext, onScrollToTicketInList])
 
   const [isClosingTicket, setTicketClosingState] = useState(false)
   const onRequestCloseTicket = useCallback(async () => {
@@ -329,11 +333,12 @@ export function BottomSheet({
                             marginBottom: 10,
                             textAlign: 'center',
                           }}>
-                            {LABEL_YOU_MUST_BE_AT_ARCADE}
-                            {!isGPSPermissionGranted && (<>
-                              <br />
-                              {LABEL_REQUIRE_GPS_PERMISSION}
-                            </>)}
+                            {geolocationAPIPermission === PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE
+                              ? LABEL_GPS_UNSUPPORTED_UNAVAILABLE
+                              : geolocationAPIPermission !== PermissionStatus.GRANTED
+                                ? <><br />{LABEL_REQUIRE_GPS_PERMISSION}</>
+                                : null
+                            }
                           </span>
                         )}
                         <div

@@ -13,31 +13,35 @@ function getCurrentPosition(): Promise<GeolocationPosition> {
       (position) => { resolve(position) },
       (positionError) => { reject(positionError) }
     )
+    setTimeout(() => { reject() }, 3000)
   })
 }
 
 export async function askForGeolocationPermission(): Promise<void> {
-  if (!navigator.geolocation) {
-    await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.UNSUPPORTED)
-    return // Early exit
-  }
   const permissionStatus = await getPermissionStatus(PermissionType.GEOLOCATION)
-  if (permissionStatus !== PermissionStatus.PROMPT) {
-    return null // Early exit
-  }
   try {
-    await CustomDialog.alert(
-      `Info: ${PROJECT_NAME} requires GPS access to function`,
-      <>
-        {'This is to ensure that players can only take tickets at the arcade to keep things fair.'}
-        <br />
-        {'You will be prompted by the browser after this.'}
-      </>,
-    )
-    await getCurrentPosition()
-    await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.GRANTED)
+    if (permissionStatus === PermissionStatus.PROMPT) {
+      await CustomDialog.alert(
+        <>{PROJECT_NAME}{' needs to know your '}<b>location</b></>,
+        'This helps make sure tickets can only be taken at the arcade. You will be prompted by the browser after this.',
+        { okText: 'Next' }
+      )
+    }
+    if (navigator.geolocation) {
+      await getCurrentPosition()
+      await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.GRANTED)
+    } else {
+      await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE)
+      return // Early exit
+    }
   } catch (e) {
-    await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.DENIED)
+    if (e instanceof GeolocationPositionError) {
+      if (e.code === GeolocationPositionError.PERMISSION_DENIED) {
+        await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.DENIED)
+      }
+    } else {
+      await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE)
+    }
   }
 }
 

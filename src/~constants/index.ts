@@ -46,5 +46,6 @@ export * from './device-recognition'
 export * from './env'
 export * from './field'
 export * from './firestore'
+export * from './labels'
 export * from './styling'
 
