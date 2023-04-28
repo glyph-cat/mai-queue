@@ -17,7 +17,7 @@ function getCurrentPosition(): Promise<GeolocationPosition> {
   })
 }
 
-export async function askForGeolocationPermission(): Promise<void> {
+export async function askForGeolocationPermission(): Promise<boolean> {
   const permissionStatus = await getPermissionStatus(PermissionType.GEOLOCATION)
   try {
     if (permissionStatus === PermissionStatus.PROMPT) {
@@ -30,10 +30,10 @@ export async function askForGeolocationPermission(): Promise<void> {
     if (navigator.geolocation) {
       await getCurrentPosition()
       await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.GRANTED)
-    } else {
-      await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE)
-      return // Early exit
+      return true // Early exit
     }
+    await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE)
+    return false
   } catch (e) {
     if (e instanceof GeolocationPositionError) {
       if (e.code === GeolocationPositionError.PERMISSION_DENIED) {
@@ -42,6 +42,7 @@ export async function askForGeolocationPermission(): Promise<void> {
     } else {
       await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.UNSUPPORTED_OR_UNAVAILABLE)
     }
+    return false
   }
 }
 

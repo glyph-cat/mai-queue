@@ -10,8 +10,9 @@ import { checkIfCoordIsWithinRadius } from '~utils/coords-intersection'
 export function useGeolocationPositionRoot(): void {
   const [hasPermissionOrAPISupported, setState] = useState(false)
   useEffect(() => {
-    askForGeolocationPermission()
-    setState(true)
+    askForGeolocationPermission().then((allowed) => {
+      setState(allowed)
+    })
   }, [])
   useEffect(() => {
     if (!hasPermissionOrAPISupported) { return }
