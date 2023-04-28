@@ -19,7 +19,7 @@ import { Divider } from '~components/divider'
 import { LinkButton, TextButton, ToggleSwitchWithLabel } from '~components/form'
 import { LiveVideoCanvas } from '~components/live-video-canvas'
 import { LoadingCover } from '~components/loading-cover'
-import { Spinner } from '~components/spinner'
+import { Spinner, SpinnerProps } from '~components/spinner'
 import {
   ENV,
   Field,
@@ -44,6 +44,7 @@ import { useCurrentQueueConsumer } from '~services/queue-watcher/current'
 import { useTheme } from '~services/theme'
 import { ConfigSource } from '~sources/config'
 import { DebugConfigSource } from '~sources/debug'
+import { PermissionStatus, PermissionType, PermissionsSource } from '~sources/permissions'
 import { UnstableSource } from '~sources/unstable'
 import { UserPreferencesSource } from '~sources/user-preferences'
 import { clearCache } from '~utils/clear-cache'
@@ -59,7 +60,8 @@ import {
   StepWizardSource,
 } from './source'
 
-const LABEL_YOU_MUST_BE_AT_ARCADE = 'You must be at the arcade to take a number.'
+const LABEL_YOU_MUST_BE_AT_ARCADE = 'You must be at the arcade to take a number. '
+const LABEL_REQUIRE_GPS_PERMISSION = 'Permission to access GPS is required.'
 
 export interface BottomSheetProps {
   onScrollToTicketInList(ticketId: string): void
@@ -86,6 +88,8 @@ export function BottomSheet({
   const friendCode = useRelinkValue(ConfigSource, s => s.friendCode)
   const currentArcade = useArcadeInfo()
   const coordIsWithinRadius = useGeolocationChecking()
+  const geolocationAPIPermission = useRelinkValue(PermissionsSource, s => s[PermissionType.GEOLOCATION])
+  const isGPSPermissionGranted = geolocationAPIPermission === PermissionStatus.GRANTED
   const [getDeviceKey] = useGetDeviceKey()
   // #endregion Hooks & derivative data
 
@@ -114,11 +118,13 @@ export function BottomSheet({
   // #endregion Ticket status
 
   // #region Actions
-  // TODO: [High priority] Mimic TextButton to show loading state when taking ticket
   const [isRequestingForNumber, setNumberRequestState] = useState(false)
   const onRequestNewTicket = useCallback(async () => {
     if (!coordIsWithinRadius) {
-      await CustomDialog.alert(LABEL_YOU_MUST_BE_AT_ARCADE)
+      await CustomDialog.alert(
+        LABEL_YOU_MUST_BE_AT_ARCADE,
+        isGPSPermissionGranted ? null : LABEL_REQUIRE_GPS_PERMISSION,
+      )
       return // Early exit
     }
     let isRequestSuccessful = false
@@ -168,9 +174,8 @@ export function BottomSheet({
         await UnstableSource.set(s => ({ ...s, isRetrievingPlayerInfo: false }))
       }
     }
-  }, [coordIsWithinRadius, currentArcade.id, friendCode, getDeviceKey, isProbablyMyTurnNext, onScrollToTicketInList])
+  }, [coordIsWithinRadius, currentArcade.id, friendCode, getDeviceKey, isGPSPermissionGranted, isProbablyMyTurnNext, onScrollToTicketInList])
 
-  // TODO: [High priority] Mimic TextButton to show loading state when closing ticket
   const [isClosingTicket, setTicketClosingState] = useState(false)
   const onRequestCloseTicket = useCallback(async () => {
     const responseData: Array<ChoiceItem<CloseTicketReason>> = []
@@ -212,6 +217,16 @@ export function BottomSheet({
   }, [isProbablyMyTurnNext, selfTicketId])
 
   // #endregion Actions
+
+  const spinnerProps: SpinnerProps = {
+    fgColor: palette.fixedWhite,
+    bgColor: `${palette.fixedWhite}60`,
+  } as const
+
+  const smallSpinnerProps: SpinnerProps = {
+    ...spinnerProps,
+    size: 32,
+  } as const
 
   return (
     <>
@@ -305,10 +320,7 @@ export function BottomSheet({
                         )}
                         style={{ backgroundColor: palette.neutralFill }}
                       >
-                        <Spinner
-                          fgColor={palette.fixedWhite}
-                          bgColor={`${palette.fixedWhite}60`}
-                        />
+                        <Spinner {...spinnerProps} />
                       </div>
                       : <>
                         {shouldShowBottomSheet && !coordIsWithinRadius && (
@@ -316,7 +328,13 @@ export function BottomSheet({
                             color: palette.fixedRed,
                             marginBottom: 10,
                             textAlign: 'center',
-                          }}>{LABEL_YOU_MUST_BE_AT_ARCADE}</span>
+                          }}>
+                            {LABEL_YOU_MUST_BE_AT_ARCADE}
+                            {!isGPSPermissionGranted && (<>
+                              <br />
+                              {LABEL_REQUIRE_GPS_PERMISSION}
+                            </>)}
+                          </span>
                         )}
                         <div
                           className={concatClassNames(
@@ -340,7 +358,10 @@ export function BottomSheet({
                               size={shouldShowBottomSheet ? 36 : 48}
                             />
                           )}
-                          {'Take number'}
+                          {isRequestingForNumber
+                            ? <Spinner {...smallSpinnerProps} />
+                            : 'Take number'
+                          }
                         </div>
                       </>
                   }
@@ -359,7 +380,11 @@ export function BottomSheet({
                       }}
                       onClick={shouldShowBottomSheet ? onRequestCloseTicket : null}
                     >
-                      {`${isProbablyMyTurnNext ? 'Close' : 'Withdraw'} ticket`}
+                      {
+                        isClosingTicket
+                          ? <Spinner {...smallSpinnerProps} />
+                          : `${isProbablyMyTurnNext ? 'Close' : 'Withdraw'} ticket`
+                      }
                     </div>
                   )}
                 </div>
@@ -418,6 +443,7 @@ async function onChangeDisableGeoChecking(newValue: boolean) {
 }
 
 async function onChangeAllowNotifications(newAllowNotificationsState: boolean) {
+  return
   await UserPreferencesSource.set(s => ({
     ...s,
     allowNotifications: newAllowNotificationsState,
@@ -460,7 +486,17 @@ function GeneralConfigSection(): JSX.Element {
           </>
         )}
         <ToggleSwitchWithLabel
-          label={'Notifications'}
+          label={<>
+            {'Notifications '}
+            <span style={{
+              fontSize: '0.65em',
+              fontWeight: 'bold',
+              opacity: 0.35,
+              textTransform: 'uppercase',
+            }}>
+              {'(coming soon)'}
+            </span>
+          </>}
           value={allowNotifications}
           onChange={onChangeAllowNotifications}
         />

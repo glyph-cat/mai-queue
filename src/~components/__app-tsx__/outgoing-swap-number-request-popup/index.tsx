@@ -127,6 +127,13 @@ function OutgoingSwapNumberRequestPopupBase({
         </span>
         <CustomDialogButtonContainer>
           <TextButton
+            label={isRequestSent ? 'Waiting...' : 'Send'}
+            onPress={handleOnSend}
+            color={palette.primaryOrange}
+            loading={isSendingRequest}
+            disabled={isRequestSent}
+          />
+          <TextButton
             label='Cancel'
             color={palette.neutralFill}
             {...(requestId ? {
@@ -136,13 +143,6 @@ function OutgoingSwapNumberRequestPopupBase({
               onPress: dismissPopup,
               disabled: isSendingRequest,
             })}
-          />
-          <TextButton
-            label={isRequestSent ? 'Waiting...' : 'Send'}
-            onPress={handleOnSend}
-            color={palette.primaryOrange}
-            loading={isSendingRequest}
-            disabled={isRequestSent}
           />
         </CustomDialogButtonContainer>
       </div>

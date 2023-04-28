@@ -1,8 +1,8 @@
 import { ChangeEvent, useCallback, useState } from 'react'
 import { useRelinkValue } from 'react-relink'
 import { TextButton } from '~components/form'
-import { GeolocationPositionSource } from '~services/geolocation'
 import { useTheme } from '~services/theme'
+import { GeolocationPositionSource } from '~sources/geolocation'
 import { checkIfCoordIsWithinRadius } from '~utils/coords-intersection'
 import styles from './index.module.css'
 

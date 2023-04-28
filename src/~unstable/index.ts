@@ -1,3 +1,3 @@
 export { }
 
-// TODO: Move some of the methods in this directory to '@glyph-cat/swiss-army-knife'
+// TODO: [Low priority] Move some of the methods in this directory to '@glyph-cat/swiss-army-knife'

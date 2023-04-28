@@ -51,7 +51,7 @@ export default async function APISubmitIncidentReportHandler(
       // This would still require making API calls, which would not save a lot of cost.
       // This still needs more consideration and planning.
 
-      // TODO: Limit maximum report?
+      // TODO: [Mid-priority] Limit maximum report?
 
       await createDocInTransaction(tx, DBCollection.IncidentReports, {
         [Field.cTime]: DateTime.now(),

@@ -30,6 +30,12 @@ async function getNetworkConfigTemplate({
   }
 }
 
+function throwErrorIfNoNInternet(): void {
+  if (!navigator?.onLine) {
+    throw new Error('No internet connection.')
+  }
+}
+
 /**
  * @public
  */
@@ -38,6 +44,7 @@ export async function networkGet<Q, R>(
   query?: Q,
   config?: AxiosRequestConfig
 ): Promise<AxiosResponse<R>> {
+  throwErrorIfNoNInternet()
   const FINAL_url = queryString.stringifyUrl({ url, query: query as StringifiableRecord })
   const FINAL_config = await getNetworkConfigTemplate({ config })
   devInfo(HttpMethod.GET, { url: FINAL_url, query, config: FINAL_config })
@@ -54,6 +61,7 @@ export async function networkPost<Q, D, R>(
   data?: D,
   config?: AxiosRequestConfig
 ): Promise<AxiosResponse<R>> {
+  throwErrorIfNoNInternet()
   const FINAL_url = queryString.stringifyUrl({ url, query: query as StringifiableRecord })
   const FINAL_config = await getNetworkConfigTemplate({ config })
   devInfo(HttpMethod.POST, { url: FINAL_url, query, data, config: FINAL_config })
@@ -69,6 +77,7 @@ export async function networkDelete<Q, R>(
   query?: Q,
   config?: AxiosRequestConfig
 ): Promise<AxiosResponse<R>> {
+  throwErrorIfNoNInternet()
   const FINAL_url = queryString.stringifyUrl({ url, query: query as StringifiableRecord })
   const FINAL_config = await getNetworkConfigTemplate({ config })
   devInfo(HttpMethod.DELETE, { url: FINAL_url, query, config: FINAL_config })

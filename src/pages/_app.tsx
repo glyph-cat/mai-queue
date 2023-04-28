@@ -18,9 +18,9 @@ import { VisualHeader } from '~components/__app-tsx__/visual-header'
 import { WatchersAndListeners } from '~components/__app-tsx__/watchers-and-listeners'
 import { LoadingCoverCanvas } from '~components/loading-cover'
 import { ANIMATED_BACKDROP_TRANSITION_DURATION, PROJECT_NAME } from '~constants'
-import { RelinkMonitor } from '~debug/relink-monitor'
 import { ArcadeInfoProvider } from '~services/arcade-info'
 import { useTheme } from '~services/theme'
+import { RelinkInspector } from '~unstable/relink-inspector'
 import '../styles/globals.css'
 
 MATERIAL_ICON_DEFAULTS.variant = 'rounded'
@@ -59,7 +59,7 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
           </RenderInClientOnly>
         </ArcadeInfoProvider>
         <MaterialIconStyleSheet variants={['rounded']} />
-        <RelinkMonitor />
+        <RelinkInspector />
       </AppErrorBoundary>
     </>
   )

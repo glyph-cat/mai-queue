@@ -13,7 +13,6 @@ export function useIncomingSwapRequestWatcher(myTicketId: string): void {
   const requestId = useRelinkValue(IncomingSwapRequestSource, s => s?.requestId)
   const currentQueue = useCurrentQueueConsumer(q => q.data)
   const currentArcade = useArcadeInfo()
-  // TODO: [High priority] Concerning this, try to send a request so the popup appears on the receiver's end, then take or close another random ticket to trigger change in the queueState and see if the popup flashes
   useEffect(() => {
     if (!myTicketId || currentQueue.length <= 0) { return }
     const unsubscribeListener = onSnapshot(query(

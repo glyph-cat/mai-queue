@@ -19,7 +19,7 @@ export function PaginationDotIndicator({
             value === StepIndex.CONFIG ? styles.activeIndicator : null,
           )}
         >
-          <MaterialIcon name='help' size={12} />
+          <MaterialIcon name='settings' size={12} />
         </div>
         <div
           className={concatClassNames(

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useOnlineStatus } from '~hooks/online-status'
 import styles from './index.module.css'
+import { useTheme } from '~services/theme'
 
 export function OnlineStatusBanner(): JSX.Element {
   const isOnline = useOnlineStatus()
+  const { palette } = useTheme()
   const [delayedIsOnline, setDelayedOnlineStatus] = useState(true)
   useEffect(() => {
     if (isOnline) {
@@ -20,6 +22,7 @@ export function OnlineStatusBanner(): JSX.Element {
       className={styles.container}
       style={{
         backgroundColor: isOnline ? '#008000' : '#ff2a2a',
+        color: isOnline ? palette.safeGreen : palette.fixedWhite,
         height: delayedIsOnline ? 0 : 42,
         transform: delayedIsOnline ? 'translateY(-42px)' : 'translateY(0)',
       }}

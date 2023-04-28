@@ -4,9 +4,6 @@ import { CustomDialog } from '~components/custom-dialog'
 import { CustomAPIError } from '~errors'
 import { devError } from '~utils/dev'
 
-// TODO: [High priority] What error do we get when no internet? How do we know? and what do we show?
-// May be can do something in '~utils/network'
-
 export async function handleClientError(
   error: Error,
   extraMessage?: string

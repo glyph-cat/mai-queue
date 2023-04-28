@@ -1,64 +1,11 @@
-import { RelinkSource } from 'react-relink'
 import { CustomDialog } from '~components/custom-dialog'
 import { PROJECT_NAME } from '~constants'
-import { strictMerge } from '~unstable/strict-merge'
-import { devError } from '~utils/dev'
-
-export enum PermissionType {
-  GEOLOCATION = 1,
-  NOTIFICATION,
-}
-
-export enum PermissionStatus {
-  PROMPT = 1,
-  GRANTED,
-  DENIED,
-  UNSUPPORTED,
-}
-
-const STORAGE_KEY = 'permissions'
-
-/**
- * Keeps track of whether permissions for certain features have been asked.
- */
-export const PermissionsSource = new RelinkSource<Record<PermissionType, PermissionStatus>>({
-  key: STORAGE_KEY,
-  default: {
-    [PermissionType.GEOLOCATION]: PermissionStatus.PROMPT,
-    [PermissionType.NOTIFICATION]: PermissionStatus.PROMPT,
-  },
-  lifecycle: typeof window === 'undefined' ? {} : {
-    init({ commit, commitNoop, defaultState }) {
-      const rawData = localStorage.getItem(STORAGE_KEY)
-      if (rawData) {
-        try {
-          const parsedData = JSON.parse(rawData)
-          return commit(strictMerge(defaultState, parsedData)) // Early exit
-        } catch (e) {
-          devError(e)
-        }
-      }
-      commitNoop()
-    },
-    didSet({ state }) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-    },
-    didReset() {
-      localStorage.removeItem(STORAGE_KEY)
-    }
-  },
-})
-
-async function setPermissionStatus(
-  type: PermissionType,
-  status: PermissionStatus
-): Promise<void> {
-  await PermissionsSource.set(s => ({ ...s, [type]: status }))
-}
-
-async function getPermissionStatus(type: PermissionType): Promise<PermissionStatus> {
-  return (await PermissionsSource.getAsync())[type]
-}
+import {
+  PermissionStatus,
+  PermissionType,
+  getPermissionStatus,
+  setPermissionStatus,
+} from '~sources/permissions'
 
 function getCurrentPosition(): Promise<GeolocationPosition> {
   return new Promise((resolve, reject) => {
@@ -92,4 +39,9 @@ export async function askForGeolocationPermission(): Promise<void> {
   } catch (e) {
     await setPermissionStatus(PermissionType.GEOLOCATION, PermissionStatus.DENIED)
   }
+}
+
+export async function askForNotificationPermission(): Promise<void> {
+  // Check for API availability
+  // Check if previously already asked
 }

@@ -17,6 +17,7 @@ import {
 } from '~services/arcade-info'
 import { useGeolocationChecking } from '~services/geolocation'
 import { useTheme } from '~services/theme'
+import { PermissionStatus, PermissionType, PermissionsSource } from '~sources/permissions'
 import { UnstableSource } from '~sources/unstable'
 import { formatArcadeName } from '~utils/format-arcade-name'
 import { handleClientError } from '~utils/show-error-alert'
@@ -70,6 +71,7 @@ export function ArcadeInfoPopup(): JSX.Element {
 function ArcadeInfoPopupBase(): JSX.Element {
   const currentArcade = useArcadeInfo()
   const coordIsWithinRadius = useGeolocationChecking()
+  const geolocationAPIPermission = useRelinkValue(PermissionsSource, s => s[PermissionType.GEOLOCATION])
 
   const baseDialogRef = useRef<BaseDialog>()
   const handleOnDismiss = useCallback(async () => {
@@ -168,7 +170,7 @@ function ArcadeInfoPopupBase(): JSX.Element {
         />
       )
     } else if (!selfReportedAsActiveId) {
-      // KIV: (Enhancement) Undo + inform resolved?
+      // TODO: [Mid-priority] (Enhancement) Undo + inform resolved in one API call?
       reportButtonStack.push(
         <TextButton
           key='inform-resolved'
@@ -235,7 +237,10 @@ function ArcadeInfoPopupBase(): JSX.Element {
             </CustomDialogButtonContainer>
             {!coordIsWithinRadius && (
               <i style={{ fontSize: '10pt', textAlign: 'center' }}>
-                {'Note: You can only submit reports when you\'re at the arcade.'}
+                {'Note: You can only submit reports at the arcade. '}
+                {geolocationAPIPermission !== PermissionStatus.GRANTED && (
+                  'Permission to access GPS is required.'
+                )}
               </i>
             )}
           </>

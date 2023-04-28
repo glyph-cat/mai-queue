@@ -10,21 +10,25 @@ import { ConfigSource } from '~sources/config'
 import { DebugConfigSource } from '~sources/debug'
 import { IncomingSwapRequestSource } from '~sources/incoming-swap-request-source'
 import { OutgoingSwapRequestSource } from '~sources/outgoing-swap-request-source'
+import { PermissionsSource } from '~sources/permissions'
 import { UnstableSource } from '~sources/unstable'
 import { UserPreferencesSource } from '~sources/user-preferences'
 import styles from './index.module.css'
-import { PermissionsSource } from '~services/permissions'
 
-export function RelinkMonitor(): JSX.Element {
+export function RelinkInspector(): JSX.Element {
   if (ENV.VERCEL_ENV === VercelEnv.PRODUCTION) { return null } // Early exit
   return (
     <RenderInClientOnly>
-      <RelinkMonitorBase />
+      <RelinkInspectorBase />
     </RenderInClientOnly>
   )
 }
 
-function RelinkMonitorBase(): JSX.Element {
+// TODO: [Low priority] Break down into smaller components and wrap in ErrorBoundaries each
+// TODO: [Low priority] Expand all / Collapse all button
+// TODO: [Low priority] Eventually move to 'react-relink' package, add support for web first for now (but need to be careful about whether or not to exclude from production bundle, take `ENV.VERCEL_ENV` into consideration)
+
+function RelinkInspectorBase(): JSX.Element {
 
   const [shouldShowOverlay, setOverlayVisibility] = useState(false)
   const [shouldBeInteractive, setInteractivity] = useState(true)

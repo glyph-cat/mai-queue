@@ -19,11 +19,6 @@ export const OutgoingSwapRequestSource = new RelinkSource<IOutgoingSwapRequestSo
       const rawData = localStorage.getItem(STORAGE_KEY)
       if (rawData) {
         try {
-          // TODO: [High priority] Try and see what will happen
-          // 1. Send request
-          // 2. Close tab
-          // 3. Let target player accept request
-          // 4. Open back the website
           const parsedData = JSON.parse(rawData)
           const docSnapshot = await getDoc(doc(DBCollection.SwapRequests, parsedData.requestId))
           if (docSnapshot.exists()) {
