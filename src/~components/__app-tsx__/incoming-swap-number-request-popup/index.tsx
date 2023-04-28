@@ -94,16 +94,16 @@ function IncomingSwapNumberRequestPopupBase({
       />
       <CustomDialogButtonContainer>
         <TextButton
-          label='Decline'
-          onPress={onDecline}
-          color={palette.neutralFill}
-          loading={isDecliningRequest}
-        />
-        <TextButton
           label='Swap'
           onPress={onAccept}
           color={palette.primaryOrange}
           loading={isAcceptingRequest}
+        />
+        <TextButton
+          label='Decline'
+          onPress={onDecline}
+          color={palette.neutralFill}
+          loading={isDecliningRequest}
         />
       </CustomDialogButtonContainer>
     </BaseDialog>
